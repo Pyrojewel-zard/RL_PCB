@@ -26,19 +26,40 @@ plt.rc("ytick", labelsize=14)# Set the font size for y tick labels
 plt.rc("legend",fontsize=12) # using a size in points
 
 def load_hyperparameters_from_file(filename):
+    """
+    从JSON格式的文件中加载超参数配置。
+
+    Args:
+        filename (str): 包含超参数配置的JSON文件路径。
+
+    Returns:
+        dict: 包含所有超参数的字典对象。
+    """
     fp = open(filename, "r", encoding="utf-8")
-    hyperparameters = json.load(fp)
+    hyperparameters = json.load(fp)  # ⭐ 核心代码：读取并解析JSON文件内容
 
     return hyperparameters
 
 def get_image(path, width=1*cm):
+    """
+    从指定路径加载图片并创建按比例缩放的图像对象
+
+    Args:
+        path (str): 图片文件路径
+        width (float): 图片宽度（默认为1厘米）
+
+    Returns:
+        Image: 按比例缩放的图像对象
+    """
     img = utils.ImageReader(path)
     iw, ih = img.getSize()
-    aspect = ih / float(iw)
+    aspect = ih / float(iw)  # ⭐ 计算图片宽高比以保持比例
     return Image(path, width=width, height=(width * aspect))
 
 class PageNumCanvas(canvas.Canvas):
     """
+    自定义画布类，用于在PDF报告中添加页码显示功能（如"Page X of Y"）
+    参考实现：
     http://code.activestate.com/recipes/546511-page-x-of-y-with-reportlab/
     http://code.activestate.com/recipes/576832/
     """
@@ -80,28 +101,56 @@ class PageNumCanvas(canvas.Canvas):
             int(0.93*page_size[0]), int(0.95*page_size[1]), page)
 
 def save_report_config(filename, report_config):
+    """
+    将实验报告配置信息保存为JSON格式的文件。
+
+    Args:
+        filename (str): 要保存的JSON文件路径
+        report_config (dict): 包含实验报告配置信息的字典
+
+    Returns:
+        None
+    """
     # Write default_hyperparameters dict to a json file
     with open(filename, "w", encoding="utf-8") as fp:
-        json.dump(report_config, fp)
+        json.dump(report_config, fp)  # ⭐ 将配置字典序列化为JSON并写入文件
 
     fp.close()
 
 def load_report_config(filename):
-    fp = open(filename, "r", encoding="utf-8")
+    """
+    从JSON格式的配置文件中加载实验报告配置信息
 
-    report_config = json.load(fp)
+    Args:
+        filename (str): 配置文件的路径
+
+    Returns:
+        dict: 解析后的JSON配置字典对象
+    """
+    fp = open(filename, "r", encoding="utf-8")
+    report_config = json.load(fp)  # ⭐ 核心操作：解析JSON配置文件内容
     fp.close()
 
     return report_config
 
 def prompt_yn(prompt: str = "Do you want to continue?", yes:bool =False):
+    """
+    提示用户进行是/否选择，支持自动默认选择功能。
+
+    Args:
+        prompt (str): 提示信息文本，默认为"Do you want to continue?"
+        yes (bool): 是否自动返回True（默认选择"是"），默认为False
+
+    Returns:
+        bool: 用户选择的结果，True表示"是"，False表示"否"
+    """
     if yes is True:
-        print(prompt + "[y|n] Y")
+        print(prompt + "[y|n] Y")  # ⭐ 自动返回True时显示默认选择
         return True
     else:
         while True:
             resp = input(prompt + "[y|n]" )
-            if resp.lower() == "y":
+            if resp.lower() == "y":  # ⭐ 处理用户输入并返回对应布尔值
                 return True
             elif resp.lower() == "n":
                 return False
@@ -109,12 +158,18 @@ def prompt_yn(prompt: str = "Do you want to continue?", yes:bool =False):
                 continue
 
 def rmdir(directory):
+    """
+    递归删除指定目录及其所有内容（包括子目录和文件）
+
+    Args:
+        directory (str/Path): 需要删除的目录路径
+    """
     directory = Path(directory)
     for item in directory.iterdir():
         if item.is_dir():
             rmdir(item)
         else:
-            item.unlink()
+            item.unlink()  # ⭐ 删除目录中的单个文件
     directory.rmdir()
 
 if __name__ == "__main__":
@@ -150,7 +205,7 @@ if __name__ == "__main__":
         else:
             sys.exit()
     else:
-        os.makedirs(tmp_dir)
+        os.makedirs(tmp_dir)  # ⭐ 创建临时目录用于报告生成
 
     rc = load_report_config(args.report_config)
 
@@ -190,7 +245,7 @@ if __name__ == "__main__":
                                   frames=[l_frame],
                                   pagesize=landscape(A4))
 
-    doc.addPageTemplates([portrait_tmpl, landscape_tmpl])
+    doc.addPageTemplates([portrait_tmpl, landscape_tmpl])  # ⭐ 添加PDF页面模板
 
     report_data = []
     report_data.append(Paragraph("Experiment Report",style_h1))

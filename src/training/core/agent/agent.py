@@ -11,9 +11,34 @@ from pcbDraw import draw_board_from_board_and_graph_multi_agent
 import datetime
 
 class agent(gym.Env):
-    # This method is called when an object is created.
-    # It's purpose is to initialize the object.
+    """
+    基于强化学习的PCB布局优化智能体环境类。
+    
+    该类通过调整元件位置和方向来优化PCB布局，最小化布线长度和元件重叠。
+    继承自gym.Env类，定义了观察空间、动作空间以及相关参数。
+
+    Attributes:
+        parameters: 配置参数对象
+        observation_space: 定义智能体的观察空间
+        action_space: 定义智能体的动作空间
+        tracker: 用于跟踪训练过程的对象
+        rng: 随机数生成器
+        max_steps: 最大步数限制
+        steps_done: 已完成的步数计数器
+        HPWLe: 优化目标中的布线长度权重
+        We: 优化目标中的欧式距离权重
+        n: PCB板参数
+        m: PCB板参数
+        p: PCB板参数
+        penalty_per_remaining_step: 每剩余步数的惩罚系数
+    """
     def __init__(self, parameters):
+        """
+        初始化智能体环境。
+
+        Args:
+            parameters: 包含各种配置参数的对象
+        """
         self.parameters = parameters
 
         obs_space = {
@@ -30,7 +55,7 @@ class agent(gym.Env):
             "ortientation": spaces.Box(low=0.0, high=1.0, shape=(1,),
                                        dtype=np.float32)
             }
-        self.observation_space = spaces.Dict(obs_space)
+        self.observation_space = spaces.Dict(obs_space)  # ⭐ 定义观察空间的结构
         self.action_space = spaces.Box(
             low=np.array([0,0,0], dtype=np.float32),
             high=np.array([1,2*np.pi,1],

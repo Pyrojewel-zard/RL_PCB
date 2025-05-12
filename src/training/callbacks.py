@@ -21,7 +21,19 @@ class log_and_eval_callback():
             eval_freq: int = 10_000,
             training_log: str = None,
         ):
+        """
+        初始化训练回调类，用于记录训练日志和评估模型性能。
 
+        Args:
+            log_dir (str): 日志文件保存的根目录路径
+            settings (dict): 训练设置字典
+            hyperparameters (dict): 超参数字典
+            model: 待训练的模型对象
+            verbose (int, optional): 日志详细程度. Defaults to 1.
+            num_evaluations (int, optional): 评估次数. Defaults to 10.
+            eval_freq (int, optional): 评估频率(步数). Defaults to 10_000.
+            training_log (str, optional): 训练日志文件名. Defaults to None.
+        """
         super().__init__()
         self.log_dir = log_dir
         # root logging directory
@@ -58,7 +70,7 @@ class log_and_eval_callback():
 
         # Create directory if it doesn't exsit.
         if os.path.isdir(self.log_dir) is False:
-            os.makedirs(self.log_dir)
+            os.makedirs(self.log_dir)  # ⭐ 创建日志根目录
 
         # Create directory if it doesn't exsit.
         if os.path.isdir(self.save_path) is False:
@@ -81,7 +93,7 @@ class log_and_eval_callback():
             os.makedirs(self.video_eval_path)
 
         self.eval_env = None
-        self.writer = SummaryWriter(log_dir=self.save_path)
+        self.writer = SummaryWriter(log_dir=self.save_path)  # ⭐ 初始化TensorBoard写入器
 
         self.settings = settings
         self.hyperparameters = hyperparameters
@@ -193,18 +205,18 @@ class log_and_eval_callback():
                 quick_eval=True)
             self.writer.add_scalar(
                 tag="periodic_evals/testing_dataset/episode_reward",
-                scalar_value=info[0],
+                scalar_value=info[0],  # ⭐ 记录测试集的episode奖励指标到tensorboard
                 global_step=self.model.num_timesteps)
             self.writer.add_scalar(
                 tag="periodic_evals/testing_dataset/episode_length",
-                scalar_value=info[1],
+                scalar_value=info[1],  # ⭐ 记录测试集的episode长度指标到tensorboard
                 global_step=self.model.num_timesteps)
             if self.verbose:
                 mean_episode_length = np.int32(
                     np.round(np.mean(self.model.trackr.episode_length),0))
                 mean_episode_reward = np.round(
                     np.mean(self.model.trackr.episode_reward),2)
-                print(f" EVALUATION - TEST     | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | {self.model.num_timesteps} | {np.round(info[1],2)}/{mean_episode_length} | {np.round(info[0],2)}/{np.round(mean_episode_reward,2)}/{np.round(self.best_mean_episode_reward,2)}")
+                print(f" EVALUATION - TEST     | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | {self.model.num_timesteps} | {np.round(info[1],2)}/{mean_episode_length} | {np.round(info[0],2)}/{np.round(mean_episode_reward,2)}/{np.round(self.best_mean_episode_reward,2)}")  # ⭐ 打印详细的评估结果到控制台
 
     def on_training_start(self):
         print("Training started.")
@@ -472,7 +484,7 @@ class log_and_eval_callback():
 
                         # Capture snapshot
                         snapshot_filename=f"{i}.{self.num_evaluations-1}.{episode_steps}"
-                        eval_env.tracker.capture_snapshot(
+                        eval_env.tracker.capture_snapshot(  # ⭐ 捕获当前环境状态快照
                             fileName=os.path.join(run_output_dir,
                                                   snapshot_filename+".png")
                                                   )
@@ -488,7 +500,7 @@ class log_and_eval_callback():
                             print(f"run={i}/{self.num_evaluations-1} @ episode_step={episode_steps} : 20% overlap best hpwl : hpwl={np.round(best_hpwl_at_20_overlap,4)}, overlap={np.round(np.sum(all_ol)/8,4)}")
 
                 for indiv_obs in obs_vec:
-                    step_reward += indiv_obs[2]
+                    step_reward += indiv_obs[2]  # ⭐ 累加每个观察值的奖励
                     if indiv_obs[4] is True:
                         done = True
 
@@ -499,7 +511,7 @@ class log_and_eval_callback():
             evaluation_log.write(f"eval_env episode {i} performed {episode_steps} in environment.\r\n")
             if verbose == 1:
                 print(f"eval_env episode {i} performed {episode_steps} in environment.")
-            eval_env.tracker.create_video(
+            eval_env.tracker.create_video(  # ⭐ 创建评估过程视频
                 fileName=os.path.join(run_output_dir, f"{i}.mp4"),
                 display_metrics=False)
             vids = eval_env.tracker.video_tensor()
@@ -507,7 +519,7 @@ class log_and_eval_callback():
 
             # eval_env.tracker.create_plot(fileName=os.path.join(video_path,
             #                                                    f'{i}.png'))
-            eval_env.tracker.log_run_to_file(
+            eval_env.tracker.log_run_to_file(  # ⭐ 记录运行日志到文件
                 path=run_output_dir, filename=f"{i}.log",
                 kicad_pcb=eval_env.g.get_kicad_pcb_file()
                 )
@@ -516,7 +528,7 @@ class log_and_eval_callback():
 
         evaluation_log.close()
 
-        return [total_reward / self.num_evaluations,
+        return [total_reward / self.num_evaluations,  # ⭐ 返回平均奖励和平均步数
                 total_steps / self.num_evaluations]
 
     def log_video(self,

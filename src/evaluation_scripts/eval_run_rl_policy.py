@@ -86,6 +86,20 @@ def configure_seed(args):
                     )
 
 def cmdline_args():
+    """
+    解析命令行参数并配置强化学习策略评估的各项参数。
+
+    该函数会：
+    1. 创建参数解析器并定义所有可接受的命令行参数
+    2. 解析输入的命令行参数
+    3. 配置随机种子
+    4. 将参数整理为字典格式返回
+
+    Returns:
+        tuple: 包含两个元素的元组：
+            - args: 解析后的命令行参数对象
+            - settings: 包含所有配置参数的字典
+    """
     parser = argparse.ArgumentParser(
         description="Multi-agent pcb component placement evaluation",
         usage="<script-name> -p <pcb_file> --rl_model_type [TD3 | SAC]",
@@ -118,7 +132,7 @@ def cmdline_args():
     parser.add_argument("--shuffle_idxs", required=False, action="store_true",
                         help="shuffle agent idx prior to stepping in the environment")
 
-    args = parser.parse_args()
+    args = parser.parse_args()  # ⭐ 核心代码：解析命令行输入参数
     settings = {}
     settings["default_seed"] = args.seed
 
@@ -154,19 +168,45 @@ def cmdline_args():
     return args, settings
 
 def set_seed_everywhere(seed):
-    torch.manual_seed(seed)
+    """
+    设置PyTorch、NumPy和Python random模块的随机种子以确保实验可重复性。
+
+    Args:
+        seed (int): 要设置的随机种子值。
+    """
+    torch.manual_seed(seed)  # ⭐ 设置PyTorch的CPU随机种子
     if torch.cuda.is_available():
-        torch.cuda.manual_seed_all(seed)
+        torch.cuda.manual_seed_all(seed)  # ⭐ 设置PyTorch的所有GPU随机种子
     np.random.seed(seed)
     random.seed(seed)
 
 def evaluation_run(settings):
+    """
+    执行强化学习策略的评估运行，包括模型加载、环境设置和评估过程。
+
+    Args:
+        settings (dict): 包含评估配置的字典，包括：
+            - hyperparameters: 超参数文件路径
+            - policy: 策略类型(TD3/SAC)
+            - device: 运行设备
+            - model: 模型文件路径
+            - output: 输出目录
+            - pcb_file: PCB文件路径
+            - seed: 随机种子
+            - max_steps: 最大步数
+            - w/o/hpwl: 奖励权重参数
+            - run: 运行编号
+            - shuffle_idxs: 是否打乱索引
+
+    Returns:
+        无显式返回，但会生成评估日志和结果文件
+    """
     hp = load_hyperparameters_from_file(settings["hyperparameters"])
 
     model = setup_model(model_type=settings["policy"],
                         train_env=None,
                         hyperparameters=hp,
-                        device=settings["device"])
+                        device=settings["device"])  # ⭐ 根据配置初始化强化学习模型
     try:
         model.load(settings["model"])
     except:
@@ -210,7 +250,7 @@ def evaluation_run(settings):
             "log_dir": None,
             "idx": j,
             "shuffle_idxs": settings["shuffle_idxs"],
-            })
+            })  # ⭐ 配置评估环境参数
 
         eval_env = environment(env_params)
 
@@ -246,13 +286,13 @@ def evaluation_run(settings):
                 obs_vec = eval_env.step(model=model.actor,
                                         random=False,
                                         deterministic=True,
-                                        rl_model_type="TD3")
+                                        rl_model_type="TD3")  # ⭐ 执行TD3策略的评估步骤
                 step_reward=0
             else:   # SAC
                 obs_vec = eval_env.step(model=model.policy,
                                         random=False,
                                         deterministic=True,
-                                        rl_model_type="SAC")
+                                        rl_model_type="SAC")  # ⭐ 执行SAC策略的评估步骤
                 step_reward=0
 
             for indiv_obs in obs_vec:

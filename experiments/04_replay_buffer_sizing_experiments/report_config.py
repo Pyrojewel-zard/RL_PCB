@@ -2,15 +2,34 @@ from datetime import datetime
 import json
 
 def save_report_config(filename, report_config):
+    """
+    将报告配置保存为JSON文件。
+
+    Args:
+        filename (str): 要保存的JSON文件路径。
+        report_config (dict): 需要保存的报告配置字典。
+
+    Returns:
+        None
+    """
     # Write default_hyperparameters dict to a json file
     with open(filename, 'w') as fp:
-        json.dump(report_config, fp)
+        json.dump(report_config, fp)  # ⭐ 将配置字典序列化为JSON并写入文件
     
     fp.close()
         
 def load_report_config(filename):
+    """
+    加载并返回JSON格式的报告配置文件内容
+
+    Args:
+        filename (str): 要加载的JSON配置文件的路径
+
+    Returns:
+        dict: 解析后的JSON配置字典
+    """
     fp = open(filename, 'r')
-    report_config = json.load(fp)
+    report_config = json.load(fp)  # ⭐ 核心代码：解析JSON文件内容为Python字典
     fp.close()
     return report_config    
         
@@ -138,7 +157,7 @@ tables = {
 report_config = {'charts': charts,
                  'tables': tables,
                  'author': 'Luke Vassallo',
-                 'timestamp': f'{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'
+                 'timestamp': f'{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'  # ⭐ 生成当前时间戳作为报告配置的创建时间
                 }
 
 save_report_config("./report_config.json", report_config)

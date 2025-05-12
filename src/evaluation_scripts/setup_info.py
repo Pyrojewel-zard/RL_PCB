@@ -81,12 +81,21 @@ def machine_info_in_paragraphs(style):
     return data
 
 def lib_info_in_paragraphs(style):
+    """
+    收集并格式化显示Python环境中的库版本信息和硬件信息，返回包含这些信息的段落列表。
+
+    Args:
+        style: 用于格式化文本的样式对象。
+
+    Returns:
+        list: 包含库版本信息和硬件信息的Paragraph对象列表。
+    """
     data = []
     major=sys.version_info.major
     minor=sys.version_info.minor
     micro=sys.version_info.micro
     data.append(Paragraph(
-        f'python                  : {major}.{minor}.{micro}',style))
+        f'python                  : {major}.{minor}.{micro}',style))  # ⭐ 添加Python版本信息到结果列表
     data.append(Paragraph(
         f'torch                   : {torch.__version__}',style))
     data.append(Paragraph(

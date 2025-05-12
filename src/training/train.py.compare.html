@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <style>/* 插件下拉菜单 */
+#elem_audio {
+    border-style: hidden !important;
+}
+
+.dark {
+    --background-fill-primary: #050810;
+    --body-background-fill: var(--background-fill-primary);
+}
+/* 插件下拉菜单 */
+#plugin-panel .wrap.svelte-aqlk7e.svelte-aqlk7e.svelte-aqlk7e {
+    box-shadow: var(--input-shadow);
+    border: var(--input-border-width) dashed var(--border-color-primary);
+    border-radius: 4px;
+}
+
+#plugin-panel .dropdown-arrow {
+    width: 25px;
+}
+#plugin-panel input.svelte-aqlk7e.svelte-aqlk7e.svelte-aqlk7e {
+    padding-left: 5px;
+}
+
+/* 小按钮 */
+#basic-panel .sm {
+    font-family: "Microsoft YaHei UI", "Helvetica", "Microsoft YaHei", "ui-sans-serif", "sans-serif", "system-ui";
+    --button-small-text-weight: 400;
+    --button-small-text-size:   14px;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius:  6px;
+    border-top-right-radius:    6px;
+    border-top-left-radius:     6px;
+}
+
+#plugin-panel .sm {
+    font-family: "Microsoft YaHei UI", "Helvetica", "Microsoft YaHei", "ui-sans-serif", "sans-serif", "system-ui";
+    --button-small-text-weight: 400;
+    --button-small-text-size:   14px;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius:  6px;
+    border-top-right-radius:    6px;
+    border-top-left-radius:     6px;
+}
+
+.wrap-inner.svelte-aqlk7e.svelte-aqlk7e.svelte-aqlk7e {
+    padding: 0%;
+}
+
+.markdown-body table {
+    margin: 1em 0;
+    border-collapse: collapse;
+    empty-cells: show;
+}
+
+.markdown-body th, .markdown-body td {
+    border: 1.2px solid var(--border-color-primary);
+    padding: 5px;
+}
+
+.markdown-body thead {
+    background-color: rgba(175,184,193,0.2);
+}
+
+.markdown-body thead th {
+    padding: .5em .2em;
+}
+
+.normal_mut_select .svelte-1gfkn6j {
+    float: left;
+    width: auto;
+    line-height: 260% !important;
+}
+
+.markdown-body ol, .markdown-body ul {
+    padding-inline-start: 2em !important;
+}
+
+/* chat box. */
+[class *= "message"] {
+    border-radius: var(--radius-xl) !important;
+    /* padding: var(--spacing-xl) !important; */
+    /* font-size: var(--text-md) !important; */
+    /* line-height: var(--line-md) !important; */
+    /* min-height: calc(var(--text-md)*var(--line-md) + 2*var(--spacing-xl)); */
+    /* min-width: calc(var(--text-md)*var(--line-md) + 2*var(--spacing-xl)); */
+}
+[data-testid = "bot"] {
+    max-width: 95%;
+    /* width: auto !important; */
+    border-bottom-left-radius: 0 !important;
+}
+[data-testid = "user"] {
+    max-width: 100%;
+    /* width: auto !important; */
+    border-bottom-right-radius: 0 !important;
+}
+
+/* linein code block. */
+.markdown-body code {
+    display: inline;
+    white-space: break-spaces;
+    border-radius: 6px;
+    margin: 0 2px 0 2px;
+    padding: .2em .4em .1em .4em;
+    background-color: rgba(13, 17, 23, 0.95);
+    color: #c9d1d9;
+}
+
+.dark .markdown-body code {
+    display: inline;
+    white-space: break-spaces;
+    border-radius: 6px;
+    margin: 0 2px 0 2px;
+    padding: .2em .4em .1em .4em;
+    background-color: rgba(175,184,193,0.2);
+}
+
+/* code block css */
+.markdown-body pre code {
+    display: block;
+    overflow: auto;
+    white-space: pre;
+    background-color: rgba(13, 17, 23, 0.95);
+    border-radius: 10px;
+    padding: 1em;
+    margin: 1em 2em 1em 0.5em;
+}
+
+.dark .markdown-body pre code {
+    display: block;
+    overflow: auto;
+    white-space: pre;
+    background-color: rgba(175,184,193,0.2);
+    border-radius: 10px;
+    padding: 1em;
+    margin: 1em 2em 1em 0.5em;
+}
+
+/* .mic-wrap.svelte-1thnwz {
+
+} */
+.block.svelte-mppz8v > .mic-wrap.svelte-1thnwz{
+    justify-content: center;
+    display: flex;
+    padding: 0;
+
+}
+
+.codehilite .hll { background-color: #6e7681 }
+.codehilite .c { color: #8b949e; font-style: italic } /* Comment */
+.codehilite .err { color: #f85149 } /* Error */
+.codehilite .esc { color: #c9d1d9 } /* Escape */
+.codehilite .g { color: #c9d1d9 } /* Generic */
+.codehilite .k { color: #ff7b72 } /* Keyword */
+.codehilite .l { color: #a5d6ff } /* Literal */
+.codehilite .n { color: #c9d1d9 } /* Name */
+.codehilite .o { color: #ff7b72; font-weight: bold } /* Operator */
+.codehilite .x { color: #c9d1d9 } /* Other */
+.codehilite .p { color: #c9d1d9 } /* Punctuation */
+.codehilite .ch { color: #8b949e; font-style: italic } /* Comment.Hashbang */
+.codehilite .cm { color: #8b949e; font-style: italic } /* Comment.Multiline */
+.codehilite .cp { color: #8b949e; font-weight: bold; font-style: italic } /* Comment.Preproc */
+.codehilite .cpf { color: #8b949e; font-style: italic } /* Comment.PreprocFile */
+.codehilite .c1 { color: #8b949e; font-style: italic } /* Comment.Single */
+.codehilite .cs { color: #8b949e; font-weight: bold; font-style: italic } /* Comment.Special */
+.codehilite .gd { color: #ffa198; background-color: #490202 } /* Generic.Deleted */
+.codehilite .ge { color: #c9d1d9; font-style: italic } /* Generic.Emph */
+.codehilite .gr { color: #ffa198 } /* Generic.Error */
+.codehilite .gh { color: #79c0ff; font-weight: bold } /* Generic.Heading */
+.codehilite .gi { color: #56d364; background-color: #0f5323 } /* Generic.Inserted */
+.codehilite .go { color: #8b949e } /* Generic.Output */
+.codehilite .gp { color: #8b949e } /* Generic.Prompt */
+.codehilite .gs { color: #c9d1d9; font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #79c0ff } /* Generic.Subheading */
+.codehilite .gt { color: #ff7b72 } /* Generic.Traceback */
+.codehilite .g-Underline { color: #c9d1d9; text-decoration: underline } /* Generic.Underline */
+.codehilite .kc { color: #79c0ff } /* Keyword.Constant */
+.codehilite .kd { color: #ff7b72 } /* Keyword.Declaration */
+.codehilite .kn { color: #ff7b72 } /* Keyword.Namespace */
+.codehilite .kp { color: #79c0ff } /* Keyword.Pseudo */
+.codehilite .kr { color: #ff7b72 } /* Keyword.Reserved */
+.codehilite .kt { color: #ff7b72 } /* Keyword.Type */
+.codehilite .ld { color: #79c0ff } /* Literal.Date */
+.codehilite .m { color: #a5d6ff } /* Literal.Number */
+.codehilite .s { color: #a5d6ff } /* Literal.String */
+.codehilite .na { color: #c9d1d9 } /* Name.Attribute */
+.codehilite .nb { color: #c9d1d9 } /* Name.Builtin */
+.codehilite .nc { color: #f0883e; font-weight: bold } /* Name.Class */
+.codehilite .no { color: #79c0ff; font-weight: bold } /* Name.Constant */
+.codehilite .nd { color: #d2a8ff; font-weight: bold } /* Name.Decorator */
+.codehilite .ni { color: #ffa657 } /* Name.Entity */
+.codehilite .ne { color: #f0883e; font-weight: bold } /* Name.Exception */
+.codehilite .nf { color: #d2a8ff; font-weight: bold } /* Name.Function */
+.codehilite .nl { color: #79c0ff; font-weight: bold } /* Name.Label */
+.codehilite .nn { color: #ff7b72 } /* Name.Namespace */
+.codehilite .nx { color: #c9d1d9 } /* Name.Other */
+.codehilite .py { color: #79c0ff } /* Name.Property */
+.codehilite .nt { color: #7ee787 } /* Name.Tag */
+.codehilite .nv { color: #79c0ff } /* Name.Variable */
+.codehilite .ow { color: #ff7b72; font-weight: bold } /* Operator.Word */
+.codehilite .pm { color: #c9d1d9 } /* Punctuation.Marker */
+.codehilite .w { color: #6e7681 } /* Text.Whitespace */
+.codehilite .mb { color: #a5d6ff } /* Literal.Number.Bin */
+.codehilite .mf { color: #a5d6ff } /* Literal.Number.Float */
+.codehilite .mh { color: #a5d6ff } /* Literal.Number.Hex */
+.codehilite .mi { color: #a5d6ff } /* Literal.Number.Integer */
+.codehilite .mo { color: #a5d6ff } /* Literal.Number.Oct */
+.codehilite .sa { color: #79c0ff } /* Literal.String.Affix */
+.codehilite .sb { color: #a5d6ff } /* Literal.String.Backtick */
+.codehilite .sc { color: #a5d6ff } /* Literal.String.Char */
+.codehilite .dl { color: #79c0ff } /* Literal.String.Delimiter */
+.codehilite .sd { color: #a5d6ff } /* Literal.String.Doc */
+.codehilite .s2 { color: #a5d6ff } /* Literal.String.Double */
+.codehilite .se { color: #79c0ff } /* Literal.String.Escape */
+.codehilite .sh { color: #79c0ff } /* Literal.String.Heredoc */
+.codehilite .si { color: #a5d6ff } /* Literal.String.Interpol */
+.codehilite .sx { color: #a5d6ff } /* Literal.String.Other */
+.codehilite .sr { color: #79c0ff } /* Literal.String.Regex */
+.codehilite .s1 { color: #a5d6ff } /* Literal.String.Single */
+.codehilite .ss { color: #a5d6ff } /* Literal.String.Symbol */
+.codehilite .bp { color: #c9d1d9 } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #d2a8ff; font-weight: bold } /* Name.Function.Magic */
+.codehilite .vc { color: #79c0ff } /* Name.Variable.Class */
+.codehilite .vg { color: #79c0ff } /* Name.Variable.Global */
+.codehilite .vi { color: #79c0ff } /* Name.Variable.Instance */
+.codehilite .vm { color: #79c0ff } /* Name.Variable.Magic */
+.codehilite .il { color: #a5d6ff } /* Literal.Number.Integer.Long */
+
+.dark .codehilite .hll { background-color: #2C3B41 }
+.dark .codehilite .c { color: #79d618; font-style: italic } /* Comment */
+.dark .codehilite .err { color: #FF5370 } /* Error */
+.dark .codehilite .esc { color: #89DDFF } /* Escape */
+.dark .codehilite .g { color: #EEFFFF } /* Generic */
+.dark .codehilite .k { color: #BB80B3 } /* Keyword */
+.dark .codehilite .l { color: #C3E88D } /* Literal */
+.dark .codehilite .n { color: #EEFFFF } /* Name */
+.dark .codehilite .o { color: #89DDFF } /* Operator */
+.dark .codehilite .p { color: #89DDFF } /* Punctuation */
+.dark .codehilite .ch { color: #79d618; font-style: italic } /* Comment.Hashbang */
+.dark .codehilite .cm { color: #79d618; font-style: italic } /* Comment.Multiline */
+.dark .codehilite .cp { color: #79d618; font-style: italic } /* Comment.Preproc */
+.dark .codehilite .cpf { color: #79d618; font-style: italic } /* Comment.PreprocFile */
+.dark .codehilite .c1 { color: #79d618; font-style: italic } /* Comment.Single */
+.dark .codehilite .cs { color: #79d618; font-style: italic } /* Comment.Special */
+.dark .codehilite .gd { color: #FF5370 } /* Generic.Deleted */
+.dark .codehilite .ge { color: #89DDFF } /* Generic.Emph */
+.dark .codehilite .gr { color: #FF5370 } /* Generic.Error */
+.dark .codehilite .gh { color: #C3E88D } /* Generic.Heading */
+.dark .codehilite .gi { color: #C3E88D } /* Generic.Inserted */
+.dark .codehilite .go { color: #79d618 } /* Generic.Output */
+.dark .codehilite .gp { color: #FFCB6B } /* Generic.Prompt */
+.dark .codehilite .gs { color: #FF5370 } /* Generic.Strong */
+.dark .codehilite .gu { color: #89DDFF } /* Generic.Subheading */
+.dark .codehilite .gt { color: #FF5370 } /* Generic.Traceback */
+.dark .codehilite .kc { color: #89DDFF } /* Keyword.Constant */
+.dark .codehilite .kd { color: #BB80B3 } /* Keyword.Declaration */
+.dark .codehilite .kn { color: #89DDFF; font-style: italic } /* Keyword.Namespace */
+.dark .codehilite .kp { color: #89DDFF } /* Keyword.Pseudo */
+.dark .codehilite .kr { color: #BB80B3 } /* Keyword.Reserved */
+.dark .codehilite .kt { color: #BB80B3 } /* Keyword.Type */
+.dark .codehilite .ld { color: #C3E88D } /* Literal.Date */
+.dark .codehilite .m { color: #F78C6C } /* Literal.Number */
+.dark .codehilite .s { color: #C3E88D } /* Literal.String */
+.dark .codehilite .na { color: #BB80B3 } /* Name.Attribute */
+.dark .codehilite .nb { color: #82AAFF } /* Name.Builtin */
+.dark .codehilite .nc { color: #FFCB6B } /* Name.Class */
+.dark .codehilite .no { color: #EEFFFF } /* Name.Constant */
+.dark .codehilite .nd { color: #82AAFF } /* Name.Decorator */
+.dark .codehilite .ni { color: #89DDFF } /* Name.Entity */
+.dark .codehilite .ne { color: #FFCB6B } /* Name.Exception */
+.dark .codehilite .nf { color: #82AAFF } /* Name.Function */
+.dark .codehilite .nl { color: #82AAFF } /* Name.Label */
+.dark .codehilite .nn { color: #FFCB6B } /* Name.Namespace */
+.dark .codehilite .nx { color: #EEFFFF } /* Name.Other */
+.dark .codehilite .py { color: #FFCB6B } /* Name.Property */
+.dark .codehilite .nt { color: #FF5370 } /* Name.Tag */
+.dark .codehilite .nv { color: #89DDFF } /* Name.Variable */
+.dark .codehilite .ow { color: #89DDFF; font-style: italic } /* Operator.Word */
+.dark .codehilite .pm { color: #89DDFF } /* Punctuation.Marker */
+.dark .codehilite .w { color: #EEFFFF } /* Text.Whitespace */
+.dark .codehilite .mb { color: #F78C6C } /* Literal.Number.Bin */
+.dark .codehilite .mf { color: #F78C6C } /* Literal.Number.Float */
+.dark .codehilite .mh { color: #F78C6C } /* Literal.Number.Hex */
+.dark .codehilite .mi { color: #F78C6C } /* Literal.Number.Integer */
+.dark .codehilite .mo { color: #F78C6C } /* Literal.Number.Oct */
+.dark .codehilite .sa { color: #BB80B3 } /* Literal.String.Affix */
+.dark .codehilite .sb { color: #C3E88D } /* Literal.String.Backtick */
+.dark .codehilite .sc { color: #C3E88D } /* Literal.String.Char */
+.dark .codehilite .dl { color: #EEFFFF } /* Literal.String.Delimiter */
+.dark .codehilite .sd { color: #79d618; font-style: italic } /* Literal.String.Doc */
+.dark .codehilite .s2 { color: #C3E88D } /* Literal.String.Double */
+.dark .codehilite .se { color: #EEFFFF } /* Literal.String.Escape */
+.dark .codehilite .sh { color: #C3E88D } /* Literal.String.Heredoc */
+.dark .codehilite .si { color: #89DDFF } /* Literal.String.Interpol */
+.dark .codehilite .sx { color: #C3E88D } /* Literal.String.Other */
+.dark .codehilite .sr { color: #89DDFF } /* Literal.String.Regex */
+.dark .codehilite .s1 { color: #C3E88D } /* Literal.String.Single */
+.dark .codehilite .ss { color: #89DDFF } /* Literal.String.Symbol */
+.dark .codehilite .bp { color: #89DDFF } /* Name.Builtin.Pseudo */
+.dark .codehilite .fm { color: #82AAFF } /* Name.Function.Magic */
+.dark .codehilite .vc { color: #89DDFF } /* Name.Variable.Class */
+.dark .codehilite .vg { color: #89DDFF } /* Name.Variable.Global */
+.dark .codehilite .vi { color: #89DDFF } /* Name.Variable.Instance */
+.dark .codehilite .vm { color: #82AAFF } /* Name.Variable.Magic */
+.dark .codehilite .il { color: #F78C6C } /* Literal.Number.Integer.Long */
+:root {
+    --gpt-academic-message-font-size: 15px;
+}
+
+.message {
+    font-size: var(--gpt-academic-message-font-size) !important;
+}
+
+#plugin_arg_menu {
+    transform: translate(-50%, -50%);
+    border: dashed;
+}
+
+/* hide remove all button */
+.remove-all.svelte-aqlk7e.svelte-aqlk7e.svelte-aqlk7e {
+    visibility: hidden;
+}
+
+/* hide selector border */
+#input-plugin-group .wrap.svelte-aqlk7e.svelte-aqlk7e.svelte-aqlk7e {
+    border: 0px;
+    box-shadow: none;
+}
+
+#input-plugin-group .secondary-wrap.svelte-aqlk7e.svelte-aqlk7e.svelte-aqlk7e {
+    border: none;
+    min-width: 0;
+}
+
+/* hide selector label */
+#input-plugin-group .svelte-1gfkn6j {
+    visibility: hidden;
+}
+
+/* height of the upload box */
+.wrap.svelte-xwlu1w {
+    min-height: var(--size-32);
+}
+
+/* status bar height */
+.min.svelte-1yrv54 {
+    min-height: var(--size-12);
+}
+
+/* copy btn */
+.message-btn-row {
+    width: 19px;
+    height: 19px;
+    position: absolute;
+    left: calc(100% + 3px);
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+/* .message-btn-row-leading, .message-btn-row-trailing {
+    display: inline-flex;
+    gap: 4px;
+} */
+.message-btn-row button {
+    font-size: 18px;
+    align-self: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    display: inline-flex;
+    flex-direction: row;
+    gap: 4px;
+    padding-block: 2px !important;
+}
+
+
+/* Scrollbar Width */
+::-webkit-scrollbar {
+    height: 12px;
+    width: 12px;
+}
+
+/* Scrollbar Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 12px;
+}
+
+/* Scrollbar Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 12px;
+}
+
+/* Scrollbar Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* input btns: clear, reset, stop */
+#input-panel button {
+    min-width: min(80px, 100%);
+}
+
+/* input btns: clear, reset, stop */
+#input-panel2 button {
+    min-width: min(80px, 100%);
+}
+
+#cbs,
+#cbsc {
+    background-color: rgba(var(--block-background-fill), 0.5) !important;
+}
+
+#interact-panel .form {
+    border: hidden
+}
+
+.drag-area {
+    border: solid;
+    border-width: thin;
+    user-select: none;
+    padding-left: 2%;
+    text-align: center;
+}
+
+.floating-component #input-panel2 {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border: solid;
+    border-width: thin;
+    border-top-width: 0;
+}
+
+.floating-component #plugin_arg_panel {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border: solid;
+    border-width: thin;
+    border-top-width: 0;
+}
+
+.floating-component #edit-panel {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border: solid;
+    border-width: thin;
+    border-top-width: 0;
+}
+
+
+.welcome-card-container {
+    text-align: center;
+    margin: 0 auto;
+    display: flex;
+    position: absolute;
+    width: inherit;
+    padding: 50px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    flex-wrap: wrap;
+    justify-content: center;
+    transition: opacity 0.6s ease-in-out;
+    opacity: 0;
+}
+.welcome-card-container.show {
+    opacity: 1;
+}
+.welcome-card-container.hide {
+    opacity: 0;
+}
+.welcome-card {
+    border-radius: 10px;
+    box-shadow: 0px 0px 6px 3px #e5e7eb6b;
+    padding: 15px;
+    margin: 10px;
+    flex: 1 0 calc(30% - 5px);
+    transform: rotateY(0deg);
+    transition: transform 0.1s;
+    transform-style: preserve-3d;
+}
+.welcome-card.show {
+    transform: rotateY(0deg);
+}
+.welcome-card.hide {
+    transform: rotateY(90deg);
+}
+.welcome-title {
+    font-size: 40px;
+    padding: 20px;
+    margin: 10px;
+    flex: 0 0 calc(90%);
+}
+.welcome-card-title {
+    font-size: 20px;
+    margin: 2px;
+    flex: 0 0 calc(95%);
+    padding-bottom: 8px;
+    padding-top: 8px;
+    padding-right: 8px;
+    padding-left: 8px;
+    display: flex;
+    justify-content: center;
+}
+.welcome-svg {
+    padding-right: 10px;
+}
+
+.welcome-title-text {
+    text-wrap: nowrap;
+}
+.welcome-content {
+    text-wrap: balance;
+    height: 55px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+}
+
+
+#gpt-submit-row {
+    display: flex;
+    gap: 0 !important;
+    border-radius: var(--button-large-radius);
+    border: var(--button-border-width) solid var(--button-primary-border-color);
+    /* background: var(--button-primary-background-fill); */
+    background: var(--button-primary-background-fill-hover);
+    color: var(--button-primary-text-color);
+    box-shadow: var(--button-shadow);
+    transition: var(--button-transition);
+    display: flex;
+}
+#gpt-submit-row:hover {
+    border-color: var(--button-primary-border-color-hover);
+    /* background: var(--button-primary-background-fill-hover); */
+    /* color: var(--button-primary-text-color-hover); */
+}
+#gpt-submit-row button#elem_submit_visible {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    box-shadow: none !important;
+    flex-grow: 1;
+}
+#gpt-submit-row #gpt-submit-dropdown {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-left: 0.5px solid #FFFFFF88 !important;
+    display: flex;
+    overflow: unset !important;
+    max-width: 40px !important;
+    min-width: 40px !important;
+}
+#gpt-submit-row #gpt-submit-dropdown input {
+    pointer-events: none;
+    opacity: 0; /* 隐藏输入框 */
+    width: 0;
+    margin-inline: 0;
+    cursor: pointer;
+}
+#gpt-submit-row #gpt-submit-dropdown label {
+    display: flex;
+    width: 0;
+}
+#gpt-submit-row #gpt-submit-dropdown label div.wrap {
+    background: none;
+    box-shadow: none;
+    border: none;
+}
+#gpt-submit-row #gpt-submit-dropdown label div.wrap div.wrap-inner {
+    background: none;
+    padding-inline: 0;
+    height: 100%;
+}
+#gpt-submit-row #gpt-submit-dropdown svg.dropdown-arrow {
+    transform: scale(2) translate(4.5px, -0.3px);
+}
+#gpt-submit-row #gpt-submit-dropdown > *:hover {
+    cursor: context-menu;
+}
+
+.tooltip.svelte-p2nen8.svelte-p2nen8 {
+    box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.5);
+    left: 10px;
+}
+
+#tooltip .hidden {
+    /* display: none; */
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+#tooltip .visible {
+    /* display: block; */
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+#elem_fontsize,
+#elem_top_p,
+#elem_temperature,
+#elem_max_length_sl,
+#elem_prompt {
+    /* 左右为0；顶部为0，底部为2px */
+    padding: 0 0 4px 0;
+    backdrop-filter: blur(10px);
+    background-color: rgba(var(--block-background-fill), 0.5);
+}
+
+
+#tooltip #cbs,
+#tooltip #cbsc,
+#tooltip .svelte-b6y5bg,
+#tooltip .tabitem {
+    backdrop-filter: blur(10px);
+    background-color: rgba(var(--block-background-fill), 0.5);
+}
+
+
+.reasoning_process {
+    font-size: smaller;
+    font-style: italic;
+    margin: 0px;
+    padding: 1em;
+    line-height: 1.5;
+    text-wrap: wrap;
+    opacity: 0.8;
+}
+
+.search_result {
+    font-size: smaller;
+    font-style: italic;
+    margin: 0px;
+    padding: 1em;
+    line-height: 1.5;
+    text-wrap: wrap;
+    opacity: 0.8;
+}
+
+.raw_text {
+    display: none;
+}</style>
+    <meta charset="UTF-8">
+    <title>源文件对比</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            display: flex;
+            width: 95%;
+            height: -webkit-fill-available;
+        }
+        .code-container {
+            flex: 1;
+            margin: 0px;
+            padding: 0px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            overflow: auto;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+<div class="code-container">
+<div class="markdown-body">
+ <div class="codehilite">
+  <pre><span></span><code><span class="sd">"""</span>
+<span class="sd">This module is the main script for running the training of an agent using a</span>
+<span class="sd">policy on a PCB routing environment. It imports several modules such as</span>
+<span class="sd">environment, parameters, numpy, torch, sys, and os.</span>
+
+<span class="sd">It defines several functions such as setup_seed, program_info,</span>
+<span class="sd">log_configuration, training_run, and main. The setup_seed function sets the</span>
+<span class="sd">seed for numpy and torch random number generators, while program_info prints</span>
+<span class="sd">the device being used. The log_configuration function logs the training</span>
+<span class="sd">configuration to a tensorboard file, while training_run sets up the</span>
+<span class="sd">environment and model, trains the model, and returns the best metrics.</span>
+<span class="sd">Finally, main reads command line arguments, performs multiple training runs,</span>
+<span class="sd">and prints the average of the best rewards and steps for each run.</span>
+
+<span class="sd">To run this script, execute the main function.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">core.environment.environment</span><span class="w"> </span><span class="kn">import</span> <span class="n">environment</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">core.environment.parameters</span><span class="w"> </span><span class="kn">import</span> <span class="n">parameters</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span> 
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">run_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">cmdline_args</span><span class="p">,</span> <span class="n">write_desc_log</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hyperparameters</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_hyperparameters_from_file</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">model_setup</span><span class="w"> </span><span class="kn">import</span> <span class="n">setup_model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">callbacks</span><span class="w"> </span><span class="kn">import</span> <span class="n">log_and_eval_callback</span>
+
+<span class="n">best_reward</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>          <span class="c1"># New best model, you could save the agent here</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">setup_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">):</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>       <span class="c1"># Seed numpy RNG</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>    <span class="c1"># Seed the RNG for all devices</span>
+
+    <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+        <span class="c1"># Deterministic operations for CuDNN, it may impact performances</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">deterministic</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">program_info</span><span class="p">(</span><span class="n">device</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">device</span> <span class="o">==</span> <span class="s2">"cuda"</span><span class="p">:</span>
+        <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">"cuda"</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">"cpu"</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">"cpu"</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"using </span><span class="si">{</span><span class="n">device</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">log_configuration</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmdline_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">global_step</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">cmdline_args</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cmdline_args</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s2">"&lt;br&gt;&lt;br&gt;"</span>
+
+    <span class="k">if</span> <span class="n">args</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">args</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">","</span><span class="p">,</span><span class="s2">"&lt;br&gt;"</span><span class="p">)[</span><span class="mi">10</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="n">writer</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="n">tag</span><span class="o">=</span><span class="s2">"params"</span><span class="p">,</span> <span class="n">text_string</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">global_step</span><span class="o">=</span><span class="n">global_step</span><span class="p">)</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">training_run</span><span class="p">(</span><span class="n">settings</span><span class="p">):</span>
+    <span class="n">setup_seed</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s2">"seed"</span><span class="p">][</span><span class="n">settings</span><span class="p">[</span><span class="s2">"run"</span><span class="p">]])</span>
+
+    <span class="n">settings</span><span class="p">[</span><span class="s2">"log_dir"</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"tensorboard_dir"</span><span class="p">],</span>
+                                       <span class="n">settings</span><span class="p">[</span><span class="s2">"run_name"</span><span class="p">]</span> <span class="o">+</span> <span class="sa">f</span><span class="s1">'_</span><span class="si">{</span><span class="n">settings</span><span class="p">[</span><span class="s2">"run"</span><span class="p">]</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">settings</span><span class="p">[</span><span class="s2">"policy"</span><span class="p">]</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+
+    <span class="c1"># Create directory if it doesn't exsit.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"tensorboard_dir"</span><span class="p">]):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"tensorboard_dir"</span><span class="p">])</span>
+
+    <span class="c1"># Create directory if it doesn't exsit.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"log_dir"</span><span class="p">]):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"log_dir"</span><span class="p">])</span>
+
+    <span class="n">hp</span> <span class="o">=</span> <span class="n">load_hyperparameters_from_file</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"hyperparameters"</span><span class="p">])</span>
+
+    <span class="n">env_params</span><span class="o">=</span><span class="n">parameters</span><span class="p">({</span><span class="s2">"pcb_file"</span><span class="p">:</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"training_pcb"</span><span class="p">],</span>
+                           <span class="s2">"training_pcb"</span><span class="p">:</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"training_pcb"</span><span class="p">],</span>
+                           <span class="s2">"evaluation_pcb"</span><span class="p">:</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"evaluation_pcb"</span><span class="p">],</span>
+                           <span class="s2">"net"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+                           <span class="s2">"use_dataAugmenter"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                           <span class="s2">"augment_position"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                           <span class="s2">"augment_orientation"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                           <span class="s2">"agent_max_action"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                           <span class="s2">"agent_expl_noise"</span><span class="p">:</span> <span class="n">hp</span><span class="p">[</span><span class="s2">"expl_noise"</span><span class="p">],</span>
+                           <span class="s2">"debug"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                           <span class="s2">"max_steps"</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
+                           <span class="s2">"w"</span><span class="p">:</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"w"</span><span class="p">],</span>
+                           <span class="s2">"o"</span><span class="p">:</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"o"</span><span class="p">],</span>
+                           <span class="s2">"hpwl"</span><span class="p">:</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"hpwl"</span><span class="p">],</span>
+                           <span class="s2">"seed"</span><span class="p">:</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"seed"</span><span class="p">][</span><span class="n">settings</span><span class="p">[</span><span class="s2">"run"</span><span class="p">]],</span>
+                           <span class="s2">"ignore_power"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                           <span class="s2">"log_dir"</span><span class="p">:</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"log_dir"</span><span class="p">],</span>
+                           <span class="s2">"idx"</span><span class="p">:</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"pcb_idx"</span><span class="p">],</span>
+                           <span class="s2">"shuffle_idxs"</span><span class="p">:</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"shuffle_training_idxs"</span><span class="p">],</span>
+                           <span class="p">})</span>
+
+    <span class="n">env</span> <span class="o">=</span> <span class="n">environment</span><span class="p">(</span><span class="n">env_params</span><span class="p">)</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">setup_model</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s2">"policy"</span><span class="p">],</span>
+                        <span class="n">train_env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span>
+                        <span class="n">hyperparameters</span><span class="o">=</span><span class="n">hp</span><span class="p">,</span>
+                        <span class="n">device</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s2">"device"</span><span class="p">],</span>
+                        <span class="n">early_stopping</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s2">"early_stopping"</span><span class="p">],</span>
+                        <span class="n">verbose</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s2">"verbose"</span><span class="p">])</span>
+
+    <span class="n">callback</span> <span class="o">=</span> <span class="n">log_and_eval_callback</span><span class="p">(</span><span class="n">log_dir</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s2">"log_dir"</span><span class="p">],</span>
+                                     <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span>
+                                     <span class="n">hyperparameters</span><span class="o">=</span><span class="n">hp</span><span class="p">,</span>
+                                     <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+                                     <span class="n">eval_freq</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s2">"evaluate_every"</span><span class="p">],</span>
+                                     <span class="n">verbose</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s2">"verbose"</span><span class="p">],</span>
+                                     <span class="n">training_log</span><span class="o">=</span><span class="s2">"training.log"</span><span class="p">,</span>
+                                     <span class="n">num_evaluations</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+    <span class="n">write_desc_log</span><span class="p">(</span> <span class="n">full_fn</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"log_dir"</span><span class="p">],</span>
+                                         <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">settings</span><span class="p">[</span><span class="s2">"run_name"</span><span class="p">]</span><span class="si">}</span><span class="s1">_desc.log'</span><span class="p">),</span>
+                                         <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span>
+                                         <span class="n">hyperparameters</span><span class="o">=</span><span class="n">hp</span><span class="p">,</span>
+                                         <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">explore_for_expert_targets</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"target_exploration_steps"</span><span class="p">])</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">timesteps</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s2">"max_timesteps"</span><span class="p">],</span>
+                <span class="n">callback</span><span class="o">=</span><span class="n">callback</span><span class="p">,</span>
+                <span class="n">start_timesteps</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s2">"start_timesteps"</span><span class="p">],</span>
+                <span class="n">incremental_replay_buffer</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s2">"incremental_replay_buffer"</span><span class="p">]</span>
+                <span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="n">callback</span><span class="o">.</span><span class="n">best_metrics</span><span class="p">,</span> <span class="n">callback</span><span class="o">.</span><span class="n">best_mean_metrics</span><span class="p">]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="n">args</span><span class="p">,</span><span class="n">settings</span> <span class="o">=</span> <span class="n">cmdline_args</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"redirect_stdout"</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">redirection_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"tensorboard_dir"</span><span class="p">],</span>
+                                        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">settings</span><span class="p">[</span><span class="s1">'policy'</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">settings</span><span class="p">[</span><span class="s1">'experiment'</span><span class="p">]</span><span class="si">}</span><span class="s2">.stdout"</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">redirection_file</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"redirect_stderr"</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">redirection_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"tensorboard_dir"</span><span class="p">],</span>
+                                        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">settings</span><span class="p">[</span><span class="s1">'policy'</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">settings</span><span class="p">[</span><span class="s1">'experiment'</span><span class="p">]</span><span class="si">}</span><span class="s2">.stderr"</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">redirection_file</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+
+    <span class="n">program_info</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="n">mean_best_rewards</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">mean_best_steps</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">mean_best_mean_rewards</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">mean_best_mean_steps</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"runs"</span><span class="p">]):</span>
+        <span class="n">settings</span><span class="p">[</span><span class="s2">"run"</span><span class="p">]</span> <span class="o">=</span> <span class="n">run</span>
+        <span class="n">perf_metrics</span> <span class="o">=</span> <span class="n">training_run</span><span class="p">(</span><span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">)</span>
+
+        <span class="n">mean_best_rewards</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">perf_metrics</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">mean_best_steps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">perf_metrics</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">mean_best_mean_rewards</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">perf_metrics</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">mean_best_mean_steps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">perf_metrics</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"mean best_reward = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mean_best_rewards</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"mean best_step = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mean_best_steps</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"mean best_mean_reward = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mean_best_mean_rewards</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"mean best_mean_step = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mean_best_mean_steps</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre>
+ </div>
+</div>
+
+</div>
+<div class="code-container">
+<div class="markdown-body">
+ <div class="codehilite">
+  <pre><span></span><code><span class="sd">"""</span>
+<span class="sd">This module is the main script for running the training of an agent using a</span>
+<span class="sd">policy on a PCB routing environment. It imports several modules such as</span>
+<span class="sd">environment, parameters, numpy, torch, sys, and os.</span>
+
+<span class="sd">It defines several functions such as setup_seed, program_info,</span>
+<span class="sd">log_configuration, training_run, and main. The setup_seed function sets the</span>
+<span class="sd">seed for numpy and torch random number generators, while program_info prints</span>
+<span class="sd">the device being used. The log_configuration function logs the training</span>
+<span class="sd">configuration to a tensorboard file, while training_run sets up the</span>
+<span class="sd">environment and model, trains the model, and returns the best metrics.</span>
+<span class="sd">Finally, main reads command line arguments, performs multiple training runs,</span>
+<span class="sd">and prints the average of the best rewards and steps for each run.</span>
+
+<span class="sd">To run this script, execute the main function.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">core.environment.environment</span><span class="w"> </span><span class="kn">import</span> <span class="n">environment</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">core.environment.parameters</span><span class="w"> </span><span class="kn">import</span> <span class="n">parameters</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span> 
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">run_config</span><span class="w"> </span><span class="kn">import</span> <span class="n">cmdline_args</span><span class="p">,</span> <span class="n">write_desc_log</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">hyperparameters</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_hyperparameters_from_file</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">model_setup</span><span class="w"> </span><span class="kn">import</span> <span class="n">setup_model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">callbacks</span><span class="w"> </span><span class="kn">import</span> <span class="n">log_and_eval_callback</span>
+
+<span class="n">best_reward</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span>          <span class="c1"># New best model, you could save the agent here</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">setup_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">):</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>       <span class="c1"># Seed numpy RNG</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>    <span class="c1"># Seed the RNG for all devices</span>
+
+    <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+        <span class="c1"># Deterministic operations for CuDNN, it may impact performances</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">deterministic</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">cudnn</span><span class="o">.</span><span class="n">benchmark</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">program_info</span><span class="p">(</span><span class="n">device</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    设置并显示程序运行的设备信息，自动选择可用的计算设备（CPU或CUDA）。</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        device (str): 用户指定的设备类型，可以是"cuda"或"cpu"。</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        无返回值，但会打印出最终使用的设备信息。</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">device</span> <span class="o">==</span> <span class="s2">"cuda"</span><span class="p">:</span>
+        <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">"cuda"</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">"cpu"</span><span class="p">)</span>  <span class="c1"># ⭐ 自动检测并选择可用的CUDA设备，否则回退到CPU</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">"cpu"</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"using </span><span class="si">{</span><span class="n">device</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">log_configuration</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmdline_args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">global_step</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    将配置参数和命令行参数记录到TensorBoard的writer中。</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        writer (SummaryWriter): TensorBoard的SummaryWriter对象，用于记录数据。</span>
+<span class="sd">        args (object, optional): 配置参数对象，通常包含训练相关的各种设置。默认为None。</span>
+<span class="sd">        cmdline_args (object, optional): 命令行参数对象。默认为None。</span>
+<span class="sd">        global_step (int, optional): 当前全局训练步数，用于标记记录的时间点。默认为1。</span>
+<span class="sd">    """</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">cmdline_args</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cmdline_args</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s2">"&lt;br&gt;&lt;br&gt;"</span>
+
+    <span class="k">if</span> <span class="n">args</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">args</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">","</span><span class="p">,</span><span class="s2">"&lt;br&gt;"</span><span class="p">)[</span><span class="mi">10</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="n">writer</span><span class="o">.</span><span class="n">add_text</span><span class="p">(</span><span class="n">tag</span><span class="o">=</span><span class="s2">"params"</span><span class="p">,</span> <span class="n">text_string</span><span class="o">=</span><span class="n">s</span><span class="p">,</span> <span class="n">global_step</span><span class="o">=</span><span class="n">global_step</span><span class="p">)</span>  <span class="c1"># ⭐ 核心操作：将参数文本写入TensorBoard</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">training_run</span><span class="p">(</span><span class="n">settings</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    执行完整的训练流程，包括环境初始化、模型训练和性能评估。</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        settings (dict): 包含所有训练配置参数的字典，包括随机种子、日志目录、策略类型等。</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: 包含两个元素的列表，分别是callback.best_metrics和callback.best_mean_metrics，表示训练过程中的最佳指标和平均指标。</span>
+<span class="sd">    """</span>
+    <span class="n">setup_seed</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s2">"seed"</span><span class="p">][</span><span class="n">settings</span><span class="p">[</span><span class="s2">"run"</span><span class="p">]])</span>
+
+    <span class="n">settings</span><span class="p">[</span><span class="s2">"log_dir"</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"tensorboard_dir"</span><span class="p">],</span>
+                                       <span class="n">settings</span><span class="p">[</span><span class="s2">"run_name"</span><span class="p">]</span> <span class="o">+</span> <span class="sa">f</span><span class="s1">'_</span><span class="si">{</span><span class="n">settings</span><span class="p">[</span><span class="s2">"run"</span><span class="p">]</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">settings</span><span class="p">[</span><span class="s2">"policy"</span><span class="p">]</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
+
+    <span class="c1"># Create directory if it doesn't exsit.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"tensorboard_dir"</span><span class="p">]):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"tensorboard_dir"</span><span class="p">])</span>
+
+    <span class="c1"># Create directory if it doesn't exsit.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"log_dir"</span><span class="p">]):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"log_dir"</span><span class="p">])</span>
+
+    <span class="n">hp</span> <span class="o">=</span> <span class="n">load_hyperparameters_from_file</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"hyperparameters"</span><span class="p">])</span>
+
+    <span class="n">env_params</span><span class="o">=</span><span class="n">parameters</span><span class="p">({</span><span class="s2">"pcb_file"</span><span class="p">:</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"training_pcb"</span><span class="p">],</span>
+                           <span class="s2">"training_pcb"</span><span class="p">:</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"training_pcb"</span><span class="p">],</span>
+                           <span class="s2">"evaluation_pcb"</span><span class="p">:</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"evaluation_pcb"</span><span class="p">],</span>
+                           <span class="s2">"net"</span><span class="p">:</span> <span class="s2">""</span><span class="p">,</span>
+                           <span class="s2">"use_dataAugmenter"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                           <span class="s2">"augment_position"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                           <span class="s2">"augment_orientation"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                           <span class="s2">"agent_max_action"</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                           <span class="s2">"agent_expl_noise"</span><span class="p">:</span> <span class="n">hp</span><span class="p">[</span><span class="s2">"expl_noise"</span><span class="p">],</span>
+                           <span class="s2">"debug"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                           <span class="s2">"max_steps"</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span>
+                           <span class="s2">"w"</span><span class="p">:</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"w"</span><span class="p">],</span>
+                           <span class="s2">"o"</span><span class="p">:</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"o"</span><span class="p">],</span>
+                           <span class="s2">"hpwl"</span><span class="p">:</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"hpwl"</span><span class="p">],</span>
+                           <span class="s2">"seed"</span><span class="p">:</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"seed"</span><span class="p">][</span><span class="n">settings</span><span class="p">[</span><span class="s2">"run"</span><span class="p">]],</span>
+                           <span class="s2">"ignore_power"</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                           <span class="s2">"log_dir"</span><span class="p">:</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"log_dir"</span><span class="p">],</span>
+                           <span class="s2">"idx"</span><span class="p">:</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"pcb_idx"</span><span class="p">],</span>
+                           <span class="s2">"shuffle_idxs"</span><span class="p">:</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"shuffle_training_idxs"</span><span class="p">],</span>
+                           <span class="p">})</span>
+
+    <span class="n">env</span> <span class="o">=</span> <span class="n">environment</span><span class="p">(</span><span class="n">env_params</span><span class="p">)</span>  <span class="c1"># ⭐ 初始化训练环境</span>
+    <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">setup_model</span><span class="p">(</span><span class="n">model_type</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s2">"policy"</span><span class="p">],</span>
+                        <span class="n">train_env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span>
+                        <span class="n">hyperparameters</span><span class="o">=</span><span class="n">hp</span><span class="p">,</span>
+                        <span class="n">device</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s2">"device"</span><span class="p">],</span>
+                        <span class="n">early_stopping</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s2">"early_stopping"</span><span class="p">],</span>
+                        <span class="n">verbose</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s2">"verbose"</span><span class="p">])</span>
+
+    <span class="n">callback</span> <span class="o">=</span> <span class="n">log_and_eval_callback</span><span class="p">(</span><span class="n">log_dir</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s2">"log_dir"</span><span class="p">],</span>
+                                     <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span>
+                                     <span class="n">hyperparameters</span><span class="o">=</span><span class="n">hp</span><span class="p">,</span>
+                                     <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+                                     <span class="n">eval_freq</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s2">"evaluate_every"</span><span class="p">],</span>
+                                     <span class="n">verbose</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s2">"verbose"</span><span class="p">],</span>
+                                     <span class="n">training_log</span><span class="o">=</span><span class="s2">"training.log"</span><span class="p">,</span>
+                                     <span class="n">num_evaluations</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+    <span class="n">write_desc_log</span><span class="p">(</span> <span class="n">full_fn</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"log_dir"</span><span class="p">],</span>
+                                         <span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">settings</span><span class="p">[</span><span class="s2">"run_name"</span><span class="p">]</span><span class="si">}</span><span class="s1">_desc.log'</span><span class="p">),</span>
+                                         <span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">,</span>
+                                         <span class="n">hyperparameters</span><span class="o">=</span><span class="n">hp</span><span class="p">,</span>
+                                         <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">)</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">explore_for_expert_targets</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"target_exploration_steps"</span><span class="p">])</span>  <span class="c1"># ⭐ 执行探索阶段</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">learn</span><span class="p">(</span><span class="n">timesteps</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s2">"max_timesteps"</span><span class="p">],</span>  <span class="c1"># ⭐ 执行主要训练过程</span>
+                <span class="n">callback</span><span class="o">=</span><span class="n">callback</span><span class="p">,</span>
+                <span class="n">start_timesteps</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s2">"start_timesteps"</span><span class="p">],</span>
+                <span class="n">incremental_replay_buffer</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s2">"incremental_replay_buffer"</span><span class="p">]</span>
+                <span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="n">callback</span><span class="o">.</span><span class="n">best_metrics</span><span class="p">,</span> <span class="n">callback</span><span class="o">.</span><span class="n">best_mean_metrics</span><span class="p">]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    PCB布线策略训练主程序，负责初始化训练环境、执行多次训练运行并输出性能统计。</span>
+
+<span class="sd">    功能流程：</span>
+<span class="sd">    1. 解析命令行参数获取训练设置</span>
+<span class="sd">    2. 可选重定向标准输出/错误到日志文件</span>
+<span class="sd">    3. 进行多轮次训练运行</span>
+<span class="sd">    4. 收集并计算平均性能指标</span>
+<span class="sd">    """</span>
+    <span class="n">args</span><span class="p">,</span><span class="n">settings</span> <span class="o">=</span> <span class="n">cmdline_args</span><span class="p">()</span>  <span class="c1"># ⭐ 解析命令行参数获取配置</span>
+
+    <span class="k">if</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"redirect_stdout"</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">redirection_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"tensorboard_dir"</span><span class="p">],</span>
+                                        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">settings</span><span class="p">[</span><span class="s1">'policy'</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">settings</span><span class="p">[</span><span class="s1">'experiment'</span><span class="p">]</span><span class="si">}</span><span class="s2">.stdout"</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">redirection_file</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"redirect_stderr"</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">redirection_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"tensorboard_dir"</span><span class="p">],</span>
+                                        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">settings</span><span class="p">[</span><span class="s1">'policy'</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">settings</span><span class="p">[</span><span class="s1">'experiment'</span><span class="p">]</span><span class="si">}</span><span class="s2">.stderr"</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">redirection_file</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+
+    <span class="n">program_info</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="n">mean_best_rewards</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">mean_best_steps</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">mean_best_mean_rewards</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">mean_best_mean_steps</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"runs"</span><span class="p">]):</span>
+        <span class="n">settings</span><span class="p">[</span><span class="s2">"run"</span><span class="p">]</span> <span class="o">=</span> <span class="n">run</span>
+        <span class="n">perf_metrics</span> <span class="o">=</span> <span class="n">training_run</span><span class="p">(</span><span class="n">settings</span><span class="o">=</span><span class="n">settings</span><span class="p">)</span>  <span class="c1"># ⭐ 执行单次训练运行</span>
+
+        <span class="n">mean_best_rewards</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">perf_metrics</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">mean_best_steps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">perf_metrics</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">mean_best_mean_rewards</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">perf_metrics</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">mean_best_mean_steps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">perf_metrics</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"mean best_reward = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mean_best_rewards</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"mean best_step = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mean_best_steps</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"mean best_mean_reward = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mean_best_mean_rewards</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"mean best_mean_step = </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mean_best_mean_steps</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre>
+ </div>
+</div>
+
+</div>
+</div>
+</body>
+</html>

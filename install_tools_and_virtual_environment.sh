@@ -1,42 +1,42 @@
 #!/bin/bash
 
-CPU_ONLY=false
+CPU_ONLY=true
 UPDATE_UTILITY_BINARIES=false
 SKIP_REPOSITORY_CHECK=false
-	date="2023/08/06"
+date="2023/08/06"
 
 update_utility_binaries() {
-	date="2023/05/06"
+    date="2023/05/06"
 
-	kicadParser_branch=parsing_and_plotting
-	SA_PCB_branch=crtYrd_bbox
-	pcbRouter_branch=updating_dependencies
+    kicadParser_branch=parsing_and_plotting
+    SA_PCB_branch=crtYrd_bbox
+    pcbRouter_branch=updating_dependencies
 
-	#GIT=https://www.github.com/
-	#GIT_USER=lukevassallo
-	#GIT=git@gitlab.lukevassallo.com:
-	GIT=https://gitlab.lukevassallo.com/
+    #GIT=https://www.github.com/
+    #GIT_USER=lukevassallo
+    # GIT=git@gitlab.lukevassallo.com:
+    GIT=https://gitlab.lukevassallo.com/
     GIT_USER=luke
 
-	CLEAN_ONLY=false
-	CLEAN_BEFORE_BUILD=false
-	RUN_PLACER_TESTS=false
-	RUN_ROUTER_TESTS=false
+    CLEAN_ONLY=false
+    CLEAN_BEFORE_BUILD=false
+    RUN_PLACER_TESTS=false
+    RUN_ROUTER_TESTS=false
 
-	printf "\n"
-	printf "  **** Luke Vassallo M.Sc - 02_update_utility_binaries.sh\n"
-	printf "   *** Program to to update kicad parsing utility and place and route tols.\n"
-	printf "    ** Last modification time %s\n" $date
-	printf "\n"
-	sleep 1
+    printf "\n"
+    printf "  **** Luke Vassallo M.Sc - 02_update_utility_binaries.sh\n"
+    printf "   *** Program to to update kicad parsing utility and place and route tols.\n"
+    printf "    ** Last modification time %s\n" $date
+    printf "\n"
+    sleep 1
 
-	print_help() {
-		echo "  --clean_only                removes the git repositories and exits."
-		echo "  --clean_before_build        removes the git repositories then clones and builds binaries."
-		echo "  --run_placer_tests          runs automated tests to verify placer."
-		echo "  --run_router_tests          runs automated tests to verify router."
-		echo "  --help                      print this help and exit."
-	}
+    print_help() {
+        echo "  --clean_only                removes the git repositories and exits."
+        echo "  --clean_before_build        removes the git repositories then clones and builds binaries."
+        echo "  --run_placer_tests          runs automated tests to verify placer."
+        echo "  --run_router_tests          runs automated tests to verify router."
+        echo "  --help                      print this help and exit."
+    }
 
     while [[ $# -gt 0 ]]; do
         case $1 in
@@ -191,14 +191,14 @@ update_utility_binaries() {
 }
 
     printf "\n"
-	printf "  **** Luke Vassallo M.Sc - install_tools_and_virtual_environment.sh\n"
-	printf "   *** Program to setup the environemnt for RL_PCB and baseline place and route tools.\n"
+    printf "  **** Luke Vassallo M.Sc - install_tools_and_virtual_environment.sh\n"
+    printf "   *** Program to setup the environemnt for RL_PCB and baseline place and route tools.\n"
     printf "\033[32m"       # Green text color
     printf "       RL_PCB is an end-to-end Reinforcement Learning PCB placement methodology.\n"
     printf "\033[0m"        # Black text color
-	printf "    ** Last modification time %s\n" $date
-	printf "\n"
-	sleep 5
+    printf "    ** Last modification time %s\n" $date
+    printf "\n"
+    sleep 5
 
 print_help() {
     echo "  --cpu_only                  installs the cpu only version of pyTorch."
@@ -228,17 +228,17 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-# Check if python3.8 exists
-if command -v python3.8 &>/dev/null; then
-    echo "Python 3.8 is installed."
+# Check if python3.10 exists
+if command -v python3.10 &>/dev/null; then
+    echo "python 3.10 is installed."
 else
-    echo "Python 3.8 is not installed. Please install python3.8 and relaunch the script."
+    echo "python 3.10 is not installed. Please install python3.10 and relaunch the script."
 fi
 
 source setup.sh
 
 if [ "$UPDATE_UTILITY_BINARIES" == true ]; then
-	update_utility_binaries --clean_before_build --run_placer_tests --run_router_tests
+    update_utility_binaries --clean_before_build --run_placer_tests --run_router_tests
     exit 0
 fi
 
@@ -248,10 +248,10 @@ if [ ! -d "bin" ]; then
 fi
 
 if [ ! -d "venv" ]; then
-	echo "Creating virtual environment ..."
-	python3.8 -m venv venv
+    echo "Creating virtual environment ..."
+    python3.10 -m venv venv
 else
-	echo "Virtual environment already exists ..."
+    echo "Virtual environment already exists ..."
 fi
 source venv/bin/activate
 
@@ -259,22 +259,18 @@ which python
 python -c "import sys; print(sys.path)"
 python -V
 
-python -m pip install --upgrade pip
-python -m pip install --upgrade setuptools==65.5.0	# See: https://github.com/openai/gym/issues/3176
+python -m pip install --upgrade pip -i https://mirrors.aliyun.com/pypi/simple/
+python -m pip install --upgrade setuptools==65.5.0 -i https://mirrors.aliyun.com/pypi/simple/   # See: https://github.com/openai/gym/issues/3176
 
-python -m pip install -r requirements.txt
+python -m pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/
 # Refer to pytorch and update according to your cuda version
 if [ "$CPU_ONLY" == true ]; then
-	python -m pip install torch==1.13.1+cpu torchvision==0.14.1+cpu torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cpu
+    python -m pip install torch==1.13.1+cpu torchvision==0.14.1+cpu torchaudio==0.13.1 -i https://mirrors.aliyun.com/pypi/simple/ --extra-index-url https://download.pytorch.org/whl/cpu
 else
-	python -m pip install torch==1.13.1+cu117 torchvision==0.14.1+cu117 torchaudio==0.13.1 --extra-index-url https://download.pytorch.org/whl/cu117
+    python -m pip install torch==1.13.1+cu117 torchvision==0.14.1+cu117 torchaudio==0.13.1 -i https://mirrors.aliyun.com/pypi/simple/ --extra-index-url https://download.pytorch.org/whl/cu117
 fi
 
-#python -m pip install matplotlib numpy==1.23.3 opencv-python gym pyglet optuna tensorboard reportlab==3.6.13 py-cpuinfo psutil pandas seaborn pynvml plotly moviepy
-
-#python -m pip install -U kaleido
-
-python -m pip install ${RL_PCB}/lib/pcb_netlist_graph-0.0.1-py3-none-any.whl
-python -m pip install ${RL_PCB}/lib/pcb_file_io-0.0.1-py3-none-any.whl
+python -m pip install ${RL_PCB}/lib/pcb_netlist_graph-0.0.1-py3-none-any.whl -i https://mirrors.aliyun.com/pypi/simple/
+python -m pip install ${RL_PCB}/lib/pcb_file_io-0.0.1-py3-none-any.whl -i https://mirrors.aliyun.com/pypi/simple/
 
 python ${RL_PCB}/tests/00_verify_machine_setup/test_setup.py

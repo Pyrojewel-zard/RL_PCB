@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <style>/* 插件下拉菜单 */
+#elem_audio {
+    border-style: hidden !important;
+}
+
+.dark {
+    --background-fill-primary: #050810;
+    --body-background-fill: var(--background-fill-primary);
+}
+/* 插件下拉菜单 */
+#plugin-panel .wrap.svelte-aqlk7e.svelte-aqlk7e.svelte-aqlk7e {
+    box-shadow: var(--input-shadow);
+    border: var(--input-border-width) dashed var(--border-color-primary);
+    border-radius: 4px;
+}
+
+#plugin-panel .dropdown-arrow {
+    width: 25px;
+}
+#plugin-panel input.svelte-aqlk7e.svelte-aqlk7e.svelte-aqlk7e {
+    padding-left: 5px;
+}
+
+/* 小按钮 */
+#basic-panel .sm {
+    font-family: "Microsoft YaHei UI", "Helvetica", "Microsoft YaHei", "ui-sans-serif", "sans-serif", "system-ui";
+    --button-small-text-weight: 400;
+    --button-small-text-size:   14px;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius:  6px;
+    border-top-right-radius:    6px;
+    border-top-left-radius:     6px;
+}
+
+#plugin-panel .sm {
+    font-family: "Microsoft YaHei UI", "Helvetica", "Microsoft YaHei", "ui-sans-serif", "sans-serif", "system-ui";
+    --button-small-text-weight: 400;
+    --button-small-text-size:   14px;
+    border-bottom-right-radius: 6px;
+    border-bottom-left-radius:  6px;
+    border-top-right-radius:    6px;
+    border-top-left-radius:     6px;
+}
+
+.wrap-inner.svelte-aqlk7e.svelte-aqlk7e.svelte-aqlk7e {
+    padding: 0%;
+}
+
+.markdown-body table {
+    margin: 1em 0;
+    border-collapse: collapse;
+    empty-cells: show;
+}
+
+.markdown-body th, .markdown-body td {
+    border: 1.2px solid var(--border-color-primary);
+    padding: 5px;
+}
+
+.markdown-body thead {
+    background-color: rgba(175,184,193,0.2);
+}
+
+.markdown-body thead th {
+    padding: .5em .2em;
+}
+
+.normal_mut_select .svelte-1gfkn6j {
+    float: left;
+    width: auto;
+    line-height: 260% !important;
+}
+
+.markdown-body ol, .markdown-body ul {
+    padding-inline-start: 2em !important;
+}
+
+/* chat box. */
+[class *= "message"] {
+    border-radius: var(--radius-xl) !important;
+    /* padding: var(--spacing-xl) !important; */
+    /* font-size: var(--text-md) !important; */
+    /* line-height: var(--line-md) !important; */
+    /* min-height: calc(var(--text-md)*var(--line-md) + 2*var(--spacing-xl)); */
+    /* min-width: calc(var(--text-md)*var(--line-md) + 2*var(--spacing-xl)); */
+}
+[data-testid = "bot"] {
+    max-width: 95%;
+    /* width: auto !important; */
+    border-bottom-left-radius: 0 !important;
+}
+[data-testid = "user"] {
+    max-width: 100%;
+    /* width: auto !important; */
+    border-bottom-right-radius: 0 !important;
+}
+
+/* linein code block. */
+.markdown-body code {
+    display: inline;
+    white-space: break-spaces;
+    border-radius: 6px;
+    margin: 0 2px 0 2px;
+    padding: .2em .4em .1em .4em;
+    background-color: rgba(13, 17, 23, 0.95);
+    color: #c9d1d9;
+}
+
+.dark .markdown-body code {
+    display: inline;
+    white-space: break-spaces;
+    border-radius: 6px;
+    margin: 0 2px 0 2px;
+    padding: .2em .4em .1em .4em;
+    background-color: rgba(175,184,193,0.2);
+}
+
+/* code block css */
+.markdown-body pre code {
+    display: block;
+    overflow: auto;
+    white-space: pre;
+    background-color: rgba(13, 17, 23, 0.95);
+    border-radius: 10px;
+    padding: 1em;
+    margin: 1em 2em 1em 0.5em;
+}
+
+.dark .markdown-body pre code {
+    display: block;
+    overflow: auto;
+    white-space: pre;
+    background-color: rgba(175,184,193,0.2);
+    border-radius: 10px;
+    padding: 1em;
+    margin: 1em 2em 1em 0.5em;
+}
+
+/* .mic-wrap.svelte-1thnwz {
+
+} */
+.block.svelte-mppz8v > .mic-wrap.svelte-1thnwz{
+    justify-content: center;
+    display: flex;
+    padding: 0;
+
+}
+
+.codehilite .hll { background-color: #6e7681 }
+.codehilite .c { color: #8b949e; font-style: italic } /* Comment */
+.codehilite .err { color: #f85149 } /* Error */
+.codehilite .esc { color: #c9d1d9 } /* Escape */
+.codehilite .g { color: #c9d1d9 } /* Generic */
+.codehilite .k { color: #ff7b72 } /* Keyword */
+.codehilite .l { color: #a5d6ff } /* Literal */
+.codehilite .n { color: #c9d1d9 } /* Name */
+.codehilite .o { color: #ff7b72; font-weight: bold } /* Operator */
+.codehilite .x { color: #c9d1d9 } /* Other */
+.codehilite .p { color: #c9d1d9 } /* Punctuation */
+.codehilite .ch { color: #8b949e; font-style: italic } /* Comment.Hashbang */
+.codehilite .cm { color: #8b949e; font-style: italic } /* Comment.Multiline */
+.codehilite .cp { color: #8b949e; font-weight: bold; font-style: italic } /* Comment.Preproc */
+.codehilite .cpf { color: #8b949e; font-style: italic } /* Comment.PreprocFile */
+.codehilite .c1 { color: #8b949e; font-style: italic } /* Comment.Single */
+.codehilite .cs { color: #8b949e; font-weight: bold; font-style: italic } /* Comment.Special */
+.codehilite .gd { color: #ffa198; background-color: #490202 } /* Generic.Deleted */
+.codehilite .ge { color: #c9d1d9; font-style: italic } /* Generic.Emph */
+.codehilite .gr { color: #ffa198 } /* Generic.Error */
+.codehilite .gh { color: #79c0ff; font-weight: bold } /* Generic.Heading */
+.codehilite .gi { color: #56d364; background-color: #0f5323 } /* Generic.Inserted */
+.codehilite .go { color: #8b949e } /* Generic.Output */
+.codehilite .gp { color: #8b949e } /* Generic.Prompt */
+.codehilite .gs { color: #c9d1d9; font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #79c0ff } /* Generic.Subheading */
+.codehilite .gt { color: #ff7b72 } /* Generic.Traceback */
+.codehilite .g-Underline { color: #c9d1d9; text-decoration: underline } /* Generic.Underline */
+.codehilite .kc { color: #79c0ff } /* Keyword.Constant */
+.codehilite .kd { color: #ff7b72 } /* Keyword.Declaration */
+.codehilite .kn { color: #ff7b72 } /* Keyword.Namespace */
+.codehilite .kp { color: #79c0ff } /* Keyword.Pseudo */
+.codehilite .kr { color: #ff7b72 } /* Keyword.Reserved */
+.codehilite .kt { color: #ff7b72 } /* Keyword.Type */
+.codehilite .ld { color: #79c0ff } /* Literal.Date */
+.codehilite .m { color: #a5d6ff } /* Literal.Number */
+.codehilite .s { color: #a5d6ff } /* Literal.String */
+.codehilite .na { color: #c9d1d9 } /* Name.Attribute */
+.codehilite .nb { color: #c9d1d9 } /* Name.Builtin */
+.codehilite .nc { color: #f0883e; font-weight: bold } /* Name.Class */
+.codehilite .no { color: #79c0ff; font-weight: bold } /* Name.Constant */
+.codehilite .nd { color: #d2a8ff; font-weight: bold } /* Name.Decorator */
+.codehilite .ni { color: #ffa657 } /* Name.Entity */
+.codehilite .ne { color: #f0883e; font-weight: bold } /* Name.Exception */
+.codehilite .nf { color: #d2a8ff; font-weight: bold } /* Name.Function */
+.codehilite .nl { color: #79c0ff; font-weight: bold } /* Name.Label */
+.codehilite .nn { color: #ff7b72 } /* Name.Namespace */
+.codehilite .nx { color: #c9d1d9 } /* Name.Other */
+.codehilite .py { color: #79c0ff } /* Name.Property */
+.codehilite .nt { color: #7ee787 } /* Name.Tag */
+.codehilite .nv { color: #79c0ff } /* Name.Variable */
+.codehilite .ow { color: #ff7b72; font-weight: bold } /* Operator.Word */
+.codehilite .pm { color: #c9d1d9 } /* Punctuation.Marker */
+.codehilite .w { color: #6e7681 } /* Text.Whitespace */
+.codehilite .mb { color: #a5d6ff } /* Literal.Number.Bin */
+.codehilite .mf { color: #a5d6ff } /* Literal.Number.Float */
+.codehilite .mh { color: #a5d6ff } /* Literal.Number.Hex */
+.codehilite .mi { color: #a5d6ff } /* Literal.Number.Integer */
+.codehilite .mo { color: #a5d6ff } /* Literal.Number.Oct */
+.codehilite .sa { color: #79c0ff } /* Literal.String.Affix */
+.codehilite .sb { color: #a5d6ff } /* Literal.String.Backtick */
+.codehilite .sc { color: #a5d6ff } /* Literal.String.Char */
+.codehilite .dl { color: #79c0ff } /* Literal.String.Delimiter */
+.codehilite .sd { color: #a5d6ff } /* Literal.String.Doc */
+.codehilite .s2 { color: #a5d6ff } /* Literal.String.Double */
+.codehilite .se { color: #79c0ff } /* Literal.String.Escape */
+.codehilite .sh { color: #79c0ff } /* Literal.String.Heredoc */
+.codehilite .si { color: #a5d6ff } /* Literal.String.Interpol */
+.codehilite .sx { color: #a5d6ff } /* Literal.String.Other */
+.codehilite .sr { color: #79c0ff } /* Literal.String.Regex */
+.codehilite .s1 { color: #a5d6ff } /* Literal.String.Single */
+.codehilite .ss { color: #a5d6ff } /* Literal.String.Symbol */
+.codehilite .bp { color: #c9d1d9 } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #d2a8ff; font-weight: bold } /* Name.Function.Magic */
+.codehilite .vc { color: #79c0ff } /* Name.Variable.Class */
+.codehilite .vg { color: #79c0ff } /* Name.Variable.Global */
+.codehilite .vi { color: #79c0ff } /* Name.Variable.Instance */
+.codehilite .vm { color: #79c0ff } /* Name.Variable.Magic */
+.codehilite .il { color: #a5d6ff } /* Literal.Number.Integer.Long */
+
+.dark .codehilite .hll { background-color: #2C3B41 }
+.dark .codehilite .c { color: #79d618; font-style: italic } /* Comment */
+.dark .codehilite .err { color: #FF5370 } /* Error */
+.dark .codehilite .esc { color: #89DDFF } /* Escape */
+.dark .codehilite .g { color: #EEFFFF } /* Generic */
+.dark .codehilite .k { color: #BB80B3 } /* Keyword */
+.dark .codehilite .l { color: #C3E88D } /* Literal */
+.dark .codehilite .n { color: #EEFFFF } /* Name */
+.dark .codehilite .o { color: #89DDFF } /* Operator */
+.dark .codehilite .p { color: #89DDFF } /* Punctuation */
+.dark .codehilite .ch { color: #79d618; font-style: italic } /* Comment.Hashbang */
+.dark .codehilite .cm { color: #79d618; font-style: italic } /* Comment.Multiline */
+.dark .codehilite .cp { color: #79d618; font-style: italic } /* Comment.Preproc */
+.dark .codehilite .cpf { color: #79d618; font-style: italic } /* Comment.PreprocFile */
+.dark .codehilite .c1 { color: #79d618; font-style: italic } /* Comment.Single */
+.dark .codehilite .cs { color: #79d618; font-style: italic } /* Comment.Special */
+.dark .codehilite .gd { color: #FF5370 } /* Generic.Deleted */
+.dark .codehilite .ge { color: #89DDFF } /* Generic.Emph */
+.dark .codehilite .gr { color: #FF5370 } /* Generic.Error */
+.dark .codehilite .gh { color: #C3E88D } /* Generic.Heading */
+.dark .codehilite .gi { color: #C3E88D } /* Generic.Inserted */
+.dark .codehilite .go { color: #79d618 } /* Generic.Output */
+.dark .codehilite .gp { color: #FFCB6B } /* Generic.Prompt */
+.dark .codehilite .gs { color: #FF5370 } /* Generic.Strong */
+.dark .codehilite .gu { color: #89DDFF } /* Generic.Subheading */
+.dark .codehilite .gt { color: #FF5370 } /* Generic.Traceback */
+.dark .codehilite .kc { color: #89DDFF } /* Keyword.Constant */
+.dark .codehilite .kd { color: #BB80B3 } /* Keyword.Declaration */
+.dark .codehilite .kn { color: #89DDFF; font-style: italic } /* Keyword.Namespace */
+.dark .codehilite .kp { color: #89DDFF } /* Keyword.Pseudo */
+.dark .codehilite .kr { color: #BB80B3 } /* Keyword.Reserved */
+.dark .codehilite .kt { color: #BB80B3 } /* Keyword.Type */
+.dark .codehilite .ld { color: #C3E88D } /* Literal.Date */
+.dark .codehilite .m { color: #F78C6C } /* Literal.Number */
+.dark .codehilite .s { color: #C3E88D } /* Literal.String */
+.dark .codehilite .na { color: #BB80B3 } /* Name.Attribute */
+.dark .codehilite .nb { color: #82AAFF } /* Name.Builtin */
+.dark .codehilite .nc { color: #FFCB6B } /* Name.Class */
+.dark .codehilite .no { color: #EEFFFF } /* Name.Constant */
+.dark .codehilite .nd { color: #82AAFF } /* Name.Decorator */
+.dark .codehilite .ni { color: #89DDFF } /* Name.Entity */
+.dark .codehilite .ne { color: #FFCB6B } /* Name.Exception */
+.dark .codehilite .nf { color: #82AAFF } /* Name.Function */
+.dark .codehilite .nl { color: #82AAFF } /* Name.Label */
+.dark .codehilite .nn { color: #FFCB6B } /* Name.Namespace */
+.dark .codehilite .nx { color: #EEFFFF } /* Name.Other */
+.dark .codehilite .py { color: #FFCB6B } /* Name.Property */
+.dark .codehilite .nt { color: #FF5370 } /* Name.Tag */
+.dark .codehilite .nv { color: #89DDFF } /* Name.Variable */
+.dark .codehilite .ow { color: #89DDFF; font-style: italic } /* Operator.Word */
+.dark .codehilite .pm { color: #89DDFF } /* Punctuation.Marker */
+.dark .codehilite .w { color: #EEFFFF } /* Text.Whitespace */
+.dark .codehilite .mb { color: #F78C6C } /* Literal.Number.Bin */
+.dark .codehilite .mf { color: #F78C6C } /* Literal.Number.Float */
+.dark .codehilite .mh { color: #F78C6C } /* Literal.Number.Hex */
+.dark .codehilite .mi { color: #F78C6C } /* Literal.Number.Integer */
+.dark .codehilite .mo { color: #F78C6C } /* Literal.Number.Oct */
+.dark .codehilite .sa { color: #BB80B3 } /* Literal.String.Affix */
+.dark .codehilite .sb { color: #C3E88D } /* Literal.String.Backtick */
+.dark .codehilite .sc { color: #C3E88D } /* Literal.String.Char */
+.dark .codehilite .dl { color: #EEFFFF } /* Literal.String.Delimiter */
+.dark .codehilite .sd { color: #79d618; font-style: italic } /* Literal.String.Doc */
+.dark .codehilite .s2 { color: #C3E88D } /* Literal.String.Double */
+.dark .codehilite .se { color: #EEFFFF } /* Literal.String.Escape */
+.dark .codehilite .sh { color: #C3E88D } /* Literal.String.Heredoc */
+.dark .codehilite .si { color: #89DDFF } /* Literal.String.Interpol */
+.dark .codehilite .sx { color: #C3E88D } /* Literal.String.Other */
+.dark .codehilite .sr { color: #89DDFF } /* Literal.String.Regex */
+.dark .codehilite .s1 { color: #C3E88D } /* Literal.String.Single */
+.dark .codehilite .ss { color: #89DDFF } /* Literal.String.Symbol */
+.dark .codehilite .bp { color: #89DDFF } /* Name.Builtin.Pseudo */
+.dark .codehilite .fm { color: #82AAFF } /* Name.Function.Magic */
+.dark .codehilite .vc { color: #89DDFF } /* Name.Variable.Class */
+.dark .codehilite .vg { color: #89DDFF } /* Name.Variable.Global */
+.dark .codehilite .vi { color: #89DDFF } /* Name.Variable.Instance */
+.dark .codehilite .vm { color: #82AAFF } /* Name.Variable.Magic */
+.dark .codehilite .il { color: #F78C6C } /* Literal.Number.Integer.Long */
+:root {
+    --gpt-academic-message-font-size: 15px;
+}
+
+.message {
+    font-size: var(--gpt-academic-message-font-size) !important;
+}
+
+#plugin_arg_menu {
+    transform: translate(-50%, -50%);
+    border: dashed;
+}
+
+/* hide remove all button */
+.remove-all.svelte-aqlk7e.svelte-aqlk7e.svelte-aqlk7e {
+    visibility: hidden;
+}
+
+/* hide selector border */
+#input-plugin-group .wrap.svelte-aqlk7e.svelte-aqlk7e.svelte-aqlk7e {
+    border: 0px;
+    box-shadow: none;
+}
+
+#input-plugin-group .secondary-wrap.svelte-aqlk7e.svelte-aqlk7e.svelte-aqlk7e {
+    border: none;
+    min-width: 0;
+}
+
+/* hide selector label */
+#input-plugin-group .svelte-1gfkn6j {
+    visibility: hidden;
+}
+
+/* height of the upload box */
+.wrap.svelte-xwlu1w {
+    min-height: var(--size-32);
+}
+
+/* status bar height */
+.min.svelte-1yrv54 {
+    min-height: var(--size-12);
+}
+
+/* copy btn */
+.message-btn-row {
+    width: 19px;
+    height: 19px;
+    position: absolute;
+    left: calc(100% + 3px);
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+/* .message-btn-row-leading, .message-btn-row-trailing {
+    display: inline-flex;
+    gap: 4px;
+} */
+.message-btn-row button {
+    font-size: 18px;
+    align-self: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    display: inline-flex;
+    flex-direction: row;
+    gap: 4px;
+    padding-block: 2px !important;
+}
+
+
+/* Scrollbar Width */
+::-webkit-scrollbar {
+    height: 12px;
+    width: 12px;
+}
+
+/* Scrollbar Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 12px;
+}
+
+/* Scrollbar Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 12px;
+}
+
+/* Scrollbar Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* input btns: clear, reset, stop */
+#input-panel button {
+    min-width: min(80px, 100%);
+}
+
+/* input btns: clear, reset, stop */
+#input-panel2 button {
+    min-width: min(80px, 100%);
+}
+
+#cbs,
+#cbsc {
+    background-color: rgba(var(--block-background-fill), 0.5) !important;
+}
+
+#interact-panel .form {
+    border: hidden
+}
+
+.drag-area {
+    border: solid;
+    border-width: thin;
+    user-select: none;
+    padding-left: 2%;
+    text-align: center;
+}
+
+.floating-component #input-panel2 {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border: solid;
+    border-width: thin;
+    border-top-width: 0;
+}
+
+.floating-component #plugin_arg_panel {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border: solid;
+    border-width: thin;
+    border-top-width: 0;
+}
+
+.floating-component #edit-panel {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border: solid;
+    border-width: thin;
+    border-top-width: 0;
+}
+
+
+.welcome-card-container {
+    text-align: center;
+    margin: 0 auto;
+    display: flex;
+    position: absolute;
+    width: inherit;
+    padding: 50px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    flex-wrap: wrap;
+    justify-content: center;
+    transition: opacity 0.6s ease-in-out;
+    opacity: 0;
+}
+.welcome-card-container.show {
+    opacity: 1;
+}
+.welcome-card-container.hide {
+    opacity: 0;
+}
+.welcome-card {
+    border-radius: 10px;
+    box-shadow: 0px 0px 6px 3px #e5e7eb6b;
+    padding: 15px;
+    margin: 10px;
+    flex: 1 0 calc(30% - 5px);
+    transform: rotateY(0deg);
+    transition: transform 0.1s;
+    transform-style: preserve-3d;
+}
+.welcome-card.show {
+    transform: rotateY(0deg);
+}
+.welcome-card.hide {
+    transform: rotateY(90deg);
+}
+.welcome-title {
+    font-size: 40px;
+    padding: 20px;
+    margin: 10px;
+    flex: 0 0 calc(90%);
+}
+.welcome-card-title {
+    font-size: 20px;
+    margin: 2px;
+    flex: 0 0 calc(95%);
+    padding-bottom: 8px;
+    padding-top: 8px;
+    padding-right: 8px;
+    padding-left: 8px;
+    display: flex;
+    justify-content: center;
+}
+.welcome-svg {
+    padding-right: 10px;
+}
+
+.welcome-title-text {
+    text-wrap: nowrap;
+}
+.welcome-content {
+    text-wrap: balance;
+    height: 55px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+}
+
+
+#gpt-submit-row {
+    display: flex;
+    gap: 0 !important;
+    border-radius: var(--button-large-radius);
+    border: var(--button-border-width) solid var(--button-primary-border-color);
+    /* background: var(--button-primary-background-fill); */
+    background: var(--button-primary-background-fill-hover);
+    color: var(--button-primary-text-color);
+    box-shadow: var(--button-shadow);
+    transition: var(--button-transition);
+    display: flex;
+}
+#gpt-submit-row:hover {
+    border-color: var(--button-primary-border-color-hover);
+    /* background: var(--button-primary-background-fill-hover); */
+    /* color: var(--button-primary-text-color-hover); */
+}
+#gpt-submit-row button#elem_submit_visible {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    box-shadow: none !important;
+    flex-grow: 1;
+}
+#gpt-submit-row #gpt-submit-dropdown {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-left: 0.5px solid #FFFFFF88 !important;
+    display: flex;
+    overflow: unset !important;
+    max-width: 40px !important;
+    min-width: 40px !important;
+}
+#gpt-submit-row #gpt-submit-dropdown input {
+    pointer-events: none;
+    opacity: 0; /* 隐藏输入框 */
+    width: 0;
+    margin-inline: 0;
+    cursor: pointer;
+}
+#gpt-submit-row #gpt-submit-dropdown label {
+    display: flex;
+    width: 0;
+}
+#gpt-submit-row #gpt-submit-dropdown label div.wrap {
+    background: none;
+    box-shadow: none;
+    border: none;
+}
+#gpt-submit-row #gpt-submit-dropdown label div.wrap div.wrap-inner {
+    background: none;
+    padding-inline: 0;
+    height: 100%;
+}
+#gpt-submit-row #gpt-submit-dropdown svg.dropdown-arrow {
+    transform: scale(2) translate(4.5px, -0.3px);
+}
+#gpt-submit-row #gpt-submit-dropdown > *:hover {
+    cursor: context-menu;
+}
+
+.tooltip.svelte-p2nen8.svelte-p2nen8 {
+    box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.5);
+    left: 10px;
+}
+
+#tooltip .hidden {
+    /* display: none; */
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+#tooltip .visible {
+    /* display: block; */
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+#elem_fontsize,
+#elem_top_p,
+#elem_temperature,
+#elem_max_length_sl,
+#elem_prompt {
+    /* 左右为0；顶部为0，底部为2px */
+    padding: 0 0 4px 0;
+    backdrop-filter: blur(10px);
+    background-color: rgba(var(--block-background-fill), 0.5);
+}
+
+
+#tooltip #cbs,
+#tooltip #cbsc,
+#tooltip .svelte-b6y5bg,
+#tooltip .tabitem {
+    backdrop-filter: blur(10px);
+    background-color: rgba(var(--block-background-fill), 0.5);
+}
+
+
+.reasoning_process {
+    font-size: smaller;
+    font-style: italic;
+    margin: 0px;
+    padding: 1em;
+    line-height: 1.5;
+    text-wrap: wrap;
+    opacity: 0.8;
+}
+
+.search_result {
+    font-size: smaller;
+    font-style: italic;
+    margin: 0px;
+    padding: 1em;
+    line-height: 1.5;
+    text-wrap: wrap;
+    opacity: 0.8;
+}
+
+.raw_text {
+    display: none;
+}</style>
+    <meta charset="UTF-8">
+    <title>源文件对比</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            display: flex;
+            width: 95%;
+            height: -webkit-fill-available;
+        }
+        .code-container {
+            flex: 1;
+            margin: 0px;
+            padding: 0px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            overflow: auto;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+<div class="code-container">
+<div class="markdown-body">
+ <div class="codehilite">
+  <pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn.functional</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">F</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.optim</span><span class="w"> </span><span class="kn">import</span> <span class="n">Adam</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">soft_update</span><span class="p">,</span> <span class="n">hard_update</span><span class="p">,</span> <span class="n">ReplayMemory</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">tracker</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">gym</span>
+<span class="n">LOG_SIG_MAX</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">LOG_SIG_MIN</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span>
+<span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1e-6</span>
+
+<span class="c1"># Initialize Policy weights</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">weights_init_</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">):</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">xavier_uniform_</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">constant_</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">bias</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">QNetwork</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_inputs</span><span class="p">,</span>
+                 <span class="n">num_actions</span><span class="p">,</span>
+                 <span class="n">qf</span> <span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">],</span>
+                 <span class="n">activation_fn</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"relu"</span><span class="p">):</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">QNetwork</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">activation_fn</span> <span class="o">==</span> <span class="s2">"relu"</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">activation_fn</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span>
+        <span class="k">elif</span> <span class="n">activation_fn</span> <span class="o">==</span> <span class="s2">"tanh"</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">activation_fn</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">tanh</span>
+
+        <span class="c1"># Q1 architecture</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qf1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">()</span>
+        <span class="n">in_size</span> <span class="o">=</span> <span class="n">num_inputs</span> <span class="o">+</span> <span class="n">num_actions</span>
+        <span class="k">for</span> <span class="n">layer_sz</span> <span class="ow">in</span> <span class="n">qf</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qf1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_size</span><span class="p">,</span> <span class="n">layer_sz</span><span class="p">))</span>
+            <span class="n">in_size</span> <span class="o">=</span> <span class="n">layer_sz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qf1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="c1"># Q2 architecture</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qf2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">()</span>
+        <span class="n">in_size</span> <span class="o">=</span> <span class="n">num_inputs</span> <span class="o">+</span> <span class="n">num_actions</span>
+        <span class="k">for</span> <span class="n">layer_sz</span> <span class="ow">in</span> <span class="n">qf</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qf2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_size</span><span class="p">,</span> <span class="n">layer_sz</span><span class="p">))</span>
+            <span class="n">in_size</span> <span class="o">=</span> <span class="n">layer_sz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qf2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="c1"># self.apply(weights_init_)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+        <span class="n">sa</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">q1</span> <span class="o">=</span> <span class="n">sa</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qf1</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">q1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation_fn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qf1</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="n">q1</span><span class="p">))</span>
+        <span class="n">q1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qf1</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">](</span><span class="n">q1</span><span class="p">)</span>
+
+        <span class="n">q2</span> <span class="o">=</span> <span class="n">sa</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qf2</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">q2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation_fn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qf2</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="n">q2</span><span class="p">))</span>
+        <span class="n">q2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qf2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">](</span><span class="n">q2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">GaussianPolicy</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">num_inputs</span><span class="p">,</span>
+                 <span class="n">num_actions</span><span class="p">,</span>
+                 <span class="n">pi</span> <span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">],</span>
+                 <span class="n">activation_fn</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"relu"</span><span class="p">,</span>
+                 <span class="n">action_space</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"cuda"</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">GaussianPolicy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">device</span> <span class="o">==</span> <span class="s2">"cuda"</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span>
+                <span class="s2">"cuda"</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">"cpu"</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">"cpu"</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pi</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">()</span>
+        <span class="n">in_size</span> <span class="o">=</span> <span class="n">num_inputs</span>
+        <span class="k">for</span> <span class="n">layer_sz</span> <span class="ow">in</span> <span class="n">pi</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_size</span><span class="p">,</span> <span class="n">layer_sz</span><span class="p">))</span>
+            <span class="n">in_size</span> <span class="o">=</span> <span class="n">layer_sz</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean_linear</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_size</span><span class="p">,</span> <span class="n">num_actions</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_std_linear</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_size</span><span class="p">,</span> <span class="n">num_actions</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">activation_fn</span> <span class="o">==</span> <span class="s2">"relu"</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">activation_fn</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span>
+        <span class="k">elif</span> <span class="n">activation_fn</span> <span class="o">==</span> <span class="s2">"tanh"</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">activation_fn</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">tanh</span>
+
+        <span class="c1"># action rescaling</span>
+        <span class="k">if</span> <span class="n">action_space</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">action_scale</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">1.</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">action_bias</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">action_scale</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">action_space</span><span class="o">.</span><span class="n">high</span> <span class="o">-</span> <span class="n">action_space</span><span class="o">.</span><span class="n">low</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">action_bias</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">action_space</span><span class="o">.</span><span class="n">high</span> <span class="o">+</span> <span class="n">action_space</span><span class="o">.</span><span class="n">low</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">state</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pi</span><span class="p">)):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation_fn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pi</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean_linear</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">log_std</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_std_linear</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">log_std</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="n">log_std</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="n">LOG_SIG_MIN</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="n">LOG_SIG_MAX</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">mean</span><span class="p">,</span> <span class="n">log_std</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="n">mean</span><span class="p">,</span> <span class="n">log_std</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="n">std</span> <span class="o">=</span> <span class="n">log_std</span><span class="o">.</span><span class="n">exp</span><span class="p">()</span>
+        <span class="n">normal</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">std</span><span class="p">)</span>
+        <span class="c1"># for reparameterization trick (mean + std * N(0,1))</span>
+        <span class="n">x_t</span> <span class="o">=</span> <span class="n">normal</span><span class="o">.</span><span class="n">rsample</span><span class="p">()</span>
+        <span class="n">y_t</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">x_t</span><span class="p">)</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">y_t</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_scale</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_bias</span>
+        <span class="n">log_prob</span> <span class="o">=</span> <span class="n">normal</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">x_t</span><span class="p">)</span>
+        <span class="c1"># Enforcing Action Bound</span>
+        <span class="n">log_prob</span> <span class="o">-=</span> <span class="n">torch</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">action_scale</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y_t</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="n">epsilon</span><span class="p">)</span>
+        <span class="n">log_prob</span> <span class="o">=</span> <span class="n">log_prob</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">mean</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">mean</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_scale</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_bias</span>
+        <span class="k">return</span> <span class="n">action</span><span class="p">,</span> <span class="n">log_prob</span><span class="p">,</span> <span class="n">mean</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">action_scale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_scale</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">action_bias</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_bias</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">GaussianPolicy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">select_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">evaluate</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">(</span><span class="n">state</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">evaluate</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">action</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">action</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SAC</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">max_action</span><span class="p">,</span>
+            <span class="n">hyperparameters</span><span class="p">,</span>
+            <span class="n">train_env</span><span class="p">,</span>
+            <span class="n">device</span><span class="p">:</span><span class="nb">str</span> <span class="o">=</span> <span class="s2">"cpu"</span><span class="p">,</span>
+            <span class="n">early_stopping</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span> <span class="mi">100_000</span><span class="p">,</span>
+            <span class="c1"># used when a training environment is not supplied</span>
+            <span class="n">state_dim</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span> <span class="mi">23</span><span class="p">,</span>
+            <span class="n">action_dim</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span><span class="mi">0</span>
+            <span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"gamma"</span><span class="p">]</span>       <span class="c1"># 0.99</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tau</span> <span class="o">=</span> <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"tau"</span><span class="p">]</span>           <span class="c1"># 0.005</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.2</span>                            <span class="c1"># args.alpha</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lr</span> <span class="o">=</span> <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"learning_rate"</span><span class="p">]</span>  <span class="c1"># 3e-4</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"batch_size"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buffer_size</span> <span class="o">=</span> <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"buffer_size"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient_steps</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">policy_type</span> <span class="o">=</span> <span class="s2">"Gaussian"</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_update_interval</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">automatic_entropy_tuning</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="n">device</span> <span class="o">==</span> <span class="s2">"cuda"</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span>
+                <span class="s2">"cuda"</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">"cpu"</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">"cpu"</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Model SAC is configured to learn with device </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span> <span class="o">=</span> <span class="n">train_env</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">state_dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_observation_space_shape</span><span class="p">()</span>
+            <span class="n">action_dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">action_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
+            <span class="n">action_space</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span>
+                <span class="n">low</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
+                <span class="n">high</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">critic</span> <span class="o">=</span> <span class="n">QNetwork</span><span class="p">(</span><span class="n">state_dim</span><span class="p">,</span>
+                               <span class="n">action_dim</span><span class="p">,</span>
+                               <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"net_arch"</span><span class="p">][</span><span class="s2">"qf"</span><span class="p">],</span>
+                               <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"activation_fn"</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">critic_optim</span> <span class="o">=</span> <span class="n">Adam</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">critic</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lr</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">critic_target</span> <span class="o">=</span> <span class="n">QNetwork</span><span class="p">(</span><span class="n">state_dim</span><span class="p">,</span>
+                                      <span class="n">action_dim</span><span class="p">,</span>
+                                      <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"net_arch"</span><span class="p">][</span><span class="s2">"qf"</span><span class="p">],</span>
+                                      <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"activation_fn"</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="n">hard_update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">critic_target</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">critic</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">automatic_entropy_tuning</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">target_entropy</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">train_env</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">))</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">target_entropy</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">action_shape</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">))</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_alpha</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span>
+                                         <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                         <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alpha_optim</span> <span class="o">=</span> <span class="n">Adam</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">log_alpha</span><span class="p">],</span> <span class="n">lr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lr</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">policy</span> <span class="o">=</span> <span class="n">GaussianPolicy</span><span class="p">(</span><span class="n">state_dim</span><span class="p">,</span>
+                                         <span class="n">action_dim</span><span class="p">,</span>
+                                         <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"net_arch"</span><span class="p">][</span><span class="s2">"pi"</span><span class="p">],</span>
+                                         <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"activation_fn"</span><span class="p">],</span>
+                                         <span class="n">action_space</span><span class="o">=</span><span class="n">train_env</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">action_space</span><span class="p">,</span>
+                                         <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">policy</span> <span class="o">=</span> <span class="n">GaussianPolicy</span><span class="p">(</span><span class="n">state_dim</span><span class="p">,</span>
+                                         <span class="n">action_dim</span><span class="p">,</span>
+                                         <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"net_arch"</span><span class="p">][</span><span class="s2">"pi"</span><span class="p">],</span>
+                                         <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"activation_fn"</span><span class="p">],</span>
+                                         <span class="n">action_space</span><span class="o">=</span><span class="n">action_space</span><span class="p">,</span>
+                                         <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">policy_optim</span> <span class="o">=</span> <span class="n">Adam</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lr</span><span class="p">)</span>
+
+        <span class="c1"># Memory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">replay_buffer</span> <span class="o">=</span> <span class="n">ReplayMemory</span><span class="p">(</span>
+            <span class="n">capacity</span><span class="o">=</span><span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"buffer_size"</span><span class="p">],</span>
+            <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trackr</span> <span class="o">=</span> <span class="n">tracker</span><span class="o">.</span><span class="n">tracker</span><span class="p">(</span><span class="n">avg_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">rl_policy_type</span><span class="o">=</span><span class="s2">"SAC"</span><span class="p">)</span>
+
+        <span class="c1"># Early stopping</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">early_stopping</span> <span class="o">=</span> <span class="n">early_stopping</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exit</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">select_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">evaluate</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">(</span><span class="n">state</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">evaluate</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">action</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">action</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memory</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">updates</span><span class="p">):</span>
+        <span class="c1"># Sample a batch from memory</span>
+        <span class="n">state_batch</span><span class="p">,</span> <span class="n">action_batch</span><span class="p">,</span> <span class="n">next_state_batch</span><span class="p">,</span> <span class="n">reward_batch</span><span class="p">,</span> <span class="n">mask_batch</span> <span class="o">=</span> <span class="n">memory</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">next_state_action</span><span class="p">,</span> <span class="n">next_state_log_pi</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">next_state_batch</span><span class="p">)</span>
+            <span class="n">qf1_next_target</span><span class="p">,</span> <span class="n">qf2_next_target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">critic_target</span><span class="p">(</span><span class="n">next_state_batch</span><span class="p">,</span> <span class="n">next_state_action</span><span class="p">)</span>
+            <span class="n">min_qf_next_target</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">qf1_next_target</span><span class="p">,</span> <span class="n">qf2_next_target</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">next_state_log_pi</span>
+            <span class="n">next_q_value</span> <span class="o">=</span> <span class="n">reward_batch</span> <span class="o">+</span> <span class="n">mask_batch</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="p">(</span><span class="n">min_qf_next_target</span><span class="p">)</span>
+        <span class="c1"># Two Q-functions to mitigate positive bias in the policy improvement step</span>
+        <span class="n">qf1</span><span class="p">,</span> <span class="n">qf2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">critic</span><span class="p">(</span><span class="n">state_batch</span><span class="p">,</span> <span class="n">action_batch</span><span class="p">)</span>
+
+        <span class="c1"># JQ = 𝔼(st,at)~D[0.5(Q1(st,at) - r(st,at) - γ(𝔼st+1~p[V(st+1)]))^2]</span>
+        <span class="n">qf1_loss</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span><span class="n">qf1</span><span class="p">,</span> <span class="n">next_q_value</span><span class="p">)</span>
+        <span class="n">qf2_loss</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span><span class="n">qf2</span><span class="p">,</span> <span class="n">next_q_value</span><span class="p">)</span>
+        <span class="n">qf_loss</span> <span class="o">=</span> <span class="n">qf1_loss</span> <span class="o">+</span> <span class="n">qf2_loss</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">critic_optim</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+        <span class="n">qf_loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">critic_optim</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+        <span class="n">pi</span><span class="p">,</span> <span class="n">log_pi</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">state_batch</span><span class="p">)</span>
+
+        <span class="n">qf1_pi</span><span class="p">,</span> <span class="n">qf2_pi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">critic</span><span class="p">(</span><span class="n">state_batch</span><span class="p">,</span> <span class="n">pi</span><span class="p">)</span>
+        <span class="n">min_qf_pi</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">qf1_pi</span><span class="p">,</span> <span class="n">qf2_pi</span><span class="p">)</span>
+        <span class="c1"># Jπ = 𝔼st∼D,εt∼N[α * logπ(f(εt;st)|st) − Q(st,f(εt;st))]</span>
+        <span class="n">policy_loss</span> <span class="o">=</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">log_pi</span><span class="p">)</span> <span class="o">-</span> <span class="n">min_qf_pi</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">policy_optim</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+        <span class="n">policy_loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">policy_optim</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">automatic_entropy_tuning</span><span class="p">:</span>
+            <span class="n">alpha_loss</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_alpha</span> <span class="o">*</span> <span class="p">(</span><span class="n">log_pi</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_entropy</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">())</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">alpha_optim</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+            <span class="n">alpha_loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alpha_optim</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_alpha</span><span class="o">.</span><span class="n">exp</span><span class="p">()</span>
+            <span class="n">alpha_tlogs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span> <span class="c1"># For TensorboardX logs</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">alpha_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">alpha_tlogs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span> <span class="c1"># For TensorboardX logs</span>
+
+
+        <span class="k">if</span> <span class="n">updates</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_update_interval</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">soft_update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">critic_target</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">critic</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">qf1_loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">qf2_loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">policy_loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">alpha_loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">alpha_tlogs</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">explore_for_expert_targets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                   <span class="n">reward_target_exploration_steps</span><span class="o">=</span><span class="mi">25_000</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"Model cannot explore because training envrionment is missing. Please reload model and supply a training envrionment."</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">reward_target_exploration_steps</span><span class="p">):</span>
+            <span class="n">obs_vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="p">,</span>
+                                          <span class="n">random</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                          <span class="n">rl_model_type</span><span class="o">=</span><span class="s2">"SAC"</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">indiv_obs</span> <span class="ow">in</span> <span class="n">obs_vec</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">indiv_obs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span><span class="o">.</span><span class="n">tracker</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">learn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+              <span class="n">timesteps</span><span class="p">,</span>
+              <span class="n">callback</span><span class="p">,</span>
+              <span class="n">start_timesteps</span><span class="o">=</span><span class="mi">25_000</span><span class="p">,</span>
+              <span class="n">incremental_replay_buffer</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"Model cannot learn because training envrionment is missing. Please reload model and supply a training envrionment."</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">next_update_at</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer_size</span><span class="o">*</span><span class="mi">2</span>
+
+        <span class="n">episode_reward</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">episode_timesteps</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">episode_num</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">callback</span><span class="o">.</span><span class="n">on_training_start</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock_gettime</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">CLOCK_REALTIME</span><span class="p">)</span>
+
+        <span class="n">episode_start_time</span> <span class="o">=</span> <span class="n">start_time</span>
+
+        <span class="c1"># Training Loop</span>
+        <span class="n">updates</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">all_actor_losses</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">all_critic_1_losses</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">all_critic_2_losses</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">all_entropy_losses</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">alpha</span> <span class="o">=</span><span class="mi">0</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">timesteps</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_timesteps</span> <span class="o">=</span> <span class="n">t</span>
+            <span class="n">episode_timesteps</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">start_timesteps</span><span class="p">:</span>
+                <span class="n">obs_vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="p">,</span>
+                                              <span class="n">random</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                              <span class="n">rl_model_type</span><span class="o">=</span><span class="s2">"SAC"</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">obs_vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="p">,</span>
+                                              <span class="n">random</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                              <span class="n">rl_model_type</span><span class="o">=</span><span class="s2">"SAC"</span><span class="p">)</span>
+
+            <span class="n">all_rewards</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">indiv_obs</span> <span class="ow">in</span> <span class="n">obs_vec</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">indiv_obs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">all_rewards</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">indiv_obs</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                <span class="n">transition</span> <span class="o">=</span> <span class="p">(</span><span class="n">indiv_obs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                              <span class="n">indiv_obs</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+                              <span class="n">indiv_obs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                              <span class="n">indiv_obs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                              <span class="mf">1.</span> <span class="o">-</span><span class="n">indiv_obs</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">replay_buffer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="o">*</span><span class="n">transition</span><span class="p">)</span>
+
+            <span class="n">episode_reward</span> <span class="o">+=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">all_rewards</span><span class="p">)))</span>
+
+            <span class="k">if</span> <span class="n">t</span> <span class="o">&gt;=</span> <span class="n">start_timesteps</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">replay_buffer</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">:</span>
+                    <span class="c1"># Number of updates per step in environment</span>
+                    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gradient_steps</span><span class="p">):</span>
+                        <span class="c1"># Update parameters of all the networks</span>
+                        <span class="n">critic_1_loss</span><span class="p">,</span> <span class="n">critic_2_loss</span><span class="p">,</span> <span class="n">policy_loss</span><span class="p">,</span> <span class="n">ent_loss</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">replay_buffer</span><span class="p">,</span>
+                                                                                                <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
+                                                                                                <span class="n">updates</span><span class="p">)</span>
+                        <span class="n">updates</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                        <span class="n">all_actor_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">policy_loss</span><span class="p">)</span>
+                        <span class="n">all_critic_1_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">critic_1_loss</span><span class="p">)</span>
+                        <span class="n">all_critic_2_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">critic_2_loss</span><span class="p">)</span>
+                        <span class="n">all_entropy_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ent_loss</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="p">:</span>
+                <span class="n">episode_finish_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock_gettime</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">CLOCK_REALTIME</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">start_timesteps</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">replay_buffer</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">trackr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">actor_loss</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                           <span class="n">critic_loss</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                           <span class="n">episode_reward</span><span class="o">=</span><span class="n">episode_reward</span><span class="p">,</span>
+                           <span class="n">episode_length</span> <span class="o">=</span> <span class="n">episode_timesteps</span><span class="p">,</span>
+                           <span class="n">episode_fps</span> <span class="o">=</span> <span class="n">episode_timesteps</span> <span class="o">/</span> <span class="p">(</span><span class="n">episode_finish_time</span> <span class="o">-</span> <span class="n">episode_start_time</span><span class="p">),</span>
+                           <span class="n">critic_1_loss</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                           <span class="n">critic_2_loss</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                           <span class="n">entropy_loss</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                           <span class="n">entropy</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">trackr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">actor_loss</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">all_actor_losses</span><span class="p">),</span>
+                           <span class="n">critic_loss</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">all_critic_1_losses</span><span class="o">+</span><span class="n">all_critic_2_losses</span><span class="p">),</span>
+                           <span class="n">episode_reward</span><span class="o">=</span><span class="n">episode_reward</span><span class="p">,</span>
+                           <span class="n">episode_length</span> <span class="o">=</span> <span class="n">episode_timesteps</span><span class="p">,</span>
+                           <span class="n">episode_fps</span> <span class="o">=</span> <span class="n">episode_timesteps</span> <span class="o">/</span> <span class="p">(</span><span class="n">episode_finish_time</span> <span class="o">-</span> <span class="n">episode_start_time</span><span class="p">),</span>
+                           <span class="n">critic_1_loss</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">all_critic_1_losses</span><span class="p">),</span>
+                           <span class="n">critic_2_loss</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">all_critic_2_losses</span><span class="p">),</span>
+                           <span class="n">entropy_loss</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">all_entropy_losses</span><span class="p">),</span>
+                           <span class="n">entropy</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+
+            <span class="n">callback</span><span class="o">.</span><span class="n">on_step</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">episode_reward</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">episode_timesteps</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">episode_num</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span><span class="o">.</span><span class="n">tracker</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+                <span class="n">episode_start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock_gettime</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">CLOCK_REALTIME</span><span class="p">)</span>
+
+                <span class="n">all_actor_losses</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">all_critic_1_losses</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">all_critic_2_losses</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">all_entropy_losses</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="c1"># Early stopping</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Early stopping mechanism triggered at timestep=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_timesteps</span><span class="si">}</span><span class="s2"> after </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">early_stopping</span><span class="si">}</span><span class="s2"> steps without improvement ... Learning terminated."</span><span class="p">)</span>
+                <span class="k">break</span>
+
+            <span class="k">if</span> <span class="n">incremental_replay_buffer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">t</span> <span class="o">&gt;=</span> <span class="n">next_update_at</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">incremental_replay_buffer</span> <span class="o">==</span> <span class="s2">"double"</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">buffer_size</span> <span class="o">*=</span> <span class="mi">2</span>
+                        <span class="n">next_update_at</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer_size</span> <span class="o">*</span> <span class="mi">2</span>
+                    <span class="k">elif</span> <span class="n">incremental_replay_buffer</span> <span class="o">==</span> <span class="s2">"triple"</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">buffer_size</span> <span class="o">*=</span> <span class="mi">3</span>
+                        <span class="n">next_update_at</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer_size</span>
+                    <span class="k">elif</span> <span class="n">incremental_replay_buffer</span> <span class="o">==</span> <span class="s2">"quadruple"</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">buffer_size</span> <span class="o">*=</span> <span class="mi">4</span>
+                        <span class="n">next_update_at</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer_size</span>
+
+                    <span class="n">old_replay_buffer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">replay_buffer</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">replay_buffer</span> <span class="o">=</span> <span class="n">ReplayMemory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buffer_size</span><span class="p">,</span>
+                                                      <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">replay_buffer</span><span class="o">.</span><span class="n">add_content_of</span><span class="p">(</span><span class="n">old_replay_buffer</span><span class="p">)</span>
+
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Updated replay buffer at timestep </span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2">; replay_buffer_size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">buffer_size</span><span class="si">}</span><span class="s2">, len=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">replay_buffer</span><span class="o">.</span><span class="fm">__len__</span><span class="p">()</span><span class="si">}</span><span class="s2"> next_update_at=</span><span class="si">{</span><span class="n">next_update_at</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+        <span class="n">callback</span><span class="o">.</span><span class="n">on_training_end</span><span class="p">()</span>
+
+    <span class="c1"># Save model parameters</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">({</span><span class="s2">"policy_state_dict"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
+                    <span class="s2">"critic_state_dict"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">critic</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
+                    <span class="s2">"critic_target_state_dict"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">critic_target</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
+                    <span class="s2">"critic_optimizer_state_dict"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">critic_optim</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
+                    <span class="s2">"policy_optimizer_state_dict"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy_optim</span><span class="o">.</span><span class="n">state_dict</span><span class="p">()},</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="c1"># Load model parameters</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="n">checkpoint</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">[</span><span class="s2">"policy_state_dict"</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">critic</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">[</span><span class="s2">"critic_state_dict"</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">critic_target</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span>
+            <span class="n">checkpoint</span><span class="p">[</span><span class="s2">"critic_target_state_dict"</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">critic_optim</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span>
+            <span class="n">checkpoint</span><span class="p">[</span><span class="s2">"critic_optimizer_state_dict"</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">policy_optim</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span>
+            <span class="n">checkpoint</span><span class="p">[</span><span class="s2">"policy_optimizer_state_dict"</span><span class="p">])</span>
+</code></pre>
+ </div>
+</div>
+
+</div>
+<div class="code-container">
+<div class="markdown-body">
+ <div class="codehilite">
+  <pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn.functional</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">F</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.optim</span><span class="w"> </span><span class="kn">import</span> <span class="n">Adam</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">soft_update</span><span class="p">,</span> <span class="n">hard_update</span><span class="p">,</span> <span class="n">ReplayMemory</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">tracker</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">gym</span>
+<span class="n">LOG_SIG_MAX</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1"># 对数标准差的最大值</span>
+<span class="n">LOG_SIG_MIN</span> <span class="o">=</span> <span class="o">-</span><span class="mi">20</span>  <span class="c1"># 对数标准差的最小值</span>
+<span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1e-6</span>  <span class="c1"># 数值稳定性的小常数</span>
+
+<span class="c1"># Initialize Policy weights</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">weights_init_</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    初始化神经网络权重</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        m (torch.nn.Module): 需要初始化的神经网络层</span>
+
+<span class="sd">    使用Xavier均匀分布初始化线性层的权重，偏置初始化为0</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">):</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">xavier_uniform_</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">gain</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># ⭐ 使用Xavier方法初始化权重</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">constant_</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">bias</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">QNetwork</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Q网络类，用于评估状态-动作对的价值</span>
+
+<span class="sd">    这是SAC算法中用于估计Q值的神经网络，继承自torch.nn.Module</span>
+<span class="sd">    """</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_inputs</span><span class="p">,</span>
+                 <span class="n">num_actions</span><span class="p">,</span>
+                 <span class="n">qf</span> <span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">],</span>
+                 <span class="n">activation_fn</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"relu"</span><span class="p">):</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">QNetwork</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">activation_fn</span> <span class="o">==</span> <span class="s2">"relu"</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">activation_fn</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span>
+        <span class="k">elif</span> <span class="n">activation_fn</span> <span class="o">==</span> <span class="s2">"tanh"</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">activation_fn</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">tanh</span>
+
+        <span class="c1"># Q1 architecture</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qf1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">()</span>
+        <span class="n">in_size</span> <span class="o">=</span> <span class="n">num_inputs</span> <span class="o">+</span> <span class="n">num_actions</span>
+        <span class="k">for</span> <span class="n">layer_sz</span> <span class="ow">in</span> <span class="n">qf</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qf1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_size</span><span class="p">,</span> <span class="n">layer_sz</span><span class="p">))</span>
+            <span class="n">in_size</span> <span class="o">=</span> <span class="n">layer_sz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qf1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="c1"># Q2 architecture</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qf2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">()</span>
+        <span class="n">in_size</span> <span class="o">=</span> <span class="n">num_inputs</span> <span class="o">+</span> <span class="n">num_actions</span>
+        <span class="k">for</span> <span class="n">layer_sz</span> <span class="ow">in</span> <span class="n">qf</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qf2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_size</span><span class="p">,</span> <span class="n">layer_sz</span><span class="p">))</span>
+            <span class="n">in_size</span> <span class="o">=</span> <span class="n">layer_sz</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qf2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="c1"># self.apply(weights_init_)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        执行双Q网络的前向传播，计算给定状态和动作下的两个Q值。</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            state (torch.Tensor): 当前环境状态</span>
+<span class="sd">            action (torch.Tensor): 在当前状态下采取的动作</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: 包含两个Q值的元组 (q1, q2)</span>
+<span class="sd">        """</span>
+        <span class="n">sa</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># ⭐ 将状态和动作拼接作为网络输入</span>
+
+        <span class="n">q1</span> <span class="o">=</span> <span class="n">sa</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qf1</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">q1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation_fn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qf1</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="n">q1</span><span class="p">))</span>
+        <span class="n">q1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qf1</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">](</span><span class="n">q1</span><span class="p">)</span>
+
+        <span class="n">q2</span> <span class="o">=</span> <span class="n">sa</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qf2</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">q2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation_fn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qf2</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="n">q2</span><span class="p">))</span>
+        <span class="n">q2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qf2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">](</span><span class="n">q2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">GaussianPolicy</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">num_inputs</span><span class="p">,</span>
+                 <span class="n">num_actions</span><span class="p">,</span>
+                 <span class="n">pi</span> <span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">400</span><span class="p">,</span> <span class="mi">300</span><span class="p">],</span>
+                 <span class="n">activation_fn</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"relu"</span><span class="p">,</span>
+                 <span class="n">action_space</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"cuda"</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">GaussianPolicy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">device</span> <span class="o">==</span> <span class="s2">"cuda"</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span>
+                <span class="s2">"cuda"</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">"cpu"</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">"cpu"</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pi</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">()</span>
+        <span class="n">in_size</span> <span class="o">=</span> <span class="n">num_inputs</span>
+        <span class="k">for</span> <span class="n">layer_sz</span> <span class="ow">in</span> <span class="n">pi</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pi</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_size</span><span class="p">,</span> <span class="n">layer_sz</span><span class="p">))</span>
+            <span class="n">in_size</span> <span class="o">=</span> <span class="n">layer_sz</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">mean_linear</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_size</span><span class="p">,</span> <span class="n">num_actions</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log_std_linear</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_size</span><span class="p">,</span> <span class="n">num_actions</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">activation_fn</span> <span class="o">==</span> <span class="s2">"relu"</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">activation_fn</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">relu</span>
+        <span class="k">elif</span> <span class="n">activation_fn</span> <span class="o">==</span> <span class="s2">"tanh"</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">activation_fn</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">functional</span><span class="o">.</span><span class="n">tanh</span>
+
+        <span class="c1"># action rescaling</span>
+        <span class="k">if</span> <span class="n">action_space</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">action_scale</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">1.</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">action_bias</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">action_scale</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">action_space</span><span class="o">.</span><span class="n">high</span> <span class="o">-</span> <span class="n">action_space</span><span class="o">.</span><span class="n">low</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">action_bias</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">action_space</span><span class="o">.</span><span class="n">high</span> <span class="o">+</span> <span class="n">action_space</span><span class="o">.</span><span class="n">low</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">state</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pi</span><span class="p">)):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation_fn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pi</span><span class="p">[</span><span class="n">i</span><span class="p">](</span><span class="n">x</span><span class="p">))</span>
+        <span class="n">mean</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mean_linear</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">log_std</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_std_linear</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">log_std</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="n">log_std</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="n">LOG_SIG_MIN</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="n">LOG_SIG_MAX</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">mean</span><span class="p">,</span> <span class="n">log_std</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="n">mean</span><span class="p">,</span> <span class="n">log_std</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="n">std</span> <span class="o">=</span> <span class="n">log_std</span><span class="o">.</span><span class="n">exp</span><span class="p">()</span>
+        <span class="n">normal</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">distributions</span><span class="o">.</span><span class="n">Normal</span><span class="p">(</span><span class="n">mean</span><span class="p">,</span> <span class="n">std</span><span class="p">)</span>
+        <span class="c1"># for reparameterization trick (mean + std * N(0,1))</span>
+        <span class="n">x_t</span> <span class="o">=</span> <span class="n">normal</span><span class="o">.</span><span class="n">rsample</span><span class="p">()</span>
+        <span class="n">y_t</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">x_t</span><span class="p">)</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">y_t</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_scale</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_bias</span>
+        <span class="n">log_prob</span> <span class="o">=</span> <span class="n">normal</span><span class="o">.</span><span class="n">log_prob</span><span class="p">(</span><span class="n">x_t</span><span class="p">)</span>
+        <span class="c1"># Enforcing Action Bound</span>
+        <span class="n">log_prob</span> <span class="o">-=</span> <span class="n">torch</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">action_scale</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y_t</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">+</span> <span class="n">epsilon</span><span class="p">)</span>
+        <span class="n">log_prob</span> <span class="o">=</span> <span class="n">log_prob</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">mean</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">mean</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_scale</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_bias</span>
+        <span class="k">return</span> <span class="n">action</span><span class="p">,</span> <span class="n">log_prob</span><span class="p">,</span> <span class="n">mean</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">action_scale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_scale</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">action_bias</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_bias</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">GaussianPolicy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">select_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">evaluate</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
+<span class="sd">        根据当前状态选择动作，可选择探索模式或评估模式。</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            state (array-like): 当前环境状态。</span>
+<span class="sd">            evaluate (bool): 是否为评估模式（True则选择确定性动作，False则选择随机动作）。</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: 选择的动作值。</span>
+<span class="sd">        """</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">(</span><span class="n">state</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># ⭐ 将状态转换为张量并送入设备</span>
+        <span class="k">if</span> <span class="n">evaluate</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">action</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">action</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SAC</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span>
+            <span class="n">max_action</span><span class="p">,</span>
+            <span class="n">hyperparameters</span><span class="p">,</span>
+            <span class="n">train_env</span><span class="p">,</span>
+            <span class="n">device</span><span class="p">:</span><span class="nb">str</span> <span class="o">=</span> <span class="s2">"cpu"</span><span class="p">,</span>
+            <span class="n">early_stopping</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span> <span class="mi">100_000</span><span class="p">,</span>
+            <span class="c1"># used when a training environment is not supplied</span>
+            <span class="n">state_dim</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span> <span class="mi">23</span><span class="p">,</span>
+            <span class="n">action_dim</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="p">:</span><span class="nb">int</span> <span class="o">=</span><span class="mi">0</span>
+            <span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"gamma"</span><span class="p">]</span>       <span class="c1"># 0.99</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tau</span> <span class="o">=</span> <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"tau"</span><span class="p">]</span>           <span class="c1"># 0.005</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.2</span>                            <span class="c1"># args.alpha</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lr</span> <span class="o">=</span> <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"learning_rate"</span><span class="p">]</span>  <span class="c1"># 3e-4</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"batch_size"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buffer_size</span> <span class="o">=</span> <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"buffer_size"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gradient_steps</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">policy_type</span> <span class="o">=</span> <span class="s2">"Gaussian"</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_update_interval</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">automatic_entropy_tuning</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="n">device</span> <span class="o">==</span> <span class="s2">"cuda"</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span>
+                <span class="s2">"cuda"</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">"cpu"</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">"cpu"</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">verbose</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Model SAC is configured to learn with device </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span> <span class="o">=</span> <span class="n">train_env</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">state_dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get_observation_space_shape</span><span class="p">()</span>
+            <span class="n">action_dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">action_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
+            <span class="n">action_space</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span>
+                <span class="n">low</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
+                <span class="n">high</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">critic</span> <span class="o">=</span> <span class="n">QNetwork</span><span class="p">(</span><span class="n">state_dim</span><span class="p">,</span>
+                               <span class="n">action_dim</span><span class="p">,</span>
+                               <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"net_arch"</span><span class="p">][</span><span class="s2">"qf"</span><span class="p">],</span>
+                               <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"activation_fn"</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">critic_optim</span> <span class="o">=</span> <span class="n">Adam</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">critic</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lr</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">critic_target</span> <span class="o">=</span> <span class="n">QNetwork</span><span class="p">(</span><span class="n">state_dim</span><span class="p">,</span>
+                                      <span class="n">action_dim</span><span class="p">,</span>
+                                      <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"net_arch"</span><span class="p">][</span><span class="s2">"qf"</span><span class="p">],</span>
+                                      <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"activation_fn"</span><span class="p">])</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="n">hard_update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">critic_target</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">critic</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">automatic_entropy_tuning</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">target_entropy</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">train_env</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">))</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">target_entropy</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">action_shape</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">))</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log_alpha</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span>
+                                         <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                         <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alpha_optim</span> <span class="o">=</span> <span class="n">Adam</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">log_alpha</span><span class="p">],</span> <span class="n">lr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lr</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">policy</span> <span class="o">=</span> <span class="n">GaussianPolicy</span><span class="p">(</span><span class="n">state_dim</span><span class="p">,</span>
+                                         <span class="n">action_dim</span><span class="p">,</span>
+                                         <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"net_arch"</span><span class="p">][</span><span class="s2">"pi"</span><span class="p">],</span>
+                                         <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"activation_fn"</span><span class="p">],</span>
+                                         <span class="n">action_space</span><span class="o">=</span><span class="n">train_env</span><span class="o">.</span><span class="n">agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">action_space</span><span class="p">,</span>
+                                         <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">policy</span> <span class="o">=</span> <span class="n">GaussianPolicy</span><span class="p">(</span><span class="n">state_dim</span><span class="p">,</span>
+                                         <span class="n">action_dim</span><span class="p">,</span>
+                                         <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"net_arch"</span><span class="p">][</span><span class="s2">"pi"</span><span class="p">],</span>
+                                         <span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"activation_fn"</span><span class="p">],</span>
+                                         <span class="n">action_space</span><span class="o">=</span><span class="n">action_space</span><span class="p">,</span>
+                                         <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">policy_optim</span> <span class="o">=</span> <span class="n">Adam</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">lr</span><span class="p">)</span>
+
+        <span class="c1"># Memory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">replay_buffer</span> <span class="o">=</span> <span class="n">ReplayMemory</span><span class="p">(</span>
+            <span class="n">capacity</span><span class="o">=</span><span class="n">hyperparameters</span><span class="p">[</span><span class="s2">"buffer_size"</span><span class="p">],</span>
+            <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">trackr</span> <span class="o">=</span> <span class="n">tracker</span><span class="o">.</span><span class="n">tracker</span><span class="p">(</span><span class="n">avg_size</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">rl_policy_type</span><span class="o">=</span><span class="s2">"SAC"</span><span class="p">)</span>
+
+        <span class="c1"># Early stopping</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">early_stopping</span> <span class="o">=</span> <span class="n">early_stopping</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exit</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">select_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">evaluate</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">(</span><span class="n">state</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">evaluate</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">action</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">action</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">memory</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">updates</span><span class="p">):</span>
+        <span class="c1"># Sample a batch from memory</span>
+        <span class="n">state_batch</span><span class="p">,</span> <span class="n">action_batch</span><span class="p">,</span> <span class="n">next_state_batch</span><span class="p">,</span> <span class="n">reward_batch</span><span class="p">,</span> <span class="n">mask_batch</span> <span class="o">=</span> <span class="n">memory</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+            <span class="n">next_state_action</span><span class="p">,</span> <span class="n">next_state_log_pi</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">next_state_batch</span><span class="p">)</span>
+            <span class="n">qf1_next_target</span><span class="p">,</span> <span class="n">qf2_next_target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">critic_target</span><span class="p">(</span><span class="n">next_state_batch</span><span class="p">,</span> <span class="n">next_state_action</span><span class="p">)</span>
+            <span class="n">min_qf_next_target</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">qf1_next_target</span><span class="p">,</span> <span class="n">qf2_next_target</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">next_state_log_pi</span>
+            <span class="n">next_q_value</span> <span class="o">=</span> <span class="n">reward_batch</span> <span class="o">+</span> <span class="n">mask_batch</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="p">(</span><span class="n">min_qf_next_target</span><span class="p">)</span>
+        <span class="c1"># Two Q-functions to mitigate positive bias in the policy improvement step</span>
+        <span class="n">qf1</span><span class="p">,</span> <span class="n">qf2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">critic</span><span class="p">(</span><span class="n">state_batch</span><span class="p">,</span> <span class="n">action_batch</span><span class="p">)</span>
+
+        <span class="c1"># JQ = 𝔼(st,at)~D[0.5(Q1(st,at) - r(st,at) - γ(𝔼st+1~p[V(st+1)]))^2]</span>
+        <span class="n">qf1_loss</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span><span class="n">qf1</span><span class="p">,</span> <span class="n">next_q_value</span><span class="p">)</span>
+        <span class="n">qf2_loss</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span><span class="n">qf2</span><span class="p">,</span> <span class="n">next_q_value</span><span class="p">)</span>
+        <span class="n">qf_loss</span> <span class="o">=</span> <span class="n">qf1_loss</span> <span class="o">+</span> <span class="n">qf2_loss</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">critic_optim</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+        <span class="n">qf_loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">critic_optim</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+        <span class="n">pi</span><span class="p">,</span> <span class="n">log_pi</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">state_batch</span><span class="p">)</span>
+
+        <span class="n">qf1_pi</span><span class="p">,</span> <span class="n">qf2_pi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">critic</span><span class="p">(</span><span class="n">state_batch</span><span class="p">,</span> <span class="n">pi</span><span class="p">)</span>
+        <span class="n">min_qf_pi</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">qf1_pi</span><span class="p">,</span> <span class="n">qf2_pi</span><span class="p">)</span>
+        <span class="c1"># Jπ = 𝔼st∼D,εt∼N[α * logπ(f(εt;st)|st) − Q(st,f(εt;st))]</span>
+        <span class="n">policy_loss</span> <span class="o">=</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">log_pi</span><span class="p">)</span> <span class="o">-</span> <span class="n">min_qf_pi</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">policy_optim</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+        <span class="n">policy_loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">policy_optim</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">automatic_entropy_tuning</span><span class="p">:</span>
+            <span class="n">alpha_loss</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">log_alpha</span> <span class="o">*</span> <span class="p">(</span><span class="n">log_pi</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_entropy</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">())</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">alpha_optim</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+            <span class="n">alpha_loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">alpha_optim</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">log_alpha</span><span class="o">.</span><span class="n">exp</span><span class="p">()</span>
+            <span class="n">alpha_tlogs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span> <span class="c1"># For TensorboardX logs</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">alpha_loss</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">alpha_tlogs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">)</span> <span class="c1"># For TensorboardX logs</span>
+
+
+        <span class="k">if</span> <span class="n">updates</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">target_update_interval</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">soft_update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">critic_target</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">critic</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tau</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">qf1_loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">qf2_loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">policy_loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">alpha_loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">alpha_tlogs</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">explore_for_expert_targets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                   <span class="n">reward_target_exploration_steps</span><span class="o">=</span><span class="mi">25_000</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"Model cannot explore because training envrionment is missing. Please reload model and supply a training envrionment."</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">reward_target_exploration_steps</span><span class="p">):</span>
+            <span class="n">obs_vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="p">,</span>
+                                          <span class="n">random</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                          <span class="n">rl_model_type</span><span class="o">=</span><span class="s2">"SAC"</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">indiv_obs</span> <span class="ow">in</span> <span class="n">obs_vec</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">indiv_obs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span><span class="o">.</span><span class="n">tracker</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">learn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+              <span class="n">timesteps</span><span class="p">,</span>
+              <span class="n">callback</span><span class="p">,</span>
+              <span class="n">start_timesteps</span><span class="o">=</span><span class="mi">25_000</span><span class="p">,</span>
+              <span class="n">incremental_replay_buffer</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"Model cannot learn because training envrionment is missing. Please reload model and supply a training envrionment."</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">next_update_at</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer_size</span><span class="o">*</span><span class="mi">2</span>
+
+        <span class="n">episode_reward</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">episode_timesteps</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">episode_num</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">callback</span><span class="o">.</span><span class="n">on_training_start</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock_gettime</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">CLOCK_REALTIME</span><span class="p">)</span>
+
+        <span class="n">episode_start_time</span> <span class="o">=</span> <span class="n">start_time</span>
+
+        <span class="c1"># Training Loop</span>
+        <span class="n">updates</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">all_actor_losses</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">all_critic_1_losses</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">all_critic_2_losses</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">all_entropy_losses</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">alpha</span> <span class="o">=</span><span class="mi">0</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">int</span><span class="p">(</span><span class="n">timesteps</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_timesteps</span> <span class="o">=</span> <span class="n">t</span>
+            <span class="n">episode_timesteps</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">start_timesteps</span><span class="p">:</span>
+                <span class="n">obs_vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="p">,</span>
+                                              <span class="n">random</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                              <span class="n">rl_model_type</span><span class="o">=</span><span class="s2">"SAC"</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">obs_vec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="p">,</span>
+                                              <span class="n">random</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                              <span class="n">rl_model_type</span><span class="o">=</span><span class="s2">"SAC"</span><span class="p">)</span>
+
+            <span class="n">all_rewards</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">indiv_obs</span> <span class="ow">in</span> <span class="n">obs_vec</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">indiv_obs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">all_rewards</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">indiv_obs</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                <span class="n">transition</span> <span class="o">=</span> <span class="p">(</span><span class="n">indiv_obs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                              <span class="n">indiv_obs</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+                              <span class="n">indiv_obs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                              <span class="n">indiv_obs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                              <span class="mf">1.</span> <span class="o">-</span><span class="n">indiv_obs</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">replay_buffer</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="o">*</span><span class="n">transition</span><span class="p">)</span>
+
+            <span class="n">episode_reward</span> <span class="o">+=</span> <span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">all_rewards</span><span class="p">)))</span>
+
+            <span class="k">if</span> <span class="n">t</span> <span class="o">&gt;=</span> <span class="n">start_timesteps</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">replay_buffer</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">:</span>
+                    <span class="c1"># Number of updates per step in environment</span>
+                    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gradient_steps</span><span class="p">):</span>
+                        <span class="c1"># Update parameters of all the networks</span>
+                        <span class="n">critic_1_loss</span><span class="p">,</span> <span class="n">critic_2_loss</span><span class="p">,</span> <span class="n">policy_loss</span><span class="p">,</span> <span class="n">ent_loss</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">replay_buffer</span><span class="p">,</span>
+                                                                                                <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span>
+                                                                                                <span class="n">updates</span><span class="p">)</span>
+                        <span class="n">updates</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                        <span class="n">all_actor_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">policy_loss</span><span class="p">)</span>
+                        <span class="n">all_critic_1_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">critic_1_loss</span><span class="p">)</span>
+                        <span class="n">all_critic_2_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">critic_2_loss</span><span class="p">)</span>
+                        <span class="n">all_entropy_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ent_loss</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="p">:</span>
+                <span class="n">episode_finish_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock_gettime</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">CLOCK_REALTIME</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">start_timesteps</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">replay_buffer</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">trackr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">actor_loss</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                           <span class="n">critic_loss</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                           <span class="n">episode_reward</span><span class="o">=</span><span class="n">episode_reward</span><span class="p">,</span>
+                           <span class="n">episode_length</span> <span class="o">=</span> <span class="n">episode_timesteps</span><span class="p">,</span>
+                           <span class="n">episode_fps</span> <span class="o">=</span> <span class="n">episode_timesteps</span> <span class="o">/</span> <span class="p">(</span><span class="n">episode_finish_time</span> <span class="o">-</span> <span class="n">episode_start_time</span><span class="p">),</span>
+                           <span class="n">critic_1_loss</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                           <span class="n">critic_2_loss</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                           <span class="n">entropy_loss</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                           <span class="n">entropy</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">trackr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">actor_loss</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">all_actor_losses</span><span class="p">),</span>
+                           <span class="n">critic_loss</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">all_critic_1_losses</span><span class="o">+</span><span class="n">all_critic_2_losses</span><span class="p">),</span>
+                           <span class="n">episode_reward</span><span class="o">=</span><span class="n">episode_reward</span><span class="p">,</span>
+                           <span class="n">episode_length</span> <span class="o">=</span> <span class="n">episode_timesteps</span><span class="p">,</span>
+                           <span class="n">episode_fps</span> <span class="o">=</span> <span class="n">episode_timesteps</span> <span class="o">/</span> <span class="p">(</span><span class="n">episode_finish_time</span> <span class="o">-</span> <span class="n">episode_start_time</span><span class="p">),</span>
+                           <span class="n">critic_1_loss</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">all_critic_1_losses</span><span class="p">),</span>
+                           <span class="n">critic_2_loss</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">all_critic_2_losses</span><span class="p">),</span>
+                           <span class="n">entropy_loss</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">all_entropy_losses</span><span class="p">),</span>
+                           <span class="n">entropy</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+
+            <span class="n">callback</span><span class="o">.</span><span class="n">on_step</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">done</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>  <span class="c1"># ⭐ 重置训练环境，开始新episode</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">episode_reward</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">episode_timesteps</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">episode_num</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">train_env</span><span class="o">.</span><span class="n">tracker</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+                <span class="n">episode_start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">clock_gettime</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">CLOCK_REALTIME</span><span class="p">)</span>
+
+                <span class="n">all_actor_losses</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">all_critic_1_losses</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">all_critic_2_losses</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">all_entropy_losses</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="c1"># Early stopping</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Early stopping mechanism triggered at timestep=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_timesteps</span><span class="si">}</span><span class="s2"> after </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">early_stopping</span><span class="si">}</span><span class="s2"> steps without improvement ... Learning terminated."</span><span class="p">)</span>
+                <span class="k">break</span>
+
+            <span class="k">if</span> <span class="n">incremental_replay_buffer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">t</span> <span class="o">&gt;=</span> <span class="n">next_update_at</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">incremental_replay_buffer</span> <span class="o">==</span> <span class="s2">"double"</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">buffer_size</span> <span class="o">*=</span> <span class="mi">2</span>
+                        <span class="n">next_update_at</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer_size</span> <span class="o">*</span> <span class="mi">2</span>
+                    <span class="k">elif</span> <span class="n">incremental_replay_buffer</span> <span class="o">==</span> <span class="s2">"triple"</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">buffer_size</span> <span class="o">*=</span> <span class="mi">3</span>
+                        <span class="n">next_update_at</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer_size</span>
+                    <span class="k">elif</span> <span class="n">incremental_replay_buffer</span> <span class="o">==</span> <span class="s2">"quadruple"</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">buffer_size</span> <span class="o">*=</span> <span class="mi">4</span>
+                        <span class="n">next_update_at</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">buffer_size</span>
+
+                    <span class="n">old_replay_buffer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">replay_buffer</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">replay_buffer</span> <span class="o">=</span> <span class="n">ReplayMemory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">buffer_size</span><span class="p">,</span>
+                                                      <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>  <span class="c1"># ⭐ 创建新大小的经验回放缓冲区</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">replay_buffer</span><span class="o">.</span><span class="n">add_content_of</span><span class="p">(</span><span class="n">old_replay_buffer</span><span class="p">)</span>
+
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Updated replay buffer at timestep </span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2">; replay_buffer_size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">buffer_size</span><span class="si">}</span><span class="s2">, len=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">replay_buffer</span><span class="o">.</span><span class="fm">__len__</span><span class="p">()</span><span class="si">}</span><span class="s2"> next_update_at=</span><span class="si">{</span><span class="n">next_update_at</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+        <span class="n">callback</span><span class="o">.</span><span class="n">on_training_end</span><span class="p">()</span>  <span class="c1"># ⭐ 训练结束回调函数</span>
+
+    <span class="c1"># Save model parameters</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">save</span><span class="p">({</span><span class="s2">"policy_state_dict"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
+                    <span class="s2">"critic_state_dict"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">critic</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
+                    <span class="s2">"critic_target_state_dict"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">critic_target</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
+                    <span class="s2">"critic_optimizer_state_dict"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">critic_optim</span><span class="o">.</span><span class="n">state_dict</span><span class="p">(),</span>
+                    <span class="s2">"policy_optimizer_state_dict"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy_optim</span><span class="o">.</span><span class="n">state_dict</span><span class="p">()},</span> <span class="n">filename</span><span class="p">)</span>
+
+    <span class="c1"># Load model parameters</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="n">checkpoint</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">[</span><span class="s2">"policy_state_dict"</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">critic</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">[</span><span class="s2">"critic_state_dict"</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">critic_target</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span>
+            <span class="n">checkpoint</span><span class="p">[</span><span class="s2">"critic_target_state_dict"</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">critic_optim</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span>
+            <span class="n">checkpoint</span><span class="p">[</span><span class="s2">"critic_optimizer_state_dict"</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">policy_optim</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span>
+            <span class="n">checkpoint</span><span class="p">[</span><span class="s2">"policy_optimizer_state_dict"</span><span class="p">])</span>
+</code></pre>
+ </div>
+</div>
+
+</div>
+</div>
+</body>
+</html>

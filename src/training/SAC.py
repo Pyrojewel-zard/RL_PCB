@@ -7,17 +7,30 @@ import numpy as np
 
 import tracker
 import gym
-LOG_SIG_MAX = 2
-LOG_SIG_MIN = -20
-epsilon = 1e-6
+LOG_SIG_MAX = 2  # 对数标准差的最大值
+LOG_SIG_MIN = -20  # 对数标准差的最小值
+epsilon = 1e-6  # 数值稳定性的小常数
 
 # Initialize Policy weights
 def weights_init_(m):
+    """
+    初始化神经网络权重
+    
+    Args:
+        m (torch.nn.Module): 需要初始化的神经网络层
+        
+    使用Xavier均匀分布初始化线性层的权重，偏置初始化为0
+    """
     if isinstance(m, torch.nn.Linear):
-        torch.nn.init.xavier_uniform_(m.weight, gain=1)
+        torch.nn.init.xavier_uniform_(m.weight, gain=1)  # ⭐ 使用Xavier方法初始化权重
         torch.nn.init.constant_(m.bias, 0)
 
 class QNetwork(torch.nn.Module):
+    """
+    Q网络类，用于评估状态-动作对的价值
+    
+    这是SAC算法中用于估计Q值的神经网络，继承自torch.nn.Module
+    """
     def __init__(self, num_inputs,
                  num_actions,
                  qf : list = [400, 300],
@@ -49,7 +62,17 @@ class QNetwork(torch.nn.Module):
         # self.apply(weights_init_)
 
     def forward(self, state, action):
-        sa = torch.cat([state, action], 1)
+        """
+        执行双Q网络的前向传播，计算给定状态和动作下的两个Q值。
+
+        Args:
+            state (torch.Tensor): 当前环境状态
+            action (torch.Tensor): 在当前状态下采取的动作
+
+        Returns:
+            tuple: 包含两个Q值的元组 (q1, q2)
+        """
+        sa = torch.cat([state, action], 1)  # ⭐ 将状态和动作拼接作为网络输入
 
         q1 = sa
         for i in range(len(self.qf1)-1):
@@ -133,7 +156,17 @@ class GaussianPolicy(torch.nn.Module):
         return super(GaussianPolicy, self).to(device)
 
     def select_action(self, state, evaluate=False):
-        state = torch.FloatTensor(state).to(self.device).unsqueeze(0)
+        """
+        根据当前状态选择动作，可选择探索模式或评估模式。
+
+        Args:
+            state (array-like): 当前环境状态。
+            evaluate (bool): 是否为评估模式（True则选择确定性动作，False则选择随机动作）。
+
+        Returns:
+            numpy.ndarray: 选择的动作值。
+        """
+        state = torch.FloatTensor(state).to(self.device).unsqueeze(0)  # ⭐ 将状态转换为张量并送入设备
         if evaluate is False:
             action, _, _ = self.sample(state)
         else:
@@ -418,7 +451,7 @@ class SAC(object):
 
             callback.on_step()
             if self.done:
-                self.train_env.reset()
+                self.train_env.reset()  # ⭐ 重置训练环境，开始新episode
                 self.done = False
                 episode_reward = 0
                 episode_timesteps = 0
@@ -431,7 +464,7 @@ class SAC(object):
                 all_critic_2_losses = []
                 all_entropy_losses = []
 
-			# Early stopping
+            # Early stopping
             if self.exit is True:
                 print(f"Early stopping mechanism triggered at timestep={self.num_timesteps} after {self.early_stopping} steps without improvement ... Learning terminated.")
                 break
@@ -450,12 +483,12 @@ class SAC(object):
 
                     old_replay_buffer = self.replay_buffer
                     self.replay_buffer = ReplayMemory(self.buffer_size,
-                                                      device=self.device)
+                                                      device=self.device)  # ⭐ 创建新大小的经验回放缓冲区
                     self.replay_buffer.add_content_of(old_replay_buffer)
 
                     print(f"Updated replay buffer at timestep {t}; replay_buffer_size={self.buffer_size}, len={self.replay_buffer.__len__()} next_update_at={next_update_at}")
 
-        callback.on_training_end()
+        callback.on_training_end()  # ⭐ 训练结束回调函数
 
     # Save model parameters
     def save(self, filename):

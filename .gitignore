@@ -6,3 +6,5 @@ scheduler.log
 tmp
 experiments/*/experiment_report.pdf
 venv
+.history
+.vscode

@@ -9,30 +9,29 @@ from pcbDraw import draw_board_from_board_and_graph_with_debug, draw_ratsnest_wi
 
 def command_line_args():
     """
-    Parses command-line arguments for a Python script that generates a PNG image
-    from a .pcb file.
+    解析用于将PCB文件转换为PNG图像的命令行参数。
 
     Returns:
-    args: argparse.Namespace object containing parsed command-line arguments.
-    settings: dict object containing settings for the script. Currently, it
-    contains a single key-value pair with the .pcb file path.
+        tuple: 包含两个元素的元组:
+            - args (argparse.Namespace): 解析后的命令行参数对象
+            - settings (dict): 包含脚本设置的字典，主要有:
+                * 'pcb': 输入的PCB文件路径
+                * 'output': 输出的PNG文件路径
 
-    Usage:
-    Call this function in your script to parse command-line arguments. The
-    function requires that the -p/--pcb option is passed, which should be
-    followed by the path to the .pcb file to be converted to a PNG image.
+    Raises:
+        SystemExit: 如果缺少必需的参数会触发argparse自动退出程序
+
     Example:
-
-    args, settings = command_line_args()
-    pcb_file = settings["pcb"]
+        >>> args, settings = command_line_args()
+        >>> print(settings['pcb'])  # 打印输入的PCB文件路径
+        >>> print(settings['output'])  # 打印输出的PNG文件路径
     """
-
     parser = argparse.ArgumentParser(description='Python script for generating\
              a .png image from a .pcb file.', usage='python pcb2png.py -p \
             <pcb_file>')
 
-    parser.add_argument('-p', '--pcb', type=str, required=True)
-    parser.add_argument('-o', '--output', type=str, required=True)
+    parser.add_argument('-p', '--pcb', type=str, required=True)  # ⭐ 定义必须的PCB文件输入参数
+    parser.add_argument('-o', '--output', type=str, required=True)  # ⭐ 定义必须的PNG输出路径参数
 
     args = parser.parse_args()
     settings = {}
@@ -43,9 +42,22 @@ def command_line_args():
     return args, settings
 
 def main():
+    """
+    主函数，负责将PCB文件转换为PNG图像。
+    
+    流程:
+    1. 解析命令行参数获取设置
+    2. 读取PCB文件并初始化PCB视图
+    3. 绘制PCB板的组件布局网格
+    4. 绘制所有节点的飞线连接关系
+    5. 合成组件布局和飞线图像并输出PNG
+    
+    Returns:
+        None
+    """
     _, settings = command_line_args()
     pv = pcb.vptr_pcbs()
-    pcb.read_pcb_file(settings['pcb'], pv)      # Read pcb file
+    pcb.read_pcb_file(settings['pcb'], pv)      # ⭐ 读取并解析PCB文件
     p = pv[0]
 
     g = p.get_graph()
@@ -85,9 +97,9 @@ def main():
                                                      ignore_power=True)
                             )
 
-    img = comp_grids[0] + 2*comp_grids[1]
-    img = np.maximum(img, ratsnest)
-    cv2.imwrite(settings['output'], img)
+    img = comp_grids[0] + 2*comp_grids[1]       # ⭐ 合成组件布局图层
+    img = np.maximum(img, ratsnest)             # ⭐ 叠加飞线图层
+    cv2.imwrite(settings['output'], img)        # ⭐ 输出最终PNG图像
 
 if __name__ == '__main__':
     main()

@@ -1,0 +1,9 @@
+bin
+work
+__pycache__
+report_config.json
+scheduler.log
+tmp
+venv
+experiments/*/work/
+lib

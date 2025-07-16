@@ -1,0 +1,32 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Train PCB",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "/home/pyrojewel/RL_PCB/src/training/train.py",
+            "args": [
+                "--policy", "SAC",
+                "--target_exploration_steps", "10000",
+                "--start_timesteps", "5000",
+                "--max_timesteps", "600000",
+                "--evaluate_every", "10000000",
+                "--training_pcb", "/home/pyrojewel/RL_PCB/dataset/base/trainingV2.pcb",
+                "--evaluation_pcb", "/home/pyrojewel/RL_PCB/dataset/base/evaluation.pcb",
+                "--tensorboard_dir", "/home/pyrojewel/RL_PCB/experiments2/00_parameter_exeperiments/work",
+                "-w", "6.0",
+                "--hpwl", "2.0",
+                "-o", "2.0",
+                "--hyperparameters", "/home/pyrojewel/RL_PCB/experiments2/00_parameter_exeperiments/hyperparameters/hp_sac.json",
+                "--incremental_replay_buffer", "double",
+                "--verbose", "0",
+                "--runs", "4",
+                "--experiment", "parameter_experiment_622",
+                "--device", "cuda",
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": false
+        }
+    ]
+}

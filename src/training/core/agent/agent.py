@@ -7,6 +7,7 @@ from core.agent.observation import get_agent_observation
 from core.agent.tracker import tracker
 
 from pcbDraw import draw_board_from_board_and_graph_multi_agent
+from pcbDraw import compute_hpwl
 
 import datetime
 
@@ -97,8 +98,9 @@ class agent(gym.Env):
             self.parameters.eoi,
             ignore_power=self.parameters.ignore_power)
         self.HPWLi = 0
-        for net_id in self.parameters.nets:
-            self.HPWLi += self.parameters.graph.calc_hpwl_of_net(net_id,
+        self.HPWLi= compute_hpwl(node, neighbors, edges)
+        #for net_id in self.parameters.nets:
+            #self.HPWLi += self.parameters.graph.calc_hpwl_of_net(net_id,
                                                                  True)
         self.current_HPWL = self.HPWLe
 
@@ -169,6 +171,8 @@ class agent(gym.Env):
             ignore_power=self.parameters.ignore_power))
 
         hpwl = 0
+        hpwl1=0
+        hpwl1 = compute_hpwl(node, neighbors, edges)
         for net_id in self.parameters.nets:
             hpwl += self.parameters.graph.calc_hpwl_of_net(net_id, True)
 

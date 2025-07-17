@@ -7,3 +7,4 @@ tmp
 venv
 experiments/*/work/
 lib
+csv_files

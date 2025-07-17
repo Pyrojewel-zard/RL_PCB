@@ -7,3 +7,5 @@ tmp
 venv
 experiments/*/work/
 lib
+
+.cursor

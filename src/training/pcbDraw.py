@@ -1110,3 +1110,58 @@ def get_los_and_ol_multi_agent(node,
             grid += grid_comps[1]
             return grid[int(cy-radius/2-1):int(cy+radius/2+1),
                         int(cx-radius/2-1):int(cx+radius/2+1)]
+
+
+def compute_hpwl(current_node, neighbor_nodes, e, ignore_power=False):
+    """
+    直接复刻 draw_ratsnest() 的坐标逻辑，计算当前元件相关连接的 HPWL（半周线长）
+
+    Args:
+        current_node: 当前处理的元件节点对象
+        neighbor_nodes: 与当前元件相连的节点列表
+        e: 边（连线）集合
+        ignore_power: 是否忽略电源线
+
+    Returns:
+        float: HPWL 总和
+    """
+    current_node_id = current_node.get_id()
+    current_node_pos = current_node.get_pos()
+    current_node_ori = current_node.get_orientation()
+
+    src = []
+    dst = []
+
+    for ee in e:
+        if ignore_power and ee.get_power_rail() > 0:
+            continue
+
+        for i in range(2):
+            if ee.get_instance_id(i) == current_node_id:
+                pad_pos = ee.get_pos(i)
+                rotated_pad = kicad_rotate(float(pad_pos[0]), float(pad_pos[1]), current_node_ori)
+                src.append([current_node_pos[0] + rotated_pad[0],
+                            current_node_pos[1] + rotated_pad[1]])
+            else:
+                for n in neighbor_nodes:
+                    if ee.get_instance_id(i) == n.get_id():
+                        neigh_pos = n.get_pos()
+                        neigh_ori = n.get_orientation()
+                        pad_pos = ee.get_pos(i)
+                        rotated_pad = kicad_rotate(float(pad_pos[0]), float(pad_pos[1]), neigh_ori)
+                        dst.append([neigh_pos[0] + rotated_pad[0],
+                                    neigh_pos[1] + rotated_pad[1]])
+                        break
+
+    # 计算 HPWL
+    hpwl = 0.0
+    all_points = src + dst
+
+    if not all_points:
+     return 0.0
+
+    xs = [p[0] for p in all_points]
+    ys = [p[1] for p in all_points]
+    hpwl = (max(xs) - min(xs)) + (max(ys) - min(ys))
+    return hpwl
+

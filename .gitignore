@@ -7,5 +7,5 @@ tmp
 venv
 experiments/*/work/
 lib
-
 .cursor
+csv_files

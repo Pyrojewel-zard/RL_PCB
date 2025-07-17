@@ -1,0 +1,5 @@
+---
+alwaysApply: true
+---
+
+1. 禁止检索venv,bin,ansible,lib这几个文件夹1. 禁止检索venv,bin,ansible,lib这几个文件夹

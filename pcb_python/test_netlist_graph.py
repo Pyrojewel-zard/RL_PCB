@@ -7,7 +7,7 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from netlist_graph import Graph, Node, Edge, Board, Optimal, Utils
+from netlist import Graph, Node, Edge, Board, Optimal, Utils
 
 def test_utils():
     """测试工具类"""

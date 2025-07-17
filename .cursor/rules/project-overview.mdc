@@ -1,0 +1,37 @@
+# RL_PCB Project Overview
+
+This is a Reinforcement Learning PCB placement methodology project. The main goal is to use RL to learn general policies for iteratively improving circuit placement, leading to intuitive layouts while outperforming stochastic methods in terms of post-routing wirelength.
+
+## Project Structure
+
+- **Main entry point**: [setup.sh](mdc:setup.sh) - Environment setup script
+- **Core training**: [src/training/](mdc:src/training/) - Contains all RL training code
+- **Experiments**: [experiments/](mdc:experiments/) - Experiment configurations and results
+- **Tests**: [tests/](mdc:tests/) - Test suites for validation
+- **Documentation**: [README.md](mdc:README.md) - Main project documentation
+- **Development workflow**: [DEVELOPMENT_WORKFLOW.md](mdc:DEVELOPMENT_WORKFLOW.md) - Git workflow guidelines
+
+## Key Components
+
+- **RL Algorithms**: [src/training/SAC.py](mdc:src/training/SAC.py) and [src/training/TD3.py](mdc:src/training/TD3.py)
+- **PCB Utilities**: [src/training/pcb_vector_utils.py](mdc:src/training/pcb_vector_utils.py) - Core PCB manipulation
+- **Training Pipeline**: [src/training/train.py](mdc:src/training/train.py) - Main training script
+- **Configuration**: [src/training/run_config.py](mdc:src/training/run_config.py) - Experiment configuration
+
+## Environment Setup
+
+Always source the environment before running any code:
+```bash
+source setup.sh
+```
+
+## Key Results
+
+The project demonstrates:
+1. Policies that learn fundamental rules and minimize overlap-free wirelength
+2. Emergent behaviors through component interactions
+3. Robust learned behavior through diverse training data
+description:
+globs:
+alwaysApply: false
+---

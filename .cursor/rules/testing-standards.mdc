@@ -1,0 +1,55 @@
+# Testing Standards
+
+## Test Structure
+- Use [tests/](mdc:tests/) directory for all test suites
+- Follow the structure shown in existing test directories
+- Include `run.sh` script for test execution
+- Provide `expected_results/` for validation
+
+## Test Categories
+- **Training Tests**: Validate RL training pipeline
+- **PCB Tests**: Test PCB manipulation utilities
+- **Integration Tests**: End-to-end workflow validation
+- **Performance Tests**: Benchmark critical components
+
+## Running Tests
+```bash
+# Source environment
+source setup.sh
+
+# Run specific test
+cd tests/test_name
+./run.sh
+
+# Clean up
+./clean.sh
+```
+
+## Test Requirements
+- All tests must pass before merging
+- Include both CPU and GPU tests where applicable
+- Test with different circuit configurations
+- Validate against known baselines
+
+## Test Data
+- Use standardized test circuits
+- Include edge cases and error conditions
+- Test with various component densities
+- Validate reward function behavior
+
+## Continuous Integration
+- Tests run automatically via [.gitlab-ci.yml](mdc:.gitlab-ci.yml)
+- Jenkins pipeline defined in [Jenkinsfile](mdc:Jenkinsfile)
+- Ensure tests are fast and reliable
+- Report test coverage metrics
+
+## Best Practices
+- Write descriptive test names
+- Test both success and failure paths
+- Use appropriate assertions
+- Mock external dependencies when needed
+- Document test setup requirements
+description:
+globs:
+alwaysApply: false
+---

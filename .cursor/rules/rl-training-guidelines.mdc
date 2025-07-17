@@ -1,0 +1,35 @@
+# Reinforcement Learning Training Guidelines
+
+## Model Architecture
+- Use PyTorch for all neural network implementations
+- Implement both SAC and TD3 algorithms as shown in [SAC.py](mdc:src/training/SAC.py) and [TD3.py](mdc:src/training/TD3.py)
+- Follow the established hyperparameter structure from [hyperparameters.py](mdc:src/training/hyperparameters.py)
+
+## Training Pipeline
+- Use the main training script [train.py](mdc:src/training/train.py) as the entry point
+- Configure experiments through [run_config.py](mdc:src/training/run_config.py)
+- Implement callbacks using [callbacks.py](mdc:src/training/callbacks.py) for monitoring
+
+## PCB Environment
+- Use [pcb_vector_utils.py](mdc:src/training/pcb_vector_utils.py) for PCB manipulation
+- Implement reward functions that consider:
+  - Half-Perimeter Wirelength (HPWL)
+  - Euclidean Wirelength (EW)
+  - Component overlap penalties
+- Use [pcbDraw.py](mdc:src/training/pcbDraw.py) for visualization
+
+## Experiment Management
+- Store experiment configurations in separate directories under [experiments/](mdc:experiments/)
+- Use [tracker.py](mdc:src/training/tracker.py) for experiment tracking
+- Generate reports using [src/report_generation/](mdc:src/report_generation/)
+
+## Best Practices
+- Normalize all inputs and rewards for stable training
+- Use consistent random seeds for reproducibility
+- Implement proper logging and checkpointing
+- Validate policies on unseen circuits
+- Compare against simulated annealing baseline
+description:
+globs:
+alwaysApply: false
+---

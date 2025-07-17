@@ -1,0 +1,50 @@
+# Experiment Management Guidelines
+
+## Experiment Structure
+Each experiment should have:
+- `run.sh` - Main execution script
+- `run_config.txt` - Configuration parameters
+- `report_config.py` - Report generation settings
+- `clean.sh` - Cleanup script
+- `expected_results/` - Pre-generated results for validation
+
+## Running Experiments
+```bash
+# Always source environment first
+source setup.sh
+
+# Run experiment
+cd experiments/experiment_name
+./run.sh
+
+# Clean up
+./clean.sh
+```
+
+## Configuration Standards
+- Use [src/training/run_config.py](mdc:src/training/run_config.py) for parameter management
+- Document all hyperparameters in `run_config.txt`
+- Include random seeds for reproducibility
+- Specify GPU/CPU device settings
+
+## Result Validation
+- Compare against `expected_results/`
+- Generate comprehensive reports with tables and figures
+- Include metadata about experiment conditions
+- Validate against simulated annealing baseline
+
+## Report Generation
+- Use [src/report_generation/](mdc:src/report_generation/) for automated reports
+- Include HPWL and routed wirelength metrics
+- Show policy performance on unseen circuits
+- Document training convergence and stability
+
+## Best Practices
+- Use consistent naming conventions
+- Archive old experiments in [experiments_archive/](mdc:experiments_archive/)
+- Document any deviations from standard procedures
+- Validate results on multiple circuits
+description:
+globs:
+alwaysApply: false
+---

@@ -1,0 +1,39 @@
+# Git Workflow Guidelines
+
+## Branch Management
+- **Main branch is sacred**: Never push directly to `main`
+- Use feature branches: `git checkout -b your-name/feature-description`
+- Follow the workflow in [DEVELOPMENT_WORKFLOW.md](mdc:DEVELOPMENT_WORKFLOW.md)
+
+## Commit Messages
+Use conventional commit format:
+- `feat:` - New features
+- `fix:` - Bug fixes
+- `docs:` - Documentation changes
+- `style:` - Code formatting
+- `refactor:` - Code refactoring
+- `test:` - Test additions/changes
+
+## Pull Request Process
+1. Create feature branch from latest `main`
+2. Make frequent, small commits
+3. Rebase with `main` regularly: `git rebase origin/main`
+4. Create PR with clear description
+5. Request code review
+6. Use "Squash and Merge" when approved
+
+## Code Review Standards
+- Review for logic correctness
+- Check code style and documentation
+- Ensure tests are included
+- Verify experiment reproducibility
+
+## Before Merging
+- All tests must pass
+- Code review approved
+- Documentation updated
+- Experiment results validated
+description:
+globs:
+alwaysApply: false
+---

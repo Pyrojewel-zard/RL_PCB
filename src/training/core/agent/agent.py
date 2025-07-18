@@ -218,8 +218,12 @@ class agent(gym.Env):
 
         reward = 0
 
-        x = np.clip((self.Wi - self.W[-1]) / (self.Wi - self.current_We),
-                    -1, 1)
+        numer = self.Wi - self.W[-1]
+        denom = self.Wi - self.current_We
+        if abs(denom) < 1e-8:
+            x = -1.0 if numer < 0 else 1.0
+        else:
+            x = np.clip(numer / denom, -1.0, 1.0)
         y = np.clip(
             (self.HPWLi - self.HPWL[-1]) / (self.HPWLi - self.current_HPWL),
              -1, 1)

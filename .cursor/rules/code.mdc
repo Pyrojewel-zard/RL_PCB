@@ -3,3 +3,5 @@ alwaysApply: true
 ---
 
 1. 禁止检索venv,bin,ansible,lib这几个文件夹1. 禁止检索venv,bin,ansible,lib这几个文件夹
+2. 使用的python环境为venv下的环境，需要source setup.sh进行激活
+3. 所有输出的解释性内容需要使用中文

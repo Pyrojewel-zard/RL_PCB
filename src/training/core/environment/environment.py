@@ -156,8 +156,8 @@ class environment:
                 deterministic=deterministic,
                 rl_model_type=rl_model_type)
             # convert state_vector
-            _state = list(state["los"]) + list(state["ol"]) + state["dom"] + state["euc_dist"] + state["position"] + state["ortientation"]
-            _next_state = list(next_state["los"]) + list(next_state["ol"]) + next_state["dom"] + next_state["euc_dist"] + next_state["position"] + next_state["ortientation"]
+            _state = list(state["los"]) + list(state["ol"]) + state["dom"] + state["euc_dist"] + state["position"] + state["ortientation"]+list(state["boardmask"])
+            _next_state = list(next_state["los"]) + list(next_state["ol"]) + next_state["dom"] + next_state["euc_dist"] + next_state["position"] + next_state["ortientation"]+list(next_state["boardmask"])
             _next_state_info = next_state["info"]
             observation_vec.append(
                 [_state, _next_state, reward, action, done, _next_state_info])

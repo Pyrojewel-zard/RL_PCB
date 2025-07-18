@@ -247,6 +247,7 @@ def compute_vector_to_group_midpoint(n, nn):
     delta_x = (cx-current_node_pos[0])
     if  delta_x == 0:#多一个除0保护
         angle = np.pi / 2 if delta_y > 0 else -np.pi / 2
+        euclidean_dist = np.abs(delta_y)
     else:
      euclidean_dist = np.sqrt(np.square(delta_x) + np.square(delta_y))
      angle = np.arctan(delta_y/delta_x)

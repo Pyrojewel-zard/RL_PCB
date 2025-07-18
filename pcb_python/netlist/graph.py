@@ -402,13 +402,27 @@ class Graph:
     
     def calc_hpwl(self, do_not_ignore_unplaced: bool = False) -> float:
         """计算HPWL"""
+        # print(f"=== HPWL计算调试 ===")
+        # print(f"总节点数: {len(self._V)}")
+        # print(f"总边数: {len(self._E)}")
+        
+        # # 显示所有节点的状态
+        # print("所有节点状态:")
+        # for i, node in enumerate(self._V):
+        #     pos = node.get_pos()
+        #     is_placed = node.get_is_placed()
+        #     print(f"  节点{i}: ID={node.get_id()}, 位置=({pos[0]:.2f}, {pos[1]:.2f}), 已放置={is_placed}")
+        
         if not do_not_ignore_unplaced:
             # 只考虑已放置的节点
             placed_nodes = [node for node in self._V if node.get_is_placed()]
+            # print(f"已放置节点数: {len(placed_nodes)}")
         else:
             placed_nodes = self._V
+            # print(f"使用所有节点数: {len(placed_nodes)}")
         
         if not placed_nodes:
+            # print("没有已放置的节点，HPWL = 0")
             return 0.0
         
         # 计算边界框
@@ -417,7 +431,12 @@ class Graph:
         min_y = min(node.get_pos()[1] for node in placed_nodes)
         max_y = max(node.get_pos()[1] for node in placed_nodes)
         
-        return (max_x - min_x) + (max_y - min_y)
+        # print(f"边界框: X({min_x:.2f}, {max_x:.2f}), Y({min_y:.2f}, {max_y:.2f})")
+        
+        hpwl = (max_x - min_x) + (max_y - min_y)
+        # print(f"计算得到的HPWL: {hpwl:.2f}")
+        
+        return hpwl
     
     def calc_full_hpwl(self) -> float:
         """计算完整HPWL"""

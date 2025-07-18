@@ -19,8 +19,8 @@ if __name__ == "__main__":
     from netlist import Graph, Node, Edge, Board
 else:
     # 相对导入
-    from .pcb import PCB, VPtrPCBs, read_pcb_file, write_pcb_file, write_pcb_file_from_individual_files
-    from .netlist import Graph, Node, Edge, Board
+from .pcb import PCB, VPtrPCBs, read_pcb_file, write_pcb_file, write_pcb_file_from_individual_files
+from .netlist import Graph, Node, Edge, Board
 
 def test_pcb_basic():
     """测试PCB基本功能"""

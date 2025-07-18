@@ -75,8 +75,45 @@ class Edge:
     
     def create_from_string_long(self, s: str) -> int:
         """从长格式字符串创建边"""
-        # 长格式与短格式相同，暂时使用相同实现
-        return self.create_from_string_short(s)
+        try:
+            fields = Utils.parse_csv_line(s)
+            
+            # 检查字段数量，支持19字段的标准格式
+            if len(fields) < 19:
+                return -1
+            
+            # 节点A信息
+            self._a_id = Utils.safe_int(fields[0])
+            self._a_pad_id = Utils.safe_int(fields[1])
+            self._a_pad_name = fields[2]
+            self._a_size_x = Utils.safe_float(fields[3])
+            self._a_size_y = Utils.safe_float(fields[4])
+            self._a_pos_x = Utils.safe_float(fields[5])
+            self._a_pos_y = Utils.safe_float(fields[6])
+            self._a_is_placed = Utils.safe_int(fields[7]) == 1
+            
+            # 节点B信息
+            self._b_id = Utils.safe_int(fields[8])
+            self._b_pad_id = Utils.safe_int(fields[9])
+            self._b_pad_name = fields[10]
+            self._b_size_x = Utils.safe_float(fields[11])
+            self._b_size_y = Utils.safe_float(fields[12])
+            self._b_pos_x = Utils.safe_float(fields[13])
+            self._b_pos_y = Utils.safe_float(fields[14])
+            self._b_is_placed = Utils.safe_int(fields[15]) == 1
+            
+            # 网络信息
+            self._net_id = Utils.safe_int(fields[16])
+            self._net_name = fields[17].strip('"') if len(fields) > 17 else ""
+            self._power_rail = Utils.safe_int(fields[18]) if len(fields) > 18 else 0
+            
+            # 设置节点名称（从pad_name推断）
+            self._a_name = f"Node_{self._a_id}"
+            self._b_name = f"Node_{self._b_id}"
+            
+            return 0
+        except Exception:
+            return -1
     
     def get_net_id(self) -> int:
         """获取网络ID"""

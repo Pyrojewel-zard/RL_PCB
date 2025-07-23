@@ -32,7 +32,7 @@ from callbacks import log_and_eval_callback
 best_reward = -np.inf          # New best model, you could save the agent here
 
 def setup_seed(seed):
-    random.seed(seed)
+    random.seed(int(seed))     # Convert numpy int to Python int to avoid deprecation warning
     np.random.seed(seed)       # Seed numpy RNG
     torch.manual_seed(seed)    # Seed the RNG for all devices
 

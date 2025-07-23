@@ -143,19 +143,7 @@ def cmdline_args():
     return args, settings
 
 def configure_seed(args):
-    """
-    配置随机种子，根据auto_seed参数决定使用自动生成种子还是用户提供的种子。
 
-    Args:
-        args (argparse.Namespace): 包含配置参数的对象，需要包含以下属性：
-            - auto_seed (bool): 是否自动生成随机种子
-            - seed (list[int]): 用户提供的种子列表
-            - runs (int): 需要运行的次数
-
-    功能说明：
-        1. 当auto_seed为True时，会覆盖用户提供的种子值
-        2. 当种子未提供或数量不匹配时，使用固定种子(99)生成随机种子
-    """
     if (args.auto_seed is True) and (args.seed is not None):
         if len(args.seed) == args.runs:
             print("auto_seed is enabled while a valid seed configuration was\
@@ -165,14 +153,14 @@ def configure_seed(args):
     # assign run seed values randomly based of an rng seed with current time.
     if args.auto_seed is True:
         args.seed = []
-        rng = np.random.default_rng(seed=int(datetime.now().strftime("%s")))  # ⭐ 使用当前时间作为随机种子生成器的基础
+        rng = np.random.default_rng(seed=int(datetime.now().strftime("%s")))
         for _ in range(args.runs):
             args.seed.append(np.int0(rng.uniform(low=0,high=np.power(2,32)-1)))
     else:
         # seed value is not provided or not provided correctly
         if (args.seed is None) or (len(args.seed) != args.runs):
             # issue a warning
-            rng = np.random.default_rng(seed=99)  # ⭐ 使用固定种子99作为后备方案
+            rng = np.random.default_rng(seed=99)
             args.seed = []
             for _ in range(args.runs):
                 args.seed.append(
@@ -182,19 +170,10 @@ def configure_seed(args):
 def write_desc_log(full_fn: str, settings: dict,
                    hyperparameters: dict = None,
                    model = None):
-    """
-    将训练配置信息写入日志文件，包括设置参数、超参数、模型架构和依赖信息。
-
-    Args:
-        full_fn (str): 日志文件的完整路径
-        settings (dict): 训练配置参数字典
-        hyperparameters (dict, optional): 训练超参数字典. Defaults to None.
-        model (optional): 训练模型对象. Defaults to None.
-    """
     f = open(full_fn, "w", encoding="utf-8")
     f.write("\n================== settings ==================\r\n")
     for key,value in settings.items():
-        f.write(f"{key} -> {value}\r\n")  # ⭐ 写入所有设置参数到日志文件
+        f.write(f"{key} -> {value}\r\n")
 
     if hyperparameters is not None:
         f.write("\n================== hyperparameters ==================\r\n")
@@ -205,9 +184,9 @@ def write_desc_log(full_fn: str, settings: dict,
         f.write(f"\n================== {settings['rl_model_type']} Model Architecture ==================\r\n")
         f.write("Actor\n")
         if settings["rl_model_type"] == "TD3":
-            f.write(str(model.actor))  # ⭐ 写入TD3模型的Actor网络结构
+            f.write(str(model.actor))
         else: # SAC
-            f.write(str(model.policy))  # ⭐ 写入SAC模型的策略网络结构
+            f.write(str(model.policy))
         f.write("\n\n")
         f.write("Critic\n")
         f.write(str(model.critic))
@@ -220,7 +199,7 @@ def write_desc_log(full_fn: str, settings: dict,
 
     f.write("\n================== Dependency Information ==================\r\n")
     # Strip leading and trailing newline ('\n') characters.
-    f.write(pcb.build_info_as_string()[1:-1])  # ⭐ 写入PCB组件依赖信息
+    f.write(pcb.build_info_as_string()[1:-1])
     f.write(graph.build_info_as_string())
 
     f.close()

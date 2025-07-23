@@ -2,25 +2,12 @@
 # do not alter cla in any way.
 class parameters:
     def __init__(self, params=None):
-        """
-        初始化环境相关参数，用于PCB环境的训练和评估。
-
-        Args:
-            params (dict, optional): 包含所有必要参数的字典。如果为None，会提示错误信息并返回-1。
-
-        Raises:
-            ValueError: 如果params为None时会打印错误信息（但实际返回-1而不是抛出异常）
-
-        Attributes:
-            包含各种PCB环境配置参数，如训练/评估PCB文件、网络配置、数据增强设置、
-            代理行为参数、优化权重等。
-        """
         if params is None:
             print("params are needed to initialize the environment.\
                    Please provide a dictionary with PCB params when\
                    creating an agent object.")
             return -1
-        self.training_pcb = params["training_pcb"]  # ⭐ 核心参数：训练用PCB文件
+        self.training_pcb = params["training_pcb"]
         self.evaluation_pcb = params["evaluation_pcb"]
         self.pcb_file = params["pcb_file"]
         self.net = params["net"]

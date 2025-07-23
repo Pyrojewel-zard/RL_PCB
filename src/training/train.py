@@ -32,50 +32,24 @@ from callbacks import log_and_eval_callback
 best_reward = -np.inf          # New best model, you could save the agent here
 
 def setup_seed(seed):
-    # 确保seed是支持的类型 (None, int, float, str, bytes, bytearray)
-    if seed is not None and not isinstance(seed, (int, float, str, bytes, bytearray)):
-        seed = int(seed)  # 或者使用其他合适的转换方式
+    random.seed(seed)
+    np.random.seed(seed)       # Seed numpy RNG
+    torch.manual_seed(seed)    # Seed the RNG for all devices
 
-    # 设置随机种子
-    if seed is not None:
-        random.seed(seed)
-        np.random.seed(seed)
-        torch.manual_seed(seed)
-
-        if torch.cuda.is_available():
-            torch.backends.cudnn.deterministic = True
-            torch.backends.cudnn.benchmark = False
+    if torch.cuda.is_available():
+        # Deterministic operations for CuDNN, it may impact performances
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
 
 def program_info(device):
-    """
-    设置并显示程序运行的设备信息，自动选择可用的计算设备（CPU或CUDA）。
-    """
     if device == "cuda":
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        # 添加CUDA可用性检查
-        if torch.cuda.is_available():
-            print("✅ CUDA is available and will be used")
-            print(f"GPU Device: {torch.cuda.get_device_name(0)}")
-        else:
-            print("⚠️ CUDA is not available, falling back to CPU")
     else:
         device = torch.device("cpu")
-        print("ℹ️ Using CPU as specified")
 
     print(f"using {device}")
-    return device  # 建议添加返回值
-
 
 def log_configuration(writer, args=None, cmdline_args=None, global_step=1):
-    """
-    将配置参数和命令行参数记录到TensorBoard的writer中。
-
-    Args:
-        writer (SummaryWriter): TensorBoard的SummaryWriter对象，用于记录数据。
-        args (object, optional): 配置参数对象，通常包含训练相关的各种设置。默认为None。
-        cmdline_args (object, optional): 命令行参数对象。默认为None。
-        global_step (int, optional): 当前全局训练步数，用于标记记录的时间点。默认为1。
-    """
     s = str("")
 
     if cmdline_args is not None:
@@ -85,19 +59,10 @@ def log_configuration(writer, args=None, cmdline_args=None, global_step=1):
     if args is not None:
         s += str(args).replace(",","<br>")[10:-2]
 
-    writer.add_text(tag="params", text_string=s, global_step=global_step)  # ⭐ 核心操作：将参数文本写入TensorBoard
+    writer.add_text(tag="params", text_string=s, global_step=global_step)
     writer.flush()
 
 def training_run(settings):
-    """
-    执行完整的训练流程，包括环境初始化、模型训练和性能评估。
-
-    Args:
-        settings (dict): 包含所有训练配置参数的字典，包括随机种子、日志目录、策略类型等。
-
-    Returns:
-        list: 包含两个元素的列表，分别是callback.best_metrics和callback.best_mean_metrics，表示训练过程中的最佳指标和平均指标。
-    """
     setup_seed(seed=settings["seed"][settings["run"]])
 
     settings["log_dir"] = os.path.join(settings["tensorboard_dir"],
@@ -109,7 +74,7 @@ def training_run(settings):
 
     # Create directory if it doesn't exsit.
     if not os.path.isdir(settings["log_dir"]):
-        os.makedirs(settings["log_dir"],exist_ok=True)
+        os.makedirs(settings["log_dir"])
 
     hp = load_hyperparameters_from_file(settings["hyperparameters"])
 
@@ -134,7 +99,7 @@ def training_run(settings):
                            "shuffle_idxs": settings["shuffle_training_idxs"],
                            })
 
-    env = environment(env_params)  # ⭐ 初始化训练环境
+    env = environment(env_params)
     env.reset()
 
     model = setup_model(model_type=settings["policy"],
@@ -159,8 +124,8 @@ def training_run(settings):
                                          hyperparameters=hp,
                                          model=model)
 
-    model.explore_for_expert_targets(settings["target_exploration_steps"])  # ⭐ 执行探索阶段
-    model.learn(timesteps=settings["max_timesteps"],  # ⭐ 执行主要训练过程
+    model.explore_for_expert_targets(settings["target_exploration_steps"])
+    model.learn(timesteps=settings["max_timesteps"],
                 callback=callback,
                 start_timesteps=settings["start_timesteps"],
                 incremental_replay_buffer=settings["incremental_replay_buffer"]
@@ -169,16 +134,7 @@ def training_run(settings):
     return [callback.best_metrics, callback.best_mean_metrics]
 
 def main():
-    """
-    PCB布线策略训练主程序，负责初始化训练环境、执行多次训练运行并输出性能统计。
-
-    功能流程：
-    1. 解析命令行参数获取训练设置
-    2. 可选重定向标准输出/错误到日志文件
-    3. 进行多轮次训练运行
-    4. 收集并计算平均性能指标
-    """
-    args,settings = cmdline_args()  # ⭐ 解析命令行参数获取配置
+    args,settings = cmdline_args()
 
     if settings["redirect_stdout"] is True:
         redirection_file = os.path.join(settings["tensorboard_dir"],
@@ -199,7 +155,7 @@ def main():
 
     for run in range(settings["runs"]):
         settings["run"] = run
-        perf_metrics = training_run(settings=settings)  # ⭐ 执行单次训练运行
+        perf_metrics = training_run(settings=settings)
 
         mean_best_rewards.append(perf_metrics[0][0])
         mean_best_steps.append(perf_metrics[0][1])

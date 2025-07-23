@@ -1,15 +1,14 @@
 import os
 import sys
 from data_augmenter import dataAugmenter
-
+from pcb import pcb
+from graph import graph
 from core.agent.agent import agent as agent
 from core.agent.parameters import parameters as agent_parameters
 from core.environment.tracker import tracker
 from pcbDraw import draw_board_from_board_and_graph_with_debug, draw_ratsnest_with_board
 import numpy as np
 import random as random_package
-from pcb_python import pcb
-from pcb_python import Graph
 
 class environment:
     """
@@ -32,7 +31,7 @@ class environment:
         """
         self.parameters = parameters
 
-        self.pv = pcb.VPtrPCBs()
+        self.pv = pcb.vptr_pcbs()
         print(len(self.pv))
         # 读取PCB文件
         pcb.read_pcb_file(self.parameters.pcb_file, self.pv)  # ⭐ 核心代码：读取PCB文件数据
@@ -157,8 +156,8 @@ class environment:
                 deterministic=deterministic,
                 rl_model_type=rl_model_type)
             # convert state_vector
-            _state = list(state["los"]) + list(state["ol"]) + state["dom"] + state["euc_dist"] + state["position"] + state["ortientation"]+list(state["boardmask"])
-            _next_state = list(next_state["los"]) + list(next_state["ol"]) + next_state["dom"] + next_state["euc_dist"] + next_state["position"] + next_state["ortientation"]+list(next_state["boardmask"])
+            _state = list(state["los"]) + list(state["ol"]) + state["dom"] + state["euc_dist"] + state["position"] + state["ortientation"]
+            _next_state = list(next_state["los"]) + list(next_state["ol"]) + next_state["dom"] + next_state["euc_dist"] + next_state["position"] + next_state["ortientation"]
             _next_state_info = next_state["info"]
             observation_vec.append(
                 [_state, _next_state, reward, action, done, _next_state_info])
@@ -219,9 +218,9 @@ class environment:
         self.p = self.pv[self.idx]
 
         if init: self.agents = []
-        self.g = self.p.get_graph_ref()
+        self.g = self.p.get_graph()
         self.g.reset()
-        self.b = self.p.get_board_ref()
+        self.b = self.p.get_board()
         # >>> VERY VERY IMPORTANT <<<
         self.g.set_component_origin_to_zero(self.b)
 
@@ -309,7 +308,7 @@ class environment:
             agnt.print()
 
     def library_info(self):
-        Graph.build_info()
+        graph.build_info()
         pcb.build_info()
 
     def library_info_as_string(self):
@@ -319,7 +318,7 @@ class environment:
         s += "pcb library dependency #1<br>"
         # strips first and last 4 characters to prevent printing double "\n"
         s += pcb.dependency_info_as_string().replace("\n", "<br>")[4:-4]
-        s += Graph.build_info_as_string().replace("\n", "<br>")
+        s += graph.build_info_as_string().replace("\n", "<br>")
         return s
 
     def write_pcb_file(self, path=None, filename=None):
@@ -330,7 +329,7 @@ class environment:
             save_loc = "./pcb_file.pcb"
 
         for i in range(len(self.pv)):
-            g = self.pv[i].get_graph_ref()
+            g = self.pv[i].get_graph()
             g.reset()
         pcb.write_pcb_file(save_loc, self.pv, False)
 
@@ -343,7 +342,7 @@ class environment:
 
         pv = pcb.vptr_pcbs()
         pv.append(self.pv[self.idx])
-        g = pv[0].get_graph_ref()
+        g = pv[0].get_graph()
         g.update_hpwl(do_not_ignore_unplaced=True)
         # >>> VERY VERY IMPORTANT <<<
         g.reset_component_origin(self.b)

@@ -8,14 +8,13 @@ Created on Mon May  2 15:38:05 2022
 
 import numpy as np
 import cv2
+from graph import graph
+from graph import board
+from graph import node
+from graph import edge
 from graph_utils import kicad_rotate
 from pcb_board import board_maskast#导入屏蔽罩二值数据
 import sys
-from pcb_python import pcb
-from pcb_python import Graph
-from pcb_python import Board
-from pcb_python import Node
-from pcb_python import Edge
 
 r = 0.1    # resolution in mm
 

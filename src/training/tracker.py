@@ -11,25 +11,17 @@ import numpy as np
 
 class tracker():
     def __init__(self, avg_size, rl_policy_type: str = "TD3"):
-        """
-        初始化强化学习训练指标跟踪器
-        
-        Args:
-            avg_size (int): 滑动窗口的平均计算大小
-            rl_policy_type (str): 强化学习算法类型，支持"TD3"或"SAC"
-        """
-        self.rl_policy_type=rl_policy_type  # ⭐ 设置强化学习算法类型
+
+        self.rl_policy_type=rl_policy_type
 
         self.avg_size = avg_size
 
-        # 初始化各指标的滑动窗口队列
         self.actor_losses = deque(maxlen=self.avg_size)
         self.critic_losses = deque(maxlen=self.avg_size)
         self.episode_reward = deque(maxlen=self.avg_size)
         self.episode_length = deque(maxlen=self.avg_size)
         self.episode_fps = deque(maxlen=self.avg_size)
 
-        # SAC算法特有的指标
         if self.rl_policy_type == "SAC":
             self.critic_1_loss = deque(maxlen=self.avg_size)
             self.critic_2_loss = deque(maxlen=self.avg_size)

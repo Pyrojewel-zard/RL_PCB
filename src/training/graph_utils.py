@@ -28,25 +28,26 @@ import numpy as np
 
 def kicad_rotate( x, y, a):
     """
-    使用Kicad旋转公式计算点(x,y)绕原点旋转后的坐标
+    Rotate a point (x, y) by an angle a (in degrees) using the Kicad rotation
+    formula.
 
     Args:
-        x (float): 点的x坐标
-        y (float): 点的y坐标
-        a (float): 旋转角度(度)
+        x (float): x-coordinate of the point.
+        y (float): y-coordinate of the point.
+        a (float): Angle of rotation in degrees.
 
     Returns:
-        list: 旋转后的新坐标[rx, ry]
+        list: The rotated point [rx, ry].
     """
  	# --             --     -- --
  	# |  cos()   sin() | \/  | x |
  	# | -sin()   cos() | /\  | y |
  	# --             --     -- --
 
-    theta =  np.pi * (a / 180.0)  # ⭐ 将角度转换为弧度
+    theta =  np.pi * (a / 180.0)
 
-    rx = x * np.cos( theta ) + y * np.sin( theta )  # ⭐ 计算旋转后的x坐标
-    ry = - x * np.sin( theta ) + y * np.cos( theta )  # ⭐ 计算旋转后的y坐标
+    rx = x * np.cos( theta ) + y * np.sin( theta )
+    ry = - x * np.sin( theta ) + y * np.cos( theta )
 
     return [rx,ry]
 
@@ -71,7 +72,7 @@ def kicad_rotate_around_point( x, y, cx, cy, a):
  	# | -sin()   cos() | /\  | y |
   	# --             --     -- --
 
-    theta =  np.pi * (a / 180.0)  # ⭐ 将角度转换为弧度，为后续三角函数计算做准备
+    theta =  np.pi * (a / 180.0)
 
     rx = ((x - cx) * np.cos( theta ) + ( y - cy ) * np.sin( theta )) + cx
     ry = (-(x - cx) * np.sin( theta ) + ( y - cy ) * np.cos( theta )) + cy

@@ -7,39 +7,13 @@ from core.agent.observation import get_agent_observation
 from core.agent.tracker import tracker
 
 from pcbDraw import draw_board_from_board_and_graph_multi_agent
-from pcbDraw import compute_hpwl
 
 import datetime
 
 class agent(gym.Env):
-    """
-    基于强化学习的PCB布局优化智能体环境类。
-    
-    该类通过调整元件位置和方向来优化PCB布局，最小化布线长度和元件重叠。
-    继承自gym.Env类，定义了观察空间、动作空间以及相关参数。
-
-    Attributes:
-        parameters: 配置参数对象
-        observation_space: 定义智能体的观察空间
-        action_space: 定义智能体的动作空间
-        tracker: 用于跟踪训练过程的对象
-        rng: 随机数生成器
-        max_steps: 最大步数限制
-        steps_done: 已完成的步数计数器
-        HPWLe: 优化目标中的布线长度权重
-        We: 优化目标中的欧式距离权重
-        n: PCB板参数
-        m: PCB板参数
-        p: PCB板参数
-        penalty_per_remaining_step: 每剩余步数的惩罚系数
-    """
+    # This method is called when an object is created.
+    # It's purpose is to initialize the object.
     def __init__(self, parameters):
-        """
-        初始化智能体环境。
-
-        Args:
-            parameters: 包含各种配置参数的对象
-        """
         self.parameters = parameters
 
         obs_space = {
@@ -54,11 +28,9 @@ class agent(gym.Env):
             "position": spaces.Box(low=0.0, high=1.0, shape=(2,),
                                    dtype=np.float32),
             "ortientation": spaces.Box(low=0.0, high=1.0, shape=(1,),
-                                       dtype=np.float32),
-            "boardmask": spaces.Box(low=0.0, high=1.0, shape=(8,),
-                              dtype=np.float32)                           
+                                       dtype=np.float32)
             }
-        self.observation_space = spaces.Dict(obs_space)  # ⭐ 定义观察空间的结构
+        self.observation_space = spaces.Dict(obs_space)
         self.action_space = spaces.Box(
             low=np.array([0,0,0], dtype=np.float32),
             high=np.array([1,2*np.pi,1],
@@ -89,7 +61,6 @@ class agent(gym.Env):
         self.W = []
         self.HPWL = []
         self.ol_term5 = []
-        self.ol_board=[]
         self.current_We = self.We
 
         self.Wi = compute_sum_of_euclidean_distances_between_pads(
@@ -98,7 +69,6 @@ class agent(gym.Env):
             self.parameters.eoi,
             ignore_power=self.parameters.ignore_power)
         self.HPWLi = 0
-    
         for net_id in self.parameters.nets:
             self.HPWLi += self.parameters.graph.calc_hpwl_of_net(net_id,
                                                                  True)
@@ -115,8 +85,7 @@ class agent(gym.Env):
              rl_model_type:str = "TD3"):
         self.steps_done += 1
         state = get_agent_observation(parameters=self.parameters)
-        _state = list(state["los"]) + list(state["ol"]) + state["dom"] + state["euc_dist"] + state["position"] + state["ortientation"]+list(state["boardmask"])
-
+        _state = list(state["los"]) + list(state["ol"]) + state["dom"] + state["euc_dist"] + state["position"] + state["ortientation"]
 
         if random is True:
             action = self.action_space.sample()
@@ -171,7 +140,6 @@ class agent(gym.Env):
             ignore_power=self.parameters.ignore_power))
 
         hpwl = 0
-     
         for net_id in self.parameters.nets:
             hpwl += self.parameters.graph.calc_hpwl_of_net(net_id, True)
 
@@ -182,11 +150,6 @@ class agent(gym.Env):
                 np.clip((1-np.sum(observation["ol"])/8), 0.0, np.inf))
         else:
             self.ol_term5.append(1)
-        if np.sum(observation["boardmask"]) > 1E-6:
-            self.ol_board.append(
-                np.clip((1-np.sum(observation["ol"])/8), 0.0, np.inf))
-        else:
-            self.ol_board.append(1)#表示重叠值，重叠越小越接近1    
 
         if self.W[-1] < self.We and self.ol_term5[-1] == 1:
 
@@ -221,25 +184,21 @@ class agent(gym.Env):
 
         reward = 0
 
-        numer = self.Wi - self.W[-1]
-        denom = self.Wi - self.current_We
-        if abs(denom) < 1e-8:
-            x = -1.0 if numer < 0 else 1.0
-        else:
-            x = np.clip(numer / denom, -1.0, 1.0)
+        x = np.clip((self.Wi - self.W[-1]) / (self.Wi - self.current_We),
+                    -1, 1)
         y = np.clip(
             (self.HPWLi - self.HPWL[-1]) / (self.HPWLi - self.current_HPWL),
              -1, 1)
         self.all_w.append(x)
         self.all_hpwl.append(y)
-        self.all_weighted_cost.append( (self.n*x + self.m*self.ol_term5[-1] + self.p*y+self.m*self.ol_board[-1])/(self.n+self.m+self.p) )
+        self.all_weighted_cost.append( (self.n*x + self.m*self.ol_term5[-1] + self.p*y)/(self.n+self.m+self.p) )
 
-        reward = np.tan((self.n*x + self.m*self.ol_term5[-1] + self.p*y+self.m*self.ol_board[-1])/(self.n+2*self.m+self.p) * np.pi/2.1  )
+        reward = np.tan((self.n*x + self.m*self.ol_term5[-1] + self.p*y)/(self.n+self.m+self.p) * np.pi/2.1  )
 
-        if ((observation["position"][0] > 1) or
+        if (((observation["position"][0] > 1) or
             (observation["position"][0] < 0) or
             (observation["position"][1] > 1) or
-            (observation["position"][1] < 0)) and ((np.sum(observation["ol"])/8) == 1)or (np.sum(observation["boardmask"])/8):
+            (observation["position"][1] < 0)) and (np.sum(observation["ol"])/8) == 1):
             reward -= (self.max_steps-self.steps_done) * self.penalty_per_remaining_step
             done = True
 

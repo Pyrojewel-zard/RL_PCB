@@ -21,23 +21,13 @@ class Actor(nn.Module):
                  activation_fn: str = "relu",
                  device: str = "cuda"
                  ):
-        """
-        Actor网络初始化，用于TD3算法中生成动作的策略网络。
 
-        Args:
-            state_dim (int): 状态空间的维度
-            action_dim (int): 动作空间的维度
-            max_action (float): 动作的最大值
-            pi (list): 各隐藏层的神经元数量，默认为[400, 300]
-            activation_fn (str): 激活函数类型，支持"relu"或"tanh"
-            device (str): 计算设备，默认为"cuda"
-        """
         super(Actor, self).__init__()
         self.device = device
         self.pi = nn.Sequential()
         in_size = state_dim
         for layer_sz in pi:
-            self.pi.append(nn.Linear(in_size, layer_sz))  # ⭐ 构建全连接层网络结构
+            self.pi.append(nn.Linear(in_size, layer_sz))
             in_size = layer_sz
         self.pi.append(nn.Linear(in_size, action_dim))
         self.max_action = max_action
@@ -48,19 +38,10 @@ class Actor(nn.Module):
             self.activation_fn == nn.Tanh
 
     def forward(self, state):
-        """
-        前向传播函数，根据输入状态生成动作。
-
-        Args:
-            state (torch.Tensor): 当前环境状态
-
-        Returns:
-            torch.Tensor: 在给定范围内的动作值
-        """
         x = state
         for i in range(len(self.pi)-1):
             x = self.activation_fn(self.pi[i](x))
-        return self.max_action * torch.tanh(self.pi[-1](x))  # ⭐ 通过tanh限制动作范围并乘以最大值
+        return self.max_action * torch.tanh(self.pi[-1](x))
 
     def select_action(self, state):
         state = torch.FloatTensor(state.reshape(1, -1)).to(self.device)
@@ -97,17 +78,7 @@ class Critic(nn.Module):
         self.qf2.append(nn.Linear(in_size, 1))
 
     def forward(self, state, action):
-        """
-        实现TD3算法中双Q网络的前向传播计算，用于评估给定状态-动作对的两个Q值。
-
-        Args:
-            state (torch.Tensor): 当前环境状态张量
-            action (torch.Tensor): 智能体采取的动作张量
-
-        Returns:
-            tuple: 包含两个Q网络输出的元组 (q1, q2)
-        """
-        sa = torch.cat([state, action], 1)  # ⭐ 将状态和动作拼接作为网络输入
+        sa = torch.cat([state, action], 1)
 
         q1 = sa
         for i in range(len(self.qf1)-1):
@@ -123,17 +94,7 @@ class Critic(nn.Module):
 
 
     def Q1(self, state, action):
-        """
-        计算给定状态和动作对的第一个Q值（Q1值），通过Critic网络的前向传播实现。
-
-        Args:
-            state (torch.Tensor): 当前环境状态张量
-            action (torch.Tensor): 智能体采取的动作张量
-
-        Returns:
-            torch.Tensor: 状态动作对的Q值评估结果
-        """
-        sa = torch.cat([state, action], 1)  # ⭐ 将状态和动作在特征维度拼接，作为网络输入
+        sa = torch.cat([state, action], 1)
 
         q1 = sa
         for i in range(len(self.qf1)-1):
@@ -205,16 +166,7 @@ class TD3(object):
         self.total_it = 0
 
     def select_action(self, state):
-        """
-        通过Actor网络选择当前状态下的最优动作。
-
-        Args:
-            state (numpy.ndarray): 当前环境状态，形状为(state_dim,)的数组
-
-        Returns:
-            numpy.ndarray: 选择的动作，形状为(action_dim,)的一维数组
-        """
-        state = torch.FloatTensor(state.reshape(1, -1)).to(self.device)  # ⭐ 将状态转换为PyTorch张量并送入设备
+        state = torch.FloatTensor(state.reshape(1, -1)).to(self.device)
         return self.actor(state).cpu().data.numpy().flatten()
 
     def train(self, replay_buffer):

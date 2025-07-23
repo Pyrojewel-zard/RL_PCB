@@ -10,25 +10,8 @@ from datetime import datetime
 matplotlib.use("Agg")
 
 class tracker():
-    """
-    PCB布局优化过程跟踪器，用于记录和可视化优化过程中的各项指标。
-
-    Attributes:
-        maxlen (int): 各数据队列的最大长度。
-        all_comp_grids (deque): 存储所有组件网格位置的队列。
-        ratsnest (deque): 存储连线长度数据的队列。
-        rewards (deque): 存储奖励值数据的队列。
-        metrics (deque): 存储其他指标的队列。
-        frame_buffer (np.array): 用于视频生成的帧缓冲区。
-    """
     def __init__(self, maxlen=1024):
-        """
-        初始化跟踪器，创建各数据存储队列和缓冲区。
-
-        Args:
-            maxlen (int, optional): 各数据队列的最大长度，默认为1024。
-        """
-        self.maxlen = maxlen  # ⭐ 设置数据队列的最大长度
+        self.maxlen = maxlen
 
         self.all_comp_grids = deque(maxlen=self.maxlen)
         self.ratsnest = deque(maxlen=self.maxlen)

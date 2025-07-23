@@ -11,46 +11,32 @@ import numpy as np
 import random as random_package
 
 class environment:
-    """
-    PCB布局优化环境类，用于初始化和管理PCB布局优化任务的环境。
-
-    Attributes:
-        parameters: 环境配置参数
-        pv: PCB布局的指针集合
-        rng: 随机数生成器
-        tracker: 用于跟踪训练过程的跟踪器
-        dA: 数据增强器（如果启用）
-        padding: 布局填充值
-    """
+    # This method is called when an object is created.
+    # It's purpose is to initialize the object.
     def __init__(self, parameters):
-        """
-        初始化PCB布局优化环境。
-
-        Args:
-            parameters: 包含环境配置参数的对象
-        """
         self.parameters = parameters
 
         self.pv = pcb.vptr_pcbs()
-        print(len(self.pv))
-        # 读取PCB文件
-        pcb.read_pcb_file(self.parameters.pcb_file, self.pv)  # ⭐ 核心代码：读取PCB文件数据
+        # Read pcb file
+        pcb.read_pcb_file(self.parameters.pcb_file, self.pv)
 
         if (self.parameters.idx != -1) and (self.parameters.idx >= len(self.pv)):
             print("The supplied pcb index exceeds the number of layouts in the training set ... Program terminating")
             sys.exit()
 
         self.rng = np.random.default_rng(seed=self.parameters.seed)
-        # 设置p,g和b变量；idx=None表示随机选择
+        # sets p,g and b variables; idx=None => random!!
         self.initialize_environment_state_from_pcb(
             init=True,
             idx=self.parameters.idx)
         self.tracker = tracker()
 
         if self.parameters.use_dataAugmenter is True:
-            # 以下配置最大平移量，需满足以下约束：
-            #   1. 网表中必须只有一个LOCKED组件
-            #   2. LOCKED组件必须位于板子中心
+            # The following configures the maximum translation. The following
+            # constraints / requirements apply:
+            #   1. There must be only one LOCKED component in the netlist.
+            #   2. The LOCKED component must be centered in the middle of the
+            #      board
             nn = self.g.get_nodes()
             c_sz = 0
             b_sz = np.minimum(self.b.get_width(), self.b.get_height())
@@ -63,7 +49,7 @@ class environment:
 
             translation_limits = [0.66*sz, 0.66*sz]
 
-            self.dA = dataAugmenter(  # ⭐ 核心代码：初始化数据增强器
+            self.dA = dataAugmenter(
                 board_size=[self.b.get_width(), self.b.get_height()],
                 max_translation=translation_limits,
                 goal=[[-1,-1, 0]],
@@ -211,7 +197,6 @@ class environment:
 
     def initialize_environment_state_from_pcb(self, init = False, idx=-1):
         if idx==-1:
-            # print(self.rng.integers(len(self.pv)))
             self.idx = int(self.rng.integers(len(self.pv)))
         else:
             self.idx = idx

@@ -1,5 +1,37 @@
 #!/bin/bash
 
+# 系统资源检测和优化配置
+CPU_CORES=$(nproc)                      # 获取CPU核心数
+GPU_COUNT=$(nvidia-smi -L 2>/dev/null | wc -l || echo 0)  # 获取GPU数量
+
+echo "=== 系统资源检测 ==="
+echo "CPU核心数: $CPU_CORES"
+echo "GPU数量: $GPU_COUNT"
+if [ $GPU_COUNT -gt 0 ]; then
+    nvidia-smi --query-gpu=name,memory.total --format=csv,noheader,nounits
+fi
+echo "====================="
+
+# 设置环境变量以优化多线程性能
+export OMP_NUM_THREADS=$CPU_CORES       # OpenMP线程数
+export MKL_NUM_THREADS=$CPU_CORES       # Intel MKL线程数
+export NUMEXPR_NUM_THREADS=$CPU_CORES   # NumExpr线程数
+export CUDA_VISIBLE_DEVICES=0,1         # 显式设置可见的GPU
+
+# 根据系统资源动态调整并行实例数
+# 对于双GPU系统，建议使用较多的并行实例以充分利用资源
+if [ $GPU_COUNT -ge 2 ]; then
+    PARALLEL_INSTANCES=$((CPU_CORES / 2))  # 双GPU情况下可以更激进
+else
+    PARALLEL_INSTANCES=$((CPU_CORES / 4))  # 单GPU情况下保守一些
+fi
+
+# 确保至少有2个实例，最多不超过8个
+PARALLEL_INSTANCES=$(( PARALLEL_INSTANCES < 2 ? 2 : PARALLEL_INSTANCES ))
+PARALLEL_INSTANCES=$(( PARALLEL_INSTANCES > 8 ? 8 : PARALLEL_INSTANCES ))
+
+echo "设置并行实例数: $PARALLEL_INSTANCES"
+
 # 二进制工具路径定义
 KICAD_PARSER=${RL_PCB}/bin/kicadParser  # KiCad解析器路径
 SA_PCB=${RL_PCB}/bin/sa                 # 模拟退火工具路径
@@ -13,14 +45,22 @@ echo "RL_PCB repository root is ${RL_PCB}" # 显示项目根目录
 
 # 创建工作目录
 mkdir -p work                           # 创建work目录存放结果
+
+# 关闭已有的TensorBoard进程
+echo "Closing existing tensorboard processes ..."
+pkill -f "tensorboard.*6001" || true   # 关闭端口6001上的TensorBoard进程，忽略错误
+sleep 1                                 # 等待进程关闭
+
 echo "Starting tensorboard ... "        # 启动TensorBoard监控
 tensorboard --logdir ./work/ --host 0.0.0.0 --port 6001 &  # 后台运行TensorBoard
 sleep 2                                 # 等待2秒确保启动
 
 # 进入训练目录执行调度
 cd ${RL_PCB}/src/training               # 切换到训练脚本目录
-./scheduler.sh --run_config ${EXP_DIR}/run_config.txt --logfile $EXP_DIR/scheduler.log --instances 4 --yes 
-                                        # 启动训练调度器，4个并行实例
+# 将scheduler.sh改为可执行
+
+./scheduler.sh --run_config ${EXP_DIR}/run_config.txt --logfile $EXP_DIR/scheduler.log --instances $PARALLEL_INSTANCES --yes 
+                                        # 启动训练调度器，使用动态计算的并行实例数
 cd ${EXP_DIR}                           # 返回实验目录
 
 # 生成报告配置

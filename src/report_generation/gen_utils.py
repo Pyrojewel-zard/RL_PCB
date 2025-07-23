@@ -316,6 +316,7 @@ def generate_dataset(batch, window: int = -1, verbose=False):
         episode_length = []
         episode_reward = []
         read_data = False
+        hdr = ["episode_number", "timesteps", "episode_length", "accumulated_reward"]  # 设置默认列名
 
         for line in f:
             l = str(line)[2:-5]

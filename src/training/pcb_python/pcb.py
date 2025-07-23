@@ -6,8 +6,8 @@ PCB模块 - 纯Python实现
 import os
 import time
 from typing import List, Optional, Tuple
-from netlist.graph import Graph
-from netlist.board import Board
+from .netlist.graph import Graph
+from .netlist.board import Board
 
 class PCB:
     """PCB类，表示一个PCB文件，包含图形和电路板信息"""

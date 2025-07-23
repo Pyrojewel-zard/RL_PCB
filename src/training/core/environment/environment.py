@@ -1,14 +1,15 @@
 import os
 import sys
 from data_augmenter import dataAugmenter
-from pcb import pcb
-from graph import graph
+
 from core.agent.agent import agent as agent
 from core.agent.parameters import parameters as agent_parameters
 from core.environment.tracker import tracker
 from pcbDraw import draw_board_from_board_and_graph_with_debug, draw_ratsnest_with_board
 import numpy as np
 import random as random_package
+from pcb_python import pcb
+from pcb_python import Graph
 
 class environment:
     """
@@ -31,7 +32,7 @@ class environment:
         """
         self.parameters = parameters
 
-        self.pv = pcb.vptr_pcbs()
+        self.pv = pcb.VPtrPCBs()
         print(len(self.pv))
         # 读取PCB文件
         pcb.read_pcb_file(self.parameters.pcb_file, self.pv)  # ⭐ 核心代码：读取PCB文件数据
@@ -218,9 +219,9 @@ class environment:
         self.p = self.pv[self.idx]
 
         if init: self.agents = []
-        self.g = self.p.get_graph()
+        self.g = self.p.get_graph_ref()
         self.g.reset()
-        self.b = self.p.get_board()
+        self.b = self.p.get_board_ref()
         # >>> VERY VERY IMPORTANT <<<
         self.g.set_component_origin_to_zero(self.b)
 
@@ -308,7 +309,7 @@ class environment:
             agnt.print()
 
     def library_info(self):
-        graph.build_info()
+        Graph.build_info()
         pcb.build_info()
 
     def library_info_as_string(self):
@@ -318,7 +319,7 @@ class environment:
         s += "pcb library dependency #1<br>"
         # strips first and last 4 characters to prevent printing double "\n"
         s += pcb.dependency_info_as_string().replace("\n", "<br>")[4:-4]
-        s += graph.build_info_as_string().replace("\n", "<br>")
+        s += Graph.build_info_as_string().replace("\n", "<br>")
         return s
 
     def write_pcb_file(self, path=None, filename=None):
@@ -329,7 +330,7 @@ class environment:
             save_loc = "./pcb_file.pcb"
 
         for i in range(len(self.pv)):
-            g = self.pv[i].get_graph()
+            g = self.pv[i].get_graph_ref()
             g.reset()
         pcb.write_pcb_file(save_loc, self.pv, False)
 
@@ -342,7 +343,7 @@ class environment:
 
         pv = pcb.vptr_pcbs()
         pv.append(self.pv[self.idx])
-        g = pv[0].get_graph()
+        g = pv[0].get_graph_ref()
         g.update_hpwl(do_not_ignore_unplaced=True)
         # >>> VERY VERY IMPORTANT <<<
         g.reset_component_origin(self.b)

@@ -107,7 +107,7 @@ class Node:
         """获取通孔引脚数"""
         return self._pins_th
     
-    def get_is_placed(self) -> bool:
+    def get_isPlaced(self) -> bool:
         """获取是否已放置"""
         return self._is_placed
     

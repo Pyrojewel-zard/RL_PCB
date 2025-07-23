@@ -98,9 +98,9 @@ class agent(gym.Env):
             self.parameters.eoi,
             ignore_power=self.parameters.ignore_power)
         self.HPWLi = 0
-        self.HPWLi= compute_hpwl(node, neighbors, edges)
-        #for net_id in self.parameters.nets:
-            #self.HPWLi += self.parameters.graph.calc_hpwl_of_net(net_id,
+    
+        for net_id in self.parameters.nets:
+            self.HPWLi += self.parameters.graph.calc_hpwl_of_net(net_id,
                                                                  True)
         self.current_HPWL = self.HPWLe
 
@@ -171,8 +171,7 @@ class agent(gym.Env):
             ignore_power=self.parameters.ignore_power))
 
         hpwl = 0
-        hpwl1=0
-        hpwl1 = compute_hpwl(node, neighbors, edges)
+     
         for net_id in self.parameters.nets:
             hpwl += self.parameters.graph.calc_hpwl_of_net(net_id, True)
 

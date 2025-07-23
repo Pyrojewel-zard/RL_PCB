@@ -266,3 +266,8 @@ class Edge:
     def __repr__(self) -> str:
         """详细字符串表示"""
         return self.__str__() 
+    def get_node_id_a(self):
+     return self._a_id
+
+    def get_node_id_b(self):
+     return self._b_id

@@ -551,3 +551,44 @@ class Graph:
     def __repr__(self) -> str:
         """详细字符串表示"""
         return self.__str__() 
+    def reset(self) -> int:
+     """将当前节点列表 _V 重置为初始 _V_original"""
+     self._V_original = self._V.copy()
+     return 0
+    def update_original_nodes_with_current_optimals(self) -> int:
+     """
+     将当前图中每个节点的最优欧几里得距离和最优 HPWL 更新到 _V_original 中对应节点
+     """
+     for node_current in self._V:
+        for node_original in self._V_original:
+            if node_current.get_id() == node_original.get_id():
+                node_original.set_opt_hpwl(node_current.get_opt_hpwl())
+                node_original.set_opt_euclidean_distance(node_current.get_opt_euclidean_distance())
+                break
+     return 0
+    def calc_hpwl_of_net(self, net_id: int, do_not_ignore_unplaced: bool = False) -> float:
+     min_x, max_x = float('inf'), float('-inf')
+     min_y, max_y = float('inf'), float('-inf')
+
+     for edge in self._E :
+        if edge.get_net_id() != net_id:
+            continue
+
+        node_a = self.get_node_by_id(edge.get_node_id_a())
+        node_b = self.get_node_by_id(edge.get_node_id_b())
+
+        # 如果节点未放置，就跳过（只计算已放置节点）
+        if node_a is not None and (do_not_ignore_unplaced or node_a.get_isPlaced()):
+            x, y = node_a.get_pos()
+            min_x, max_x = min(min_x, x), max(max_x, x)
+            min_y, max_y = min(min_y, y), max(max_y, y)
+
+        if node_b is not None and (do_not_ignore_unplaced or node_a.get_isPlaced()):
+            x, y = node_b.get_pos()
+            min_x, max_x = min(min_x, x), max(max_x, x)
+            min_y, max_y = min(min_y, y), max(max_y, y)
+
+     if min_x == float('inf'):  # 所有节点都未放置
+         return 0.0
+
+     return (max_x - min_x) + (max_y - min_y)

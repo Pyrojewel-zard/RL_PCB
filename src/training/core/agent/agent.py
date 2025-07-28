@@ -28,7 +28,9 @@ class agent(gym.Env):
             "position": spaces.Box(low=0.0, high=1.0, shape=(2,),
                                    dtype=np.float32),
             "ortientation": spaces.Box(low=0.0, high=1.0, shape=(1,),
-                                       dtype=np.float32)
+                                       dtype=np.float32),
+            "boardmask":spaces.Box( low=0.0, high=1.0,shape=(8,),
+                                    dtype=np.float32)    #这里添加新的字典变量，后面计算输入张量的维度会用到
             }
         self.observation_space = spaces.Dict(obs_space)
         self.action_space = spaces.Box(
@@ -61,6 +63,7 @@ class agent(gym.Env):
         self.W = []
         self.HPWL = []
         self.ol_term5 = []
+        self.ol_board=[]
         self.current_We = self.We
 
         self.Wi = compute_sum_of_euclidean_distances_between_pads(
@@ -85,7 +88,8 @@ class agent(gym.Env):
              rl_model_type:str = "TD3"):
         self.steps_done += 1
         state = get_agent_observation(parameters=self.parameters)
-        _state = list(state["los"]) + list(state["ol"]) + state["dom"] + state["euc_dist"] + state["position"] + state["ortientation"]
+        _state = list(state["los"]) + list(state["ol"]) + state["dom"] + state["euc_dist"] + state["position"] + state["ortientation"]+list(state["boardmask"])  
+        # 添加新的字典变量,也就是输入多一个8维的张量boardmask,和enviroment.py里面一样对应要修改，不然和环境交互会报错
 
         if random is True:
             action = self.action_space.sample()
@@ -150,8 +154,14 @@ class agent(gym.Env):
                 np.clip((1-np.sum(observation["ol"])/8), 0.0, np.inf))
         else:
             self.ol_term5.append(1)
+        if np.sum(observation["boardmask"]) > 1E-6:
+            self.ol_board.append(
+                np.clip((1-np.sum(observation["boardmask"])/8), 0.0, np.inf))
+        else:
+            self.ol_board.append(1)#表示重叠值，重叠越小越接近1    
+   
 
-        if self.W[-1] < self.We and self.ol_term5[-1] == 1:
+        if self.W[-1] < self.We and self.ol_term5[-1] == 1 and self.ol_board[-1] == 1:
 
             if self.parameters.log_file is not None:
                 f = open(self.parameters.log_file, "a", encoding="utf-8")
@@ -191,16 +201,16 @@ class agent(gym.Env):
              -1, 1)
         self.all_w.append(x)
         self.all_hpwl.append(y)
-        self.all_weighted_cost.append( (self.n*x + self.m*self.ol_term5[-1] + self.p*y)/(self.n+self.m+self.p) )
+        self.all_weighted_cost.append( (self.n*x + self.m*self.ol_term5[-1] + self.p*y+self.m*self.ol_board[-1])/(self.n+2*self.m+self.p) )
 
-        reward = np.tan((self.n*x + self.m*self.ol_term5[-1] + self.p*y)/(self.n+self.m+self.p) * np.pi/2.1  )
+        reward = np.tan((self.n*x + self.m*self.ol_term5[-1] + self.p*y+self.m*self.ol_board[-1])/(self.n+2*self.m+self.p) * np.pi/2.1  )
 
         if (((observation["position"][0] > 1) or
             (observation["position"][0] < 0) or
             (observation["position"][1] > 1) or
-            (observation["position"][1] < 0)) and (np.sum(observation["ol"])/8) == 1):
+            (observation["position"][1] < 0)) and ((np.sum(observation["ol"])/8) == 1) or (np.sum(observation["boardmask"])/8)==1) :
             reward -= (self.max_steps-self.steps_done) * self.penalty_per_remaining_step
-            done = True
+            done = True#增加对触碰边界的判断
 
         if self.steps_done==self.max_steps:
             done = True

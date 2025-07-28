@@ -14,6 +14,7 @@ from graph import node
 from graph import edge
 from graph_utils import kicad_rotate
 import sys
+from pcb_board import board_mask
 
 r = 0.1    # resolution in mm
 
@@ -887,18 +888,32 @@ def get_los_and_ol_multi_agent(node,
             overlap_segments = np.zeros(
                 (8,int(x)+2*int(padding/res),int(y)+2*int(padding/res)),
                 np.uint8)
+            overlap_board_mask = np.zeros(
+                (8,int(x)+2*int(padding/res),int(y)+2*int(padding/res)),
+                np.uint8)
+            hebing=np.zeros(
+                (8,int(x)+2*int(padding/res),int(y)+2*int(padding/res)),
+                np.uint8)
         else:
             los_segments_mask = np.zeros((8,int(x),int(y)), np.uint8)
             los_segments = np.zeros((8,int(x),int(y)), np.uint8)
             overlap_segments_mask = np.zeros((8,int(x),int(y)), np.uint8)
             overlap_segments = np.zeros((8,int(x),int(y)), np.uint8)
+            overlap_board_mask = np.zeros((8,int(x),int(y)), np.uint8)
+            hebing=np.zeros((8,int(x),int(y)), np.uint8)
+
 
         segment_mask_pixels = np.zeros(8)
         segment_pixels = np.zeros(8)
         overlap_mask_pixels = np.zeros(8)
         overlap_pixels = np.zeros(8)
+        overlap_boardsum=np.zeros(8)
         start = -22.5 - angle_offset
         stop = 22.5 - angle_offset
+        if padding is not None:
+           board_mask_img=board_mask(x*res+2*padding,y*res+2*padding,res)
+        else: 
+             board_mask_img=board_mask( x*res, y*res, res)#异形边框程序导入，获取二值图像
         for i in range(8):
             cv2.ellipse(los_segments_mask[i],
                         (cx,cy),
@@ -911,7 +926,10 @@ def get_los_and_ol_multi_agent(node,
             overlap_segments_mask[i] = cv2.bitwise_and(
                 src1=los_segments_mask[i],
                 src2=grid_comps[1])
-
+            hebing[i]=cv2.bitwise_and(src1=overlap_segments_mask[i],
+                                     src2=board_mask_img[i])
+            overlap_board_mask[i]=cv2.bitwise_and(hebing[i],cv2.bitwise_not(board_mask_img[i]))
+             
             overlap_mask_pixels[i] = np.sum(overlap_segments_mask[i])
             if los_type == 1:
                 los_segments_mask[i] -= overlap_segments_mask[i]
@@ -940,11 +958,12 @@ def get_los_and_ol_multi_agent(node,
 
             segment_pixels[i] = np.sum(los_segments[i])
             overlap_pixels[i] = np.sum(overlap_segments[i])
+            overlap_boardsum[i]=np.sum(overlap_board_mask[i])#可以进行归一化
 
             start -= 45
             stop -= 45
 
-        return segment_pixels/segment_mask_pixels, overlap_pixels/overlap_mask_pixels, los_segments_mask, overlap_segments_mask
+        return segment_pixels/segment_mask_pixels, overlap_pixels/overlap_mask_pixels, los_segments_mask, overlap_segments_mask,overlap_boardsum/overlap_mask_pixels
 
     if los_type == 2:
         return

@@ -44,12 +44,12 @@ def get_agent_observation(parameters, tracker=None):
                                                    by=parameters.board_height,
                                                    padding=parameters.padding)
 
-    los, ol, _, ol_grids = get_los_and_ol_multi_agent(
+    los, ol, _, ol_grids,boardmask = get_los_and_ol_multi_agent(
         node=parameters.node,
         board=parameters.board,
         radius=np.max(parameters.node.get_size())*1.5,
         grid_comps=comp_grids,
-        padding=parameters.padding)
+        padding=parameters.padding)#新增加异形边界二值获取
 
     # compute ol_ratio
     ol_ratios = []
@@ -91,5 +91,6 @@ def get_agent_observation(parameters, tracker=None):
             "position": [parameters.node.get_pos()[0] / parameters.board_width,
                          parameters.node.get_pos()[1] / parameters.board_height],
             "ortientation": [wrap_angle(parameters.node.get_orientation())],
+            "boardmask":boardmask[-8:],
             "info": info
         }

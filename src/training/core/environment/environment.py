@@ -196,11 +196,15 @@ class environment:
         return observation_vec
 
     def initialize_environment_state_from_pcb(self, init = False, idx=-1):
+       
+        if len(self.pv) == 0:
+         raise ValueError(f"[ERROR] No PCB data found. Please check your training.pcb file.")
         if idx==-1:
             self.idx = int(self.rng.integers(len(self.pv)))
         else:
             self.idx = idx
         self.p = self.pv[self.idx]
+        
 
         if init: self.agents = []
         self.g = self.p.get_graph()

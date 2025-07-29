@@ -1,0 +1,57 @@
+Luke Vassallo @ 2022/02/22
+Changes going from version 0.0.1 to 0.0.2
+
+Added member variables and updated constructors:
+    • id
+    • parent_kicad_pcb
+    
+get/set methods for id
+get/set methods for set_filename
+
+new methods for writing design in form of graph and board to a pcb file. These include:
+int write_pcb_file_from_graph_and_board(std::string &fileName, graph &g, board &b, const std::vector<std::pair<std::string, std::string>>& global_params, const std::vector<std::pair<std::string, std::string>>& local_params);
+and
+int append_pcb_file_from_graph_and_board(std::string &fileName, graph &g, board &b, const std::vector<std::pair<std::string, std::string>>& global_params, const std::vector<std::pair<std::string, std::string>>& local_params);
+The improvement over the old ones (consider removing) is that these accept global and local parameters.
+
+All printing is performed using fixed precision with 8 decimal places.
+
+Removed all pcb attributes apart from .kicad_pcb and timestamp. Extra attributes can be added by means of the local parameters structure.
+
+Added board information during the pcb file generation (prior to this commit all board information was ignored.)
+
+Luke Vassallo @ 2022/03/06
+Changes going from version 0.0.4 to 0.0.5
+
+Minor updates to function prototyes for swig integration.
+
+
+Luke Vassallo @ 2022/04/18
+Changes going from version 0.0.6 to 0.0.7
+
+Modified some comments. 
+Added method for printing dependency build information
+
+Updated netlist_graph from v0.1.9 to v0.1.10
+
+Luke Vassallo @ 2022/07/29
+    Added optimals features
+    Added method to write pcb vector to file
+    Updated netlist_graph from v0.1.12 to v 0.1.13
+
+Luke Vassallo @ 2022/08/02
+	Changes going from version 0.0.9 to 0.0.10
+	Added two new methods for retriving 'kicad_pcb' and parent_kicad_pcb member variables from python. For simplicity this required member function with a return type of 'std::string'. Existing methods had a return type of 'std::string &'. The new methods are respectively:
+		std::string get_kicad_pcb2( void )
+		std::string get_parent_kicad_pcb2( void )
+	Update method: 'int write_pcb_file( std::string &fileName, std::vector<pcb*> &p, bool append=true )' ; It now prints the kicad_pcb filename in the appropriate location.
+
+Luke Vassallo @ 2022/08/04
+	Changes going from version 0.0.10 to 0.0.11
+	Added new method, build_info_as_string , for returning build information as a string. The original method, which is still retained, prints the information to console.
+	Added new method, dependency_info_as_string , for returning dependency build information as a string. The original method, which is still retained, prints the information to console.
+	Updated netlist_graph dependency library from v0.1.13 to v0.1.14
+	
+Luke Vassallo @ 2022/09/14
+    Updated main.py test script to print build information for the pcb library and it's dependent netlist_graph library.
+	Updated netlist_graph dependency library from v0.1.14 to v0.1.16

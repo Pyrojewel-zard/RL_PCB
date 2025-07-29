@@ -1,0 +1,6 @@
+build
+generated
+lib
+workspace
+pyfiles
+*.so

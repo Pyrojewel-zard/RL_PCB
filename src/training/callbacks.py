@@ -20,6 +20,7 @@ class log_and_eval_callback():
             num_evaluations: int = 10,
             eval_freq: int = 10_000,
             training_log: str = None,
+            pcb_save_freq: int = None,  # 新增：PCB保存频率参数，如10000表示每1万步保存一次
         ):
 
         super().__init__()
@@ -34,12 +35,16 @@ class log_and_eval_callback():
         self.video_train_path = os.path.join(self.video_path, "training_set")
         # subdirectory containing evaluations based off evaluation pcb file
         self.video_eval_path = os.path.join(self.video_path, "evaluation_set")
+        # 新增：实时PCB保存目录
+        self.realtime_pcb_path = os.path.join(self.save_path, "realtime_pcb")
         # optimals file for saving best We.
         self.optimals = os.path.join(self.save_path, "wirelength.optimals")
 
         self.verbose = verbose
         self.num_evaluations = num_evaluations
         self.eval_freq = eval_freq
+        # 新增：PCB保存频率，默认为None表示不保存
+        self.pcb_save_freq = pcb_save_freq
         # logfile to save episode progress
         if training_log is not None:
             self.training_log = os.path.join(self.save_path,training_log)
@@ -79,6 +84,11 @@ class log_and_eval_callback():
         # Create directory if it doesn't exsit.
         if os.path.isdir(self.video_eval_path) is False:
             os.makedirs(self.video_eval_path)
+
+        # 新增：实时PCB保存目录
+        if self.pcb_save_freq is not None:
+            if os.path.isdir(self.realtime_pcb_path) is False:
+                os.makedirs(self.realtime_pcb_path)
 
         self.eval_env = None
         self.writer = SummaryWriter(log_dir=self.save_path)
@@ -205,6 +215,46 @@ class log_and_eval_callback():
                 mean_episode_reward = np.round(
                     np.mean(self.model.trackr.episode_reward),2)
                 print(f" EVALUATION - TEST     | {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} | {self.model.num_timesteps} | {np.round(info[1],2)}/{mean_episode_length} | {np.round(info[0],2)}/{np.round(mean_episode_reward,2)}/{np.round(self.best_mean_episode_reward,2)}")
+
+        # 新增：实时PCB文件保存逻辑
+        if (self.pcb_save_freq is not None and 
+            self.model.num_timesteps > 0 and 
+            self.model.num_timesteps % self.pcb_save_freq == 0):
+            
+            timestep_k = int(self.model.num_timesteps / 1000)
+            filename = f"step_{timestep_k}k.pcb"
+            
+            try:
+                # 保存当前训练环境的PCB状态
+                self.model.train_env.write_current_pcb_file(
+                    path=self.realtime_pcb_path, 
+                    filename=filename
+                )
+                
+                # 记录保存信息
+                if self.verbose:
+                    print(f"💾 已保存实时PCB文件: {filename} (步数: {self.model.num_timesteps})")
+                
+                # 记录到TensorBoard
+                self.writer.add_scalar(
+                    tag="realtime_pcb/save_checkpoint",
+                    scalar_value=self.model.num_timesteps,
+                    global_step=self.model.num_timesteps
+                )
+                
+                # 计算并记录当前HPWL
+                current_hpwl = self.model.train_env.calc_hpwl()
+                self.writer.add_scalar(
+                    tag="realtime_pcb/hpwl",
+                    scalar_value=current_hpwl,
+                    global_step=self.model.num_timesteps
+                )
+                
+                if self.verbose > 1:
+                    print(f"  当前HPWL: {np.round(current_hpwl, 4)}")
+                    
+            except Exception as e:
+                print(f"⚠️  保存实时PCB文件失败: {e}")
 
     def on_training_start(self):
         print("Training started.")

@@ -46,19 +46,45 @@ echo "RL_PCB repository root is ${RL_PCB}" # 显示项目根目录
 # 创建工作目录
 mkdir -p work                           # 创建work目录存放结果
 
+# 函数：寻找可用端口
+find_available_port() {
+    local start_port=${1:-6001}         # 默认从6001开始
+    local max_port=${2:-6100}           # 最大端口号6100
+    
+    for ((port=$start_port; port<=$max_port; port++)); do
+        # 检查端口是否被占用
+        if ! ss -tuln | grep -q ":$port "; then
+            echo $port
+            return 0
+        fi
+    done
+    
+    # 如果都被占用，返回一个随机端口
+    echo $((RANDOM % 1000 + 6001))
+}
+
+# 寻找可用端口
+TENSORBOARD_PORT=$(find_available_port 6001 6100)
+echo "找到可用端口: $TENSORBOARD_PORT"
+
 # 关闭已有的TensorBoard进程
 echo "Closing existing tensorboard processes ..."
-pkill -f "tensorboard.*6001" || true   # 关闭端口6001上的TensorBoard进程，忽略错误
+pkill -f "tensorboard.*--port.*" || true   # 关闭所有tensorboard进程，忽略错误
 sleep 1                                 # 等待进程关闭
 
-echo "Starting tensorboard ... "        # 启动TensorBoard监控
-tensorboard --logdir ./work/ --host 0.0.0.0 --port 6001 &  # 后台运行TensorBoard
+echo "Starting tensorboard on port $TENSORBOARD_PORT ... "        # 启动TensorBoard监控
+tensorboard --logdir ./work/ --host 0.0.0.0 --port $TENSORBOARD_PORT &  # 后台运行TensorBoard
 sleep 2                                 # 等待2秒确保启动
+
+echo "TensorBoard已启动，访问地址: http://localhost:$TENSORBOARD_PORT"
 
 # 进入训练目录执行调度
 cd ${RL_PCB}/src/training               # 切换到训练脚本目录
 # 将scheduler.sh改为可执行
 
+# 启动训练调度器，使用动态计算的并行实例数
+# 新增功能：可以通过添加 --pcb_save_freq 参数来实时保存PCB文件
+# 例如：--pcb_save_freq 10000 表示每1万步保存一次PCB文件到 realtime_pcb/ 目录
 ./scheduler.sh --run_config ${EXP_DIR}/run_config.txt --logfile $EXP_DIR/scheduler.log --instances $PARALLEL_INSTANCES --yes 
                                         # 启动训练调度器，使用动态计算的并行实例数
 cd ${EXP_DIR}                           # 返回实验目录

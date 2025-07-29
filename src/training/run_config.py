@@ -86,6 +86,9 @@ def cmdline_args():
     parser.add_argument("--redirect_stderr", required=False,
                         action="store_true", default=False,
                         help="redirect standard error to file")
+    # 新增：PCB实时保存频率参数
+    parser.add_argument("--pcb_save_freq", required=False, type=int, default=None,
+                        help="保存实时PCB文件的频率（训练步数间隔），如10000表示每1万步保存一次。默认None表示不保存")
 
     args = parser.parse_args()
 
@@ -113,6 +116,8 @@ def cmdline_args():
     settings["evaluation_pcb"] = args.evaluation_pcb
     settings["tensorboard_dir"] = args.tensorboard_dir
     settings["incremental_replay_buffer"] = args.incremental_replay_buffer
+    # 新增：PCB保存频率设置
+    settings["pcb_save_freq"] = args.pcb_save_freq
 
     if args.device == "cuda":
         settings["device"] = "cuda" if torch.cuda.is_available() else "cpu"

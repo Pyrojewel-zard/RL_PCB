@@ -16,7 +16,7 @@ def board_mask(physical_height_mm, physical_width_mm, grid_step_mm):
 
     grid_width = int(physical_width_mm / grid_step_mm)
     grid_height = int(physical_height_mm / grid_step_mm)
-    row_index = 8
+    row_index = 9
 
     # 读取并解析 CSV 中区域点集
     df = pd.read_csv(csv_path, header=None)

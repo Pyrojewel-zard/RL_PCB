@@ -54,8 +54,13 @@ def get_agent_observation(parameters, tracker=None):
     # compute ol_ratio
     ol_ratios = []
     total = np.sum(ol_grids)/64
-    for grid in ol_grids:
-        ol_ratios.append((np.sum(grid) / 64) / total)
+    # 添加安全检查以避免除0错误
+    if total == 0:
+        # 当total为0时，所有ol_ratios设为0（表示没有重叠）
+        ol_ratios = [0.0] * len(ol_grids)
+    else:
+        for grid in ol_grids:
+            ol_ratios.append((np.sum(grid) / 64) / total)
 
     dom, _, _ = compute_pad_referenced_distance_vectors_v2(
         parameters.node,

@@ -211,8 +211,7 @@ def compute_vector_to_group_midpoint(n, nn):
     delta_x = (cx-current_node_pos[0])
 
     euclidean_dist = np.sqrt(np.square(delta_x) + np.square(delta_y))
-    angle = np.arctan(delta_y/delta_x)
-    if delta_x < 0: angle += np.pi
+    angle = np.arctan2(delta_y, delta_x)
 
     return tuple([cx,cy]), euclidean_dist, angle
 

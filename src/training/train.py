@@ -116,7 +116,8 @@ def training_run(settings):
                                      eval_freq=settings["evaluate_every"],
                                      verbose=settings["verbose"],
                                      training_log="training.log",
-                                     num_evaluations=16)
+                                     num_evaluations=16,
+                                     pcb_save_freq=settings.get("pcb_save_freq", None))  # 新增：PCB保存频率参数
 
     write_desc_log( full_fn=os.path.join(settings["log_dir"],
                                          f'{settings["run_name"]}_desc.log'),

@@ -963,6 +963,11 @@ def get_los_and_ol_multi_agent(node,
             start -= 45
             stop -= 45
 
+        # 添加安全检查以避免除0错误
+        epsilon = 1e-10
+        segment_mask_pixels = np.where(segment_mask_pixels == 0, epsilon, segment_mask_pixels)
+        overlap_mask_pixels = np.where(overlap_mask_pixels == 0, epsilon, overlap_mask_pixels)
+        
         return segment_pixels/segment_mask_pixels, overlap_pixels/overlap_mask_pixels, los_segments_mask, overlap_segments_mask,overlap_boardsum/overlap_mask_pixels
 
     if los_type == 2:

@@ -194,11 +194,19 @@ class agent(gym.Env):
 
         reward = 0
 
-        x = np.clip((self.Wi - self.W[-1]) / (self.Wi - self.current_We),
-                    -1, 1)
-        y = np.clip(
-            (self.HPWLi - self.HPWL[-1]) / (self.HPWLi - self.current_HPWL),
-             -1, 1)
+        # 安全处理除零情况
+        denominator_w = self.Wi - self.current_We
+        if abs(denominator_w) < 1e-10:  # 避免除零
+            x = 0.0
+        else:
+            x = np.clip((self.Wi - self.W[-1]) / denominator_w, -1, 1)
+        
+        denominator_hpwl = self.HPWLi - self.current_HPWL
+        if abs(denominator_hpwl) < 1e-10:  # 避免除零
+            y = 0.0
+        else:
+            y = np.clip((self.HPWLi - self.HPWL[-1]) / denominator_hpwl, -1, 1)
+        
         self.all_w.append(x)
         self.all_hpwl.append(y)
         self.all_weighted_cost.append( (self.n*x + self.m*self.ol_term5[-1] + self.p*y+self.m*self.ol_board[-1])/(self.n+2*self.m+self.p) )

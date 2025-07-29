@@ -6,13 +6,9 @@ import ast
 from pcb import pcb
 
 
-def board_maskast(physical_width_mm, physical_height_mm, grid_step_mm):
+def board_mask(physical_height_mm, physical_width_mm, grid_step_mm):
     """
-    生成矩形比例的二值掩码图。
-    参数:
-        physical_width_mm: 输出图像的物理宽度（mm）
-        physical_height_mm: 输出图像的物理高度（mm）
-        grid_step_mm: 每个像素代表的物理尺寸
+    生成 (8, H, W) 的异形边框掩码，每张图像通道单独填充。
     """
     # 获取项目根目录
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -22,7 +18,7 @@ def board_maskast(physical_width_mm, physical_height_mm, grid_step_mm):
     grid_height = int(physical_height_mm / grid_step_mm)
     row_index = 8
 
-    # 读取并解析 CSV
+    # 读取并解析 CSV 中区域点集
     df = pd.read_csv(csv_path, header=None)
     raw_row = df.iloc[row_index].dropna()
     points = []
@@ -35,14 +31,13 @@ def board_maskast(physical_width_mm, physical_height_mm, grid_step_mm):
             continue
     points = np.array(points, dtype=np.float32)
 
-    # 缩放处理
+    # 缩放 + 居中处理
     min_xy = np.min(points, axis=0)
     size_xy = np.max(points, axis=0) - min_xy
     scale_x = physical_width_mm / size_xy[0]
     scale_y = physical_height_mm / size_xy[1]
     points_scaled = (points - min_xy) * np.array([scale_x, scale_y])
 
-    # 居中处理
     delta_x = physical_width_mm - np.max(points_scaled[:, 0])
     delta_y = physical_height_mm - np.max(points_scaled[:, 1])
     points_scaled[:, 0] += delta_x / 2
@@ -53,13 +48,18 @@ def board_maskast(physical_width_mm, physical_height_mm, grid_step_mm):
     pixel_points[:, 0] = np.clip(pixel_points[:, 0], 0, grid_width - 1)
     pixel_points[:, 1] = np.clip(pixel_points[:, 1], 0, grid_height - 1)
 
-    # 生成图像
-    board_mask = np.zeros((8,int(grid_width), int(grid_height)), dtype=np.uint8)
-    for i in range(8):
-       board_mask[i] = cv2.fillPoly(np.zeros((grid_width, grid_height), dtype=np.uint8),
-                                 [pixel_points], 1)
+    # 初始化 8 张图像
+    overlap_board_mask = np.zeros((8, int(grid_height), int(grid_width)), dtype=np.uint8)
 
-    return board_mask
+    # 对每一张图进行不同方式的填充（这里只是示例填充方式，你可以按需修改）
+    for i in range(8):
+        # 示例：略微平移坐标点，模拟不同区域填充
+       
+
+        cv2.fillPoly(overlap_board_mask[i], [pixel_points], 64)
+
+    return overlap_board_mask
+
 
 
 

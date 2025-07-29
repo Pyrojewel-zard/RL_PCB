@@ -5,15 +5,9 @@ import numpy as np
 
 class tracker():
     def __init__(self, maxlen=1024):
-        """
-        初始化跟踪器对象，设置最大记录长度并创建数据存储队列。
-
-        Args:
-            maxlen (int, optional): 队列的最大长度，默认为1024。
-        """
         self.maxlen = maxlen
 
-        self.all_comp_grids = deque(maxlen=self.maxlen)  # ⭐ 初始化组件网格存储队列
+        self.all_comp_grids = deque(maxlen=self.maxlen)
         self.ratsnest = deque(maxlen=self.maxlen)
 
         self.frame_buffer = np.array([])
@@ -23,18 +17,8 @@ class tracker():
                         los=None,
                         ol_grids=None,
                         ol=None):
-        """
-        添加观察数据到跟踪器中，目前仅支持组件网格数据的添加。
-
-        Args:
-            comp_grids: 组件网格数据
-            los_grids: 鼠线网格数据（未实现）
-            los: 鼠线数据（未实现）
-            ol_grids: 重叠网格数据（未实现）
-            ol: 重叠数据（未实现）
-        """
         if comp_grids is not None:
-            self.all_comp_grids.append(comp_grids)  # ⭐ 将组件网格数据添加到队列
+            self.all_comp_grids.append(comp_grids)
 
     def add_ratsnest(self, ratsnest):
         if ratsnest is not None:

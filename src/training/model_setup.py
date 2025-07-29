@@ -76,7 +76,7 @@ def sac_model_setup(train_env,
     Returns:
         SAC: The initialized SAC model.
     """
-    model = SAC.SAC(max_action=1.0,  # ⭐ 核心代码：创建SAC模型实例，设置最大动作值为1.0
+    model = SAC.SAC(max_action=1.0,
                     hyperparameters=hyperparameters,
                     train_env=train_env,
                     device = device,
@@ -112,13 +112,13 @@ def setup_model( model_type: str,
                                 hyperparameters=hyperparameters,
                                 device=device,
                                 early_stopping=early_stopping,
-                                verbose=verbose)  # ⭐ 初始化TD3模型的核心调用
+                                verbose=verbose)
     elif model_type == "SAC":
         model = sac_model_setup(train_env=train_env,
                                 hyperparameters=hyperparameters,
                                 device=device,
                                 early_stopping=early_stopping,
-                                verbose=verbose)  # ⭐ 初始化SAC模型的核心调用
+                                verbose=verbose)
     else:
         print(f"{model_type} is not a supported model.\
               Please select from {supported_models}")

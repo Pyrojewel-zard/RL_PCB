@@ -10,59 +10,60 @@ from graph_utils import kicad_rotate
 from pcbDraw import draw_los, draw_comps_from_nodes_and_edges, pcbDraw_resolution
 
 def polar_to_rectangular(r, theta):
-    """
-    将极坐标转换为直角坐标（复数形式表示）
-
-    Args:
-        r (float): 极坐标半径
-        theta (float): 极坐标角度（弧度制）
-
-    Returns:
-        complex: 以复数形式表示的直角坐标
-    """
-    return r * np.exp( 1j * theta )  # ⭐ 核心计算：通过欧拉公式将极坐标转换为复数形式的直角坐标
+    return r * np.exp( 1j * theta )
 
 def rectangular_to_polar(z):
-    """
-    将直角坐标系的复数转换为极坐标表示（模和幅角）
-
-    Args:
-        z (complex): 需要转换的复数
-
-    Returns:
-        tuple: 包含两个元素的元组，第一个元素是模(r)，第二个元素是幅角(theta)
-    """
-    r = np.abs(z)  # ⭐ 计算复数的模（绝对值）
-    theta = np.angle(z)  # ⭐ 计算复数的幅角（相位角）
+    r = np.abs(z)
+    theta = np.angle(z)
     return (r, theta)
 
 def compute_pad_referenced_distance_vectors_v2(n, nn, e, ignore_power=False):
     """
-    计算基于焊盘参考的距离向量（v2版本），用于PCB元件布局优化。
+    Parameters
+    ----------
+    n : TYPE
+        DESCRIPTION.
+    nn : TYPE
+        DESCRIPTION.
+    e : TYPE
+        DESCRIPTION.
 
-    Args:
-        n: 当前元件对象
-        nn: 邻居元件对象列表
-        e: 网络连接对象列表
-        ignore_power: 是否忽略电源网络（默认False）
+    Returns
+    -------
+    dom : TYPE
+        DESCRIPTION.
+    resultant_vecs : TYPE
+        DESCRIPTION.
+        List of list. The latter containing [ net_id, current_node_id,
+        target_node_id, current_pad_id, target_pad_id ] (r, theta)
+    all_vecs : TYPE
+        DESCRIPTION.
+        List of lists. Each list contains a list of vectors correspond to a
+        specific current_node - target_node pair.
+        The latter containing [ net_id, current_node_id, target_node_id,
+        current_pad_id, target_pad_id ] (current_pad_x, current_pad_y,
+        target_pad_x, target_pad_y, r, theta)
 
-    Returns:
-        tuple: 包含三个返回值：
-            - dom: 主导方向向量
-            - resultant_vecs: 合力向量列表，每个元素格式为[网络ID,当前节点ID,目标节点ID,当前焊盘ID,目标焊盘ID](r,θ)
-            - all_vecs: 所有向量列表，每个元素包含完整的向量信息
 
-    实现步骤：
-        1. 计算当前焊盘到邻居焊盘的连接向量（自动选择最短距离）
-        2. 对同网络的向量进行求和得到合力向量
-        3. 汇总所有合力向量确定移动方向
-        注：合力向量的大小会除以该网络的向量数量进行归一化
+    The function does the following:
+        #1 Compute connection vectors from current component pad to target
+        neighbor pad. In case multiple pads are involved in a given net, use
+        the one with the shortest distance.
+        #2 Reduce the vectors between components by summing them up (i.e.
+        obtain the resultant vector between the current component and each
+        of its neighbors)
+        #3 Obtain the direction of movement by summing up all the resultant
+        vectors.
+
+        Notes added after the implementation but no changes to the code were
+        carried out. The magnitude of the resultant vector is divded by the
+        number of vectors in the net.
     """
     current_node_id = n.get_id()
     current_node_pos = n.get_pos()
     net_ids = []
 
-    # 1 为每个网络创建数据点对列表
+    # 1 Make a list containing pairs of data points for every net
     for ee in e:
         if (ignore_power is True) and (ee.get_power_rail() > 0):
             continue
@@ -76,16 +77,18 @@ def compute_pad_referenced_distance_vectors_v2(n, nn, e, ignore_power=False):
                 for i in range(2):
                     if ee.get_instance_id(i) == current_node_id:
                         current_pad_pos = ee.get_pos(i)
-                        # 旋转焊盘位置以匹配元件方向
+                        # rotate pad positions so that they match the
+                        # component's orientation
                         rotated_current_pad_pos = kicad_rotate(
                             float(current_pad_pos[0]),
                             float(current_pad_pos[1]),
-                            n.get_orientation())  # ⭐ 关键旋转操作：校正焊盘位置
+                            n.get_orientation())
 
                         neighbor_pad_pos = ee.get_pos(1-i)
                         for v in nn:
                             if v.get_id() == ee.get_instance_id(1-i):
-                                # 旋转邻居焊盘位置以匹配其元件方向
+                                # rotate pad positions so that they match the
+                                # component's orientation
                                 rotated_neighbor_pad_pos = kicad_rotate(
                                     float(neighbor_pad_pos[0]),
                                     float(neighbor_pad_pos[1]),
@@ -96,8 +99,8 @@ def compute_pad_referenced_distance_vectors_v2(n, nn, e, ignore_power=False):
                                 header = [net_id,
                                             current_node_id,
                                             v.get_id(),
-                                            ee.get_pad_id(i),      # 当前节点焊盘ID
-                                            ee.get_pad_id(1-i)]    # 目标节点焊盘ID
+                                            ee.get_pad_id(i),      # current node pad id
+                                            ee.get_pad_id(1-i)]    # target node pad id
                                 break
 
                         sx = current_node_pos[0] + rotated_current_pad_pos[0]
@@ -109,7 +112,7 @@ def compute_pad_referenced_distance_vectors_v2(n, nn, e, ignore_power=False):
                         delta_x = (dx-sx)
 
                         euclidean_dist = np.sqrt(
-                            np.square(delta_x) + np.square(delta_y))  # ⭐ 计算欧式距离
+                            np.square(delta_x) + np.square(delta_y))
                         angle = np.arctan(delta_y/delta_x)
                         if delta_x < 0: angle += np.pi
 
@@ -167,19 +170,10 @@ def compute_pad_referenced_distance_vectors_v2(n, nn, e, ignore_power=False):
     return dom, resultant_vecs, all_vecs
 
 def sort_resultant_vectors( resultant_vecs ):
-    """
-    对结果向量列表按照特定规则进行排序（默认升序）
-
-    Args:
-        resultant_vecs (list): 需要排序的向量列表，每个向量应包含子列表结构
-
-    Returns:
-        list: 排序后的向量列表，按照每个子向量第4个元素(x[0][3])的值升序排列
-    """
     # reverse = None (Sorts in Ascending order)
     # key is set to sort using second element of
     # sublist lambda has been used
-    resultant_vecs.sort(key = lambda x: x[0][3])  # ⭐ 核心排序操作：按子列表第4个元素的值进行排序
+    resultant_vecs.sort(key = lambda x: x[0][3])
     return resultant_vecs
 
 def compute_vector_to_group_midpoint(n, nn):
@@ -256,18 +250,6 @@ def compute_sum_of_euclidean_distances_between_pads(n,
                                                     nn,
                                                     eoi,
                                                     ignore_power=False):
-    """
-    计算当前元件所有焊盘到相邻元件对应焊盘的欧式距离之和。
-
-    Args:
-        n: 当前元件对象，需包含位置、旋转角度和焊盘信息
-        nn: 相邻元件对象列表
-        eoi: 元件间连接关系对象列表
-        ignore_power (bool): 是否忽略电源轨焊盘
-
-    Returns:
-        float: 所有焊盘到对应相邻焊盘的最小距离之和
-    """
     current_node_id = n.get_id()
     current_node_pos = n.get_pos()
     current_node_orientation = n.get_orientation()
@@ -288,7 +270,7 @@ def compute_sum_of_euclidean_distances_between_pads(n,
                             rotated_current_pad_pos = kicad_rotate(
                                 float(current_pad_pos[0]),
                                 float(current_pad_pos[1]),
-                                current_node_orientation)  # ⭐ 旋转当前焊盘坐标以匹配元件方向
+                                current_node_orientation)
 
                             for v in nn:
                                 if v.get_id() == e.get_instance_id(1-k):
@@ -312,20 +294,10 @@ def compute_sum_of_euclidean_distances_between_pads(n,
     return np.sum(all_lengths)
 
 def distance_between_two_points(p1,p2):
-    """
-    计算两个二维点之间的欧几里得距离。
-
-    Args:
-        p1 (tuple/list): 第一个点的坐标，格式为(x1, y1)
-        p2 (tuple/list): 第二个点的坐标，格式为(x2, y2)
-
-    Returns:
-        float: 两点之间的直线距离。如果两点重合则返回0。
-    """
     if p1[0] == p2[0] and p1[1] == p2[1]:
         return 0
     else:
-        return np.sqrt(np.square(p1[0]-p2[0])+np.square(p1[1]-p2[1]))  # ⭐ 使用欧几里得公式计算两点距离
+        return np.sqrt(np.square(p1[0]-p2[0])+np.square(p1[1]-p2[1]))
 
 # img and los_segment should be layers containing drawings with a single value.
 def shortest_distance_to_object_within_segment(img,
@@ -334,21 +306,7 @@ def shortest_distance_to_object_within_segment(img,
                                                radius,
                                                normalize=True,
                                                padding=(0,0)):
-    """
-    计算线段区域内图像对象到中心点的最短距离。
-
-    Args:
-        img (ndarray): 输入的二值图像矩阵
-        los_segment (ndarray): 线段区域的掩模矩阵
-        centre (tuple): 中心点坐标(x,y)
-        radius (float): 归一化半径基准值
-        normalize (bool): 是否对距离进行归一化处理
-        padding (tuple): 中心点坐标的填充偏移量(x,y)
-
-    Returns:
-        tuple: (最短距离, 最近点坐标)。若normalize=True则返回归一化后的距离
-    """
-    tmp = los_segment/16 * img/64  # ⭐ 通过矩阵运算得到有效区域掩模
+    tmp = los_segment/16 * img/64
 
     dist = radius
     coords = (-1,-1)
@@ -364,101 +322,42 @@ def shortest_distance_to_object_within_segment(img,
                     coords = tuple([j,i])
 
     if normalize:
-        dist /= radius  # ⭐ 执行距离归一化计算
+        dist /= radius
 
     return dist, coords
 
 def get_coords_from_polar_vector(r, theta, p0, angle_degrees=False):
-    """
-    根据极坐标向量计算对应的笛卡尔坐标。
-
-    Args:
-        r (float): 极坐标半径/向量长度
-        theta (float): 极坐标角度（弧度制或角度制）
-        p0 (tuple): 原始点坐标(x,y)
-        angle_degrees (bool): 是否为角度制，默认为False（弧度制）
-
-    Returns:
-        tuple: 包含两个元组的新坐标点和原始点坐标 ((新x,新y), (原x,原y))
-    """
     if angle_degrees is  True:
         if theta > 180: theta -= 360
-        theta = (theta / 180.0) * np.pi  # ⭐ 角度制转弧度制的核心计算
+        theta = (theta / 180.0) * np.pi
 
     p = [0,0]
 
-    p[0] = p0[0] + r*np.cos(theta)  # ⭐ 计算x坐标的核心公式
-    p[1] = p0[1] - r*np.sin(theta)  # ⭐ 计算y坐标的核心公式
+    p[0] = p0[0] + r*np.cos(theta)
+    p[1] = p0[1] - r*np.sin(theta)
 
     return (p[0],p[1]), (p0[0], p0[1])
 
 # orientation invariant
 # theta= -theta
 def distance_from_rectangle_center_to_edge( size, theta, degrees=True ):
-    """
-    计算从矩形中心到边缘的距离，基于给定的角度和矩形尺寸。
-
-    Args:
-        size (tuple): 矩形的尺寸，格式为(宽度, 高度)。
-        theta (float): 从矩形中心出发的角度。
-        degrees (bool, optional): 角度是否为度数而非弧度。默认为True。
-
-    Returns:
-        float: 从矩形中心到边缘的距离。
-    """
     if degrees is True:
-        theta = deg2rad(theta)  # ⭐ 将角度转换为弧度（如果需要）
+        theta = deg2rad(theta)
 
     if np.abs(np.tan(theta)) <= (size[1]/size[0]):
-        m = 0.5 * (size[0] / np.abs(np.cos(theta)))  # ⭐ 计算水平方向的距离
+        m = 0.5 * (size[0] / np.abs(np.cos(theta)))
     else:
-        m = 0.5 * (size[1] / np.abs(np.sin(theta)))  # ⭐ 计算垂直方向的距离
+        m = 0.5 * (size[1] / np.abs(np.sin(theta)))
 
     return m
 
 def deg2rad(theta):
-    """
-    将角度值从度转换为弧度。
-
-    Args:
-        theta (float): 以度为单位的输入角度值。
-
-    Returns:
-        float: 转换后的弧度值。
-    """
-    return (theta / 360) * 2 * np.pi  # ⭐ 执行角度到弧度的转换计算
+    return (theta / 360) * 2 * np.pi
 
 def rad2deg(theta):
-    """
-    将弧度值转换为角度值。
-
-    Args:
-        theta (float): 需要转换的弧度值。
-
-    Returns:
-        float: 转换后的角度值。
-    """
-    return (theta * 360) / (2 * np.pi)  # ⭐ 执行弧度到角度的转换计算
+    return (theta * 360) / (2 * np.pi)
 
 def get_los_feature_vector(n, nn, eoi, b, clamp_at_zero=True, padding=None):
-    """
-    计算PCB元件间的视线(LOS)特征向量，用于布局优化分析。
-
-    Args:
-        n: 当前元件节点对象
-        nn: 相邻元件节点列表
-        eoi: 边对象列表
-        b: 板边界对象
-        clamp_at_zero (bool): 是否将负距离值钳制为0
-        padding: 填充参数
-
-    Returns:
-        tuple: 包含四个元素的元组：
-            - los_feature: 归一化的LOS特征向量(8个方向)
-            - box_edge_coords: 元件边缘坐标列表
-            - intersection_point_coords: 交点坐标列表
-            - dict: 包含LOS线段信息的字典
-    """
     current_node_size = n.get_size()
     current_node_position = n.get_pos()
     current_node_orientation = n.get_orientation()
@@ -469,7 +368,7 @@ def get_los_feature_vector(n, nn, eoi, b, clamp_at_zero=True, padding=None):
                                          current_node_orientation,
                                          bx=b.get_width(),
                                          by=b.get_height(),
-                                         padding=padding)  # ⭐ 生成8个方向的LOS线段
+                                         padding=padding)
 
     grid_comps = draw_comps_from_nodes_and_edges(n,
                                                  nn,
@@ -488,7 +387,7 @@ def get_los_feature_vector(n, nn, eoi, b, clamp_at_zero=True, padding=None):
     for i in range(8):
         # The center point of the current node must factor in the padding of
         # the grid!
-        d, c = shortest_distance_to_object_within_segment(  # ⭐ 计算线段到最近障碍物的距离和交点
+        d, c = shortest_distance_to_object_within_segment(
             grid_comps[0],
             los_segments[i],
             tuple([scaled_current_node_pos[0],scaled_current_node_pos[1]]),
@@ -544,40 +443,23 @@ def get_los_feature_vector(n, nn, eoi, b, clamp_at_zero=True, padding=None):
 
 # wraps theta between -pi and pi. Angle always returned in radians
 def wrap_angle(theta, degrees=True):
-    """
-    将角度值规范到[-π, π]区间（弧度制）或对应的角度区间。
-
-    Args:
-        theta (float): 输入的角度值
-        degrees (bool): 标志位，True表示输入为角度制，False表示输入为弧度制
-
-    Returns:
-        float: 规范化后的角度值（与输入保持相同的单位制）
-    """
     if degrees is True:
-        theta = deg2rad(theta)  # ⭐ 将角度转换为弧度（如果需要）
+        theta = deg2rad(theta)
 
     if theta > np.pi:
-        return theta - np.pi  # ⭐ 核心处理逻辑：将大于π的角度减去π进行规范化
+        return theta - np.pi
     else:
         return theta
 
 def cosine_distance_for_two_terminal_component(resultant, degrees=False):
     """
-    计算两个终端元件向量间的余弦距离（方向相似性）。
-
-    Args:
-        resultant (list): 包含元件向量信息的列表，每个元素格式为(标签, (x,y,角度))。
-        degrees (bool): 角度单位标志，True表示角度制，False表示弧度制（默认）。
-
-    Returns:
-        float: 两个向量夹角的余弦值（仅当输入为2个向量时有效），否则返回0。
-
-    Note:
-        当输入向量数≠2时会打印错误提示。
+    vector resultant vector list.
+    degrees - When true the angles are interpreted in degrees. By default
+    they are interpreted in radians.
     """
+
     if len(resultant) == 2:
-        return np.cos(resultant[0][1][-1] - resultant[1][1][-1])  # ⭐ 计算两个向量最后角度值的余弦差
+        return np.cos(resultant[0][1][-1] - resultant[1][1][-1])
     else:
         if len(resultant) > 2:
             print("Function 'cosine_distance_for_two_terminal_component' can only work with two resultant vectors. Returning 0.")

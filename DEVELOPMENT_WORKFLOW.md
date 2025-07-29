@@ -11,7 +11,7 @@
 ---
 
 ## 详细开发流程
-
+refac
 ### 1. 开始新任务：同步并创建新分支
 
 在开始任何新的开发任务之前，请确保你的 `main` 分支是最新的，然后从 `main` 分支创建你的工作分支。
@@ -123,4 +123,3 @@ PR 合并后，你的 feature 分支就完成了它的使命。可以将其删�
 10. Reviewer 批准后，在 GitHub 上使用 "Squash and Merge" 合并 PR。
 11. 删除 feature 分支。
 12. 另一位开发者 `git pull origin main` 开始新的循环。 
-

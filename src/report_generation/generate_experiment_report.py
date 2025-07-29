@@ -216,13 +216,13 @@ if __name__ == "__main__":
                                 topMargin = 1*inch,
                                 bottomMargin = 1*inch, pagesize=A4)
 
-    # TrueType fonts work in Unicode/UTF8 and are not limited to 256 characters.
-    pdfmetrics.registerFont(TTFont("Verdana", "verdana.ttf"))
-    pdfmetrics.registerFont(TTFont("Vera", "Vera.ttf"))
+    # 使用ReportLab内置字体，避免外部字体文件问题
+    # pdfmetrics.registerFont(TTFont("Verdana", "verdana.ttf"))
+    # pdfmetrics.registerFont(TTFont("Vera", "Vera.ttf"))
 
     styles = getSampleStyleSheet()
     style = ParagraphStyle("yourtitle",
-                            fontName="Verdana",
+                            fontName="Helvetica",  # 使用内置字体
                             fontSize=12,
                             spaceAfter=6
                         )

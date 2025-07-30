@@ -924,7 +924,7 @@ def get_los_and_ol_multi_agent(node,
         if padding is not None:
            board_mask_img=board_mask(x*res+2*padding,y*res+2*padding,res)
         else: 
-             board_mask_img=board_mask( x*res, y*res, res)#异形边框程序导入，获取二值图像
+             board_mask_img=board_mask(x*res, y*res, res)#异形边框程序导入，获取二值图像
         for i in range(8):
             cv2.ellipse(los_segments_mask[i],
                         (cx,cy),

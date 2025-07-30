@@ -6,14 +6,16 @@ import ast
 from pcb import pcb
 
 
-def board_mask(physical_height_mm, physical_width_mm, grid_step_mm):
+def board_mask(physical_width_mm, physical_height_mm, grid_step_mm):
     """
     生成 (8, H, W) 的异形边框掩码，每张图像通道单独填充。
+    修复了坐标系统问题，确保正确的图像方向。
     """
     # 获取项目根目录
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     csv_path = os.path.join(project_root, "board_csv", "mokuai.csv")
 
+    # 正确的像素尺寸计算
     grid_width = int(physical_width_mm / grid_step_mm)
     grid_height = int(physical_height_mm / grid_step_mm)
     row_index = 9
@@ -43,19 +45,21 @@ def board_mask(physical_height_mm, physical_width_mm, grid_step_mm):
     points_scaled[:, 0] += delta_x / 2
     points_scaled[:, 1] += delta_y / 2
 
-    # 转为像素坐标
+    # 转为像素坐标 - 修复坐标映射
     pixel_points = (points_scaled / grid_step_mm).astype(np.int32)
-    pixel_points[:, 0] = np.clip(pixel_points[:, 0], 0, grid_width - 1)
-    pixel_points[:, 1] = np.clip(pixel_points[:, 1], 0, grid_height - 1)
+    
+    # 确保坐标在有效范围内
+    pixel_points[:, 0] = np.clip(pixel_points[:, 0], 0, grid_width - 1)   # X坐标
+    pixel_points[:, 1] = np.clip(pixel_points[:, 1], 0, grid_height - 1)  # Y坐标
+    
+    # 修复Y轴方向 - OpenCV的Y轴向下为正，需要翻转
+    pixel_points[:, 1] = grid_height - 1 - pixel_points[:, 1]
 
-    # 初始化 8 张图像
-    overlap_board_mask = np.zeros((8, int(grid_height), int(grid_width)), dtype=np.uint8)
+    # 初始化 8 张图像 - 正确的维度顺序 (8, height, width)
+    overlap_board_mask = np.zeros((8, grid_height, grid_width), dtype=np.uint8)
 
-    # 对每一张图进行不同方式的填充（这里只是示例填充方式，你可以按需修改）
+    # 对每一张图进行填充
     for i in range(8):
-        # 示例：略微平移坐标点，模拟不同区域填充
-       
-
         cv2.fillPoly(overlap_board_mask[i], [pixel_points], 64)
 
     return overlap_board_mask

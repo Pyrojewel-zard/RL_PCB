@@ -6,7 +6,7 @@ import ast
 from pcb import pcb
 
 
-def board_mask(physical_width_mm, physical_height_mm, grid_step_mm):
+def board_mask(physical_height_mm,physical_width_mm, grid_step_mm):
     """
     生成 (8, H, W) 的异形边框掩码，每张图像通道单独填充。
     修复了坐标系统问题，确保正确的图像方向。

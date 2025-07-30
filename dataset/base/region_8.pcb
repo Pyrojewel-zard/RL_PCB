@@ -137,9 +137,9 @@ pcb begin
 		edges end
 	graph end
 	board begin
-		bb_min_x,27.53790000
+		bb_min_x,24.53790000
 		bb_min_y,54.82010000
-		bb_max_x,50.60790000
-		bb_max_y,60.77010000
+		bb_max_x,37.60790000
+		bb_max_y,73.77010000
 	board end
 pcb end

@@ -16,7 +16,7 @@ from graph_utils import kicad_rotate
 import sys
 from pcb_board import board_mask
 
-r = 0.1    # resolution in mm
+r = 0.02    # resolution in mm
 
 def draw_board_from_board_and_graph(b,
                                     g,
@@ -136,6 +136,17 @@ def draw_board_from_board_and_graph_with_debug(b,
             np.uint8)
     else:
         grid_comps = np.zeros((3,int(x),int(y),1), np.uint8)
+    if padding is not None:
+          
+        mask=board_mask(x*r+2*padding,y*r+2*padding,r)
+        mask = np.max(mask, axis=0)              # 8通道合并成1通道
+        mask = np.expand_dims(mask, axis=-1)     # 调整维度 (H, W, 1)
+        grid_comps[0] = mask
+    else:
+       mask = board_mask(x*r, y*r, r)
+       mask = np.max(mask, axis=0)
+       mask = np.expand_dims(mask, axis=-1)
+       grid_comps[0] = mask
 
     for n in nv:
         pos = n.get_pos()
@@ -963,12 +974,18 @@ def get_los_and_ol_multi_agent(node,
             start -= 45
             stop -= 45
 
-        # 添加安全检查以避免除0错误
-        epsilon = 1e-10
-        segment_mask_pixels = np.where(segment_mask_pixels == 0, epsilon, segment_mask_pixels)
-        overlap_mask_pixels = np.where(overlap_mask_pixels == 0, epsilon, overlap_mask_pixels)
+        # 使用numpy.divide避免除零警告，当分母为0时结果设为0
+        segment_ratio = np.divide(segment_pixels, segment_mask_pixels, 
+                                 out=np.zeros_like(segment_pixels), 
+                                 where=segment_mask_pixels!=0)
+        overlap_ratio = np.divide(overlap_pixels, overlap_mask_pixels, 
+                                 out=np.zeros_like(overlap_pixels), 
+                                 where=overlap_mask_pixels!=0)
+        overlap_board_ratio = np.divide(overlap_boardsum, overlap_mask_pixels, 
+                                       out=np.zeros_like(overlap_boardsum), 
+                                       where=overlap_mask_pixels!=0)
         
-        return segment_pixels/segment_mask_pixels, overlap_pixels/overlap_mask_pixels, los_segments_mask, overlap_segments_mask,overlap_boardsum/overlap_mask_pixels
+        return segment_ratio, overlap_ratio, los_segments_mask, overlap_segments_mask, overlap_board_ratio
 
     if los_type == 2:
         return

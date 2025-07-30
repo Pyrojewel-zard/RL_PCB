@@ -175,6 +175,7 @@ class SAC(object):
             print(f"Model SAC is configured to learn with device {self.device}")
 
         self.train_env = train_env
+        self.verbose = verbose
 
         if self.train_env is not None:
             state_dim = self.train_env.agents[0].get_observation_space_shape()
@@ -295,16 +296,55 @@ class SAC(object):
         return qf1_loss.item(), qf2_loss.item(), policy_loss.item(), alpha_loss.item(), alpha_tlogs.item()
 
     def explore_for_expert_targets(self,
-                                   reward_target_exploration_steps=25_000):
+                                   reward_target_exploration_steps=25_000,
+                                   output_dir=None,
+                                   save_pcb_every_n_steps=1000):
+        """
+        在专家目标探索过程中，每隔一定步数保存当前PCB布局到work目录。
+        
+        Args:
+            reward_target_exploration_steps: 探索步数
+            output_dir: PCB文件输出目录，如果为None则不保存
+            save_pcb_every_n_steps: 每隔多少步保存一次PCB文件
+        """
         if self.train_env is None:
             print("Model cannot explore because training envrionment is missing. Please reload model and supply a training envrionment.")
             return
 
+        # 创建PCB输出目录
+        pcb_output_dir = None
+        if output_dir is not None:
+            import os
+            from pathlib import Path
+            pcb_output_dir = os.path.join(output_dir, "explore_pcb")
+            Path(pcb_output_dir).mkdir(parents=True, exist_ok=True)
+            if self.verbose > 0:
+                print(f"PCB文件将保存到: {pcb_output_dir}")
+
         self.done = False
+        step_count = 0
+        
         for _ in range(reward_target_exploration_steps):
             obs_vec = self.train_env.step(self.policy,
                                           random=True,
                                           rl_model_type="SAC")
+
+            step_count += 1
+
+            # 每隔指定步数保存PCB文件
+            if (pcb_output_dir is not None and 
+                step_count % save_pcb_every_n_steps == 0):
+                try:
+                    filename = f"explore_step_{step_count}.pcb"
+                    self.train_env.write_current_pcb_file(
+                        path=pcb_output_dir,
+                        filename=filename
+                    )
+                    if self.verbose > 0:
+                        print(f"💾 已保存探索PCB文件: {filename} (步数: {step_count})")
+                except Exception as e:
+                    if self.verbose > 0:
+                        print(f"保存PCB文件时出错: {e}")
 
             for indiv_obs in obs_vec:
                 if indiv_obs[4] is True:
@@ -314,6 +354,19 @@ class SAC(object):
                 self.train_env.reset()
                 self.done = False
                 self.train_env.tracker.reset()
+                # 环境重置时也保存一次PCB文件
+                if pcb_output_dir is not None:
+                    try:
+                        filename = f"explore_reset_{step_count}.pcb"
+                        self.train_env.write_current_pcb_file(
+                            path=pcb_output_dir,
+                            filename=filename
+                        )
+                        if self.verbose > 0:
+                            print(f"💾 环境重置时保存PCB文件: {filename}")
+                    except Exception as e:
+                        if self.verbose > 0:
+                            print(f"重置时保存PCB文件出错: {e}")
 
         self.train_env.reset()
         self.done = False

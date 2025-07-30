@@ -109,6 +109,13 @@ PR 合并后，你的 feature 分支就完成了它的使命。可以将其删�
 
 ---
 
+## 本地分支删除
+# 建议每位开发者在本地配置别名，自动清理已合并到 main 的分支
+git config --global alias.cleanup-merged '!git branch --merged main | grep -v "\*" | grep -v main | xargs -n 1 git branch -d'
+运行
+git cleanup-merged
+
+
 ## 总结：一次完整的流程
 
 1.  `git checkout main`

@@ -1,0 +1,21 @@
+name: Delete merged branches
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  delete-merged-branch:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete merged feature branch
+        uses: peter-evans/delete-branch@v3
+        with:
+          branches: |
+            ${{ github.event.pull_request.head.ref }}
+          exclude:
+            - main
+            - dev
+            - release

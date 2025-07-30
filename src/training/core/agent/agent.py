@@ -146,7 +146,7 @@ class agent(gym.Env):
         hpwl = 0
         for net_id in self.parameters.nets:
             hpwl += self.parameters.graph.calc_hpwl_of_net(net_id, True)
-
+        # print("hpwl",hpwl)
         self.HPWL.append(hpwl)
 
         if np.sum(observation["ol"]) > 1E-6:
@@ -172,6 +172,8 @@ class agent(gym.Env):
             self.parameters.node.set_opt_euclidean_distance(self.W[-1])
 
         if self.HPWL[-1] < self.HPWLe:
+            # print("hpwl",self.HPWL[-1])
+            # print("hpwl_e",self.HPWLe)
             stack = draw_board_from_board_and_graph_multi_agent(
                 self.parameters.board,
                 self.parameters.graph,
@@ -183,7 +185,9 @@ class agent(gym.Env):
             for i in range(len(stack)):
                 stack_sum += stack[i]
 
+            # print("max_stack_sum:", np.max(stack_sum))  # 添加调试信息
             if np.max(stack_sum) <= 64:
+                # print("HPWL更新：重叠检查通过")  # 添加调试信息
                 if self.parameters.log_file is not None:
                     f = open(self.parameters.log_file, "a", encoding="utf-8")
                     f.write(f"{datetime.datetime.now().strftime('%Y%m%dT%H%M%S.%f')[:-3]} Agent {self.parameters.node.get_name()} ({self.parameters.node.get_id()}) found a better, legal, HPWL target of {np.round(self.HPWL[-1],6)}, originally {np.round(self.HPWLe,6)}.\r\n")
@@ -191,6 +195,8 @@ class agent(gym.Env):
 
                 self.HPWLe = self.HPWL[-1]
                 self.parameters.node.set_opt_hpwl(self.HPWL[-1])
+            # else:
+            #     print("HPWL未更新：重叠检查未通过，max_stack_sum =", np.max(stack_sum))  # 添加调试信息
 
         reward = 0
 

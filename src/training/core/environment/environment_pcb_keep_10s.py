@@ -9,6 +9,8 @@ from core.environment.tracker import tracker
 from pcbDraw import draw_board_from_board_and_graph_with_debug, draw_ratsnest_with_board
 import numpy as np
 import random as random_package
+import time  # 添加time模块
+import datetime  # 添加datetime模块
 
 class environment:
     # This method is called when an object is created.
@@ -30,6 +32,11 @@ class environment:
             init=True,
             idx=self.parameters.idx)
         self.tracker = tracker()
+        
+        # 添加PCB文件输出相关的时间追踪
+        self.last_pcb_output_time = time.time()
+        self.pcb_output_interval = 10.0  # 10秒间隔
+        self.pcb_output_counter = 0  # 输出计数器
 
         if self.parameters.use_dataAugmenter is True:
             # The following configures the maximum translation. The following
@@ -65,6 +72,10 @@ class environment:
         # multiple PCBs
         self.initialize_environment_state_from_pcb(init=True,
                                                    idx=self.parameters.idx)
+
+        # 重置PCB输出时间追踪
+        self.last_pcb_output_time = time.time()
+        self.pcb_output_counter = 0
 
         if self.parameters.use_dataAugmenter is True:
             # The following configures the maximum translation. The following
@@ -193,7 +204,36 @@ class environment:
             self.tracker.add(comp_grids=comp_grids,ratsnest=ratsnest)
 
         self.tracker.add_metrics(step_metrics)
+        
+        # 检查是否需要输出PCB文件（每隔10秒）
+        current_time = time.time()
+        if current_time - self.last_pcb_output_time >= self.pcb_output_interval:
+            self.output_pcb_file_timed()
+            self.last_pcb_output_time = current_time
+        
         return observation_vec
+    
+    def output_pcb_file_timed(self):
+        """每隔10秒自动输出PCB文件"""
+        try:
+            # 创建输出目录
+            output_dir = "pcb_outputs_env"
+            if not os.path.exists(output_dir):
+                os.makedirs(output_dir)
+            
+            # 生成文件名，包含时间戳和计数器
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"env_step_{timestamp}_{self.pcb_output_counter:04d}.pcb"
+            
+            # 调用environment的write_pcb_file方法
+            self.write_pcb_file(path=output_dir, filename=filename)
+            
+            print(f"Environment PCB文件已保存: {os.path.join(output_dir, filename)}")
+            
+            self.pcb_output_counter += 1
+            
+        except Exception as e:
+            print(f"Environment输出PCB文件时发生错误: {e}")
 
     def initialize_environment_state_from_pcb(self, init = False, idx=-1):
        
@@ -243,7 +283,7 @@ class environment:
                          "nets": set(nets),
                          "net": self.parameters.net,
                          "seed": self.rng.integers(0,65535),
-                         "step_size": min(self.b.get_width(), self.b.get_height()) * 0.05,
+                         "step_size": 1.0,
                          "max_steps": self.parameters.max_steps,
                          "expl_noise": self.parameters.agent_expl_noise,
                          "max_action": self.parameters.agent_max_action,

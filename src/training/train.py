@@ -125,7 +125,11 @@ def training_run(settings):
                                          hyperparameters=hp,
                                          model=model)
 
-    model.explore_for_expert_targets(settings["target_exploration_steps"])
+    model.explore_for_expert_targets(
+        reward_target_exploration_steps=settings["target_exploration_steps"],
+        output_dir=settings["log_dir"],
+        save_pcb_every_n_steps=settings.get("explore_pcb_save_freq", 2)
+    )
     model.learn(timesteps=settings["max_timesteps"],
                 callback=callback,
                 start_timesteps=settings["start_timesteps"],

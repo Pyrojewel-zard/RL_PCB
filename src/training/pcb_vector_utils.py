@@ -13,13 +13,11 @@ def rectangular_to_polar(z):
 def calculate_resultant_vector( x : float, y : float ):
     euclidean_dist = np.sqrt(np.square(x) + np.square(y))
 
-    # if both x and y are zero, the result of delta_y/delta_x is NaN
+    # 使用arctan2避免除零错误，它可以正确处理所有象限和特殊情况
     if x == y == 0.0:
         angle = 0.0
     else:
-        angle = np.arctan(y/x)
-
-    if x < 0: angle += np.pi
+        angle = np.arctan2(y, x)
 
     return euclidean_dist, angle
 

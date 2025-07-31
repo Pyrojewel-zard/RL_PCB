@@ -96,7 +96,9 @@ def main():
                                                      padding=0.5,
                                                      ignore_power=True)
                             )
-
+    # 打印comp_grids[0]的shape
+    print(comp_grids[0].shape)
+    print(comp_grids[1].shape)
     img = comp_grids[0] + 2*comp_grids[1]       # ⭐ 合成组件布局图层
     img = np.maximum(img, ratsnest)             # ⭐ 叠加飞线图层
     cv2.imwrite(settings['output'], img)        # ⭐ 输出最终PNG图像

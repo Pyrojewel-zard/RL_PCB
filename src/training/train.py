@@ -128,7 +128,7 @@ def training_run(settings):
     model.explore_for_expert_targets(
         reward_target_exploration_steps=settings["target_exploration_steps"],
         output_dir=settings["log_dir"],
-        save_pcb_every_n_steps=settings.get("explore_pcb_save_freq", 2)
+        save_pcb_every_n_steps=settings.get("explore_pcb_save_freq", 100)
     )
     model.learn(timesteps=settings["max_timesteps"],
                 callback=callback,

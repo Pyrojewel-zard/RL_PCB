@@ -106,79 +106,110 @@ def draw_board_from_board_and_graph_with_debug(b,
                                                padding=None,
                                                line_thickness=-1):
     """
+    从PCB板和图形对象生成调试用的可视化图像
+    
+    该函数将PCB板布局和组件图形转换为灰度图像，用于调试和可视化。
+    生成三个通道的图像：已放置组件、未放置组件和组件名称标签。
+    
     Parameters
     ----------
-    b : TYPE
-        DESCRIPTION.
-    g : TYPE
-        DESCRIPTION.
-    draw_placed : TYPE, optional
-        DESCRIPTION. The default is True.
-    draw_unplaced : TYPE, optional
-        DESCRIPTION. The default is True.
+    b : PCB板对象
+        PCB板对象，包含板的尺寸信息
+    g : 图形对象
+        包含节点（组件）信息的图形对象
+    draw_placed : bool, optional
+        是否绘制已放置的组件，默认为True
+    draw_unplaced : bool, optional
+        是否绘制未放置的组件，默认为True
+    padding : float, optional
+        图像边距（毫米），默认为None（无边距）
+    line_thickness : int, optional
+        绘制线条的厚度，-1表示填充，默认为-1
 
     Returns
     -------
-    grid_comps : n-dimensional numpy array
-        Contains two grid with grayscale drawings. In position 0 there is a
-        drawing containing the board with the placed components. Position 1
-        contains the unplaced component.
+    list : 包含三个numpy数组的列表
+        [已放置组件图像, 未放置组件图像, 组件名称图像]
+        每个图像都是灰度图像，尺寸为 (H, W, 1)
     """
+    # 获取图形中的所有节点（组件）
     nv = g.get_nodes()
 
-    # Setup grid
-    x = b.get_width() / r
-    y = b.get_height() / r
-
+    # 设置网格尺寸 - 将物理尺寸转换为像素网格
+    x = b.get_height() / r   # 板宽度对应的像素数
+    y = b.get_width() / r  # 板高度对应的像素数
+    
+    # 根据是否有边距创建不同尺寸的图像数组
     if padding is not None:
+        # 有边距时，图像尺寸增加2*padding/r
         grid_comps = np.zeros(
             (3,int(x)+2*int(padding/r),int(y)+2*int(padding/r),1),
             np.uint8)
     else:
+        # 无边距时，使用原始尺寸
         grid_comps = np.zeros((3,int(x),int(y),1), np.uint8)
+    
+    # 生成PCB板的掩码图像（异形边框）
     if padding is not None:
-          
+        # 有边距时，生成包含边距的板掩码
         mask=board_mask(x*r+2*padding,y*r+2*padding,r)
         mask = np.max(mask, axis=0)              # 8通道合并成1通道
         mask = np.expand_dims(mask, axis=-1)     # 调整维度 (H, W, 1)
         grid_comps[0] = mask
     else:
+        # 无边距时，生成原始尺寸的板掩码
        mask = board_mask(x*r, y*r, r)
        mask = np.max(mask, axis=0)
        mask = np.expand_dims(mask, axis=-1)
        grid_comps[0] = mask
 
+    # 遍历所有节点（组件），绘制每个组件
     for n in nv:
-        pos = n.get_pos()
-        size = n.get_size()
-        orientation = n.get_orientation()
+        # 获取组件的位置、尺寸和方向信息
+        pos = n.get_pos()        # 组件中心位置 (x, y)
+        size = n.get_size()      # 组件尺寸 (width, height)
+        orientation = n.get_orientation()  # 组件旋转角度
 
+        # 计算组件在图像中的像素坐标
         if padding is not None:
+            # 有边距时，坐标需要加上边距偏移
             xc = float(pos[0]) / r + int(padding/r)
             yc = float(pos[1]) / r + int(padding/r)
         else:
+            # 无边距时，直接转换坐标
             xc = float(pos[0]) / r
             yc = float(pos[1]) / r
 
+        # 计算组件在图像中的像素尺寸
         sz_x = float(size[0]) / r
         sz_y = float(size[1]) / r
-        # convert the center, size and orientation to rectange points
+        
+        # 将中心点、尺寸和方向转换为矩形的四个顶点坐标
         box = cv2.boxPoints(((xc,yc), (sz_x,sz_y), -orientation))
-        box = np.int0(box)  # ensure that box point are integers
+        box = np.int0(box)  # 确保顶点坐标为整数
+        
+        # 根据组件是否已放置，绘制到不同的图像通道
         if n.get_isPlaced() == 1:
+            # 已放置的组件绘制到第一个通道（与板掩码叠加）
             cv2.drawContours(grid_comps[0],[box],0,(64),line_thickness)
         else:
+            # 未放置的组件绘制到第二个通道
             cv2.drawContours(grid_comps[1],[box],0,(64),line_thickness)
 
+        # 如果有边距，绘制组件名称标签
         if padding is not None:
+            # 生成组件名称的图像
             tmp = draw_node_name(n,
-                                 b.get_width(),
                                  b.get_height(),
+                                 b.get_width(),
                                  padding=padding)
             tmp = np.reshape(tmp,(tmp.shape[0],tmp.shape[1],1))
+            # 将名称标签叠加到第三个通道
             grid_comps[2] = np.maximum(tmp, grid_comps[2])
 
+    # 根据是否有边距返回不同格式的结果
     if padding is not None:
+        # 有边距时，创建边框并返回三个独立的图像
         border = np.zeros((int(x),int(y),1), np.uint8)
         border = cv2.copyMakeBorder(border,
                                     int(padding/r),
@@ -202,6 +233,7 @@ def draw_board_from_board_and_graph_with_debug(b,
                                    value=(0))
                                    ]
     else:
+        # 无边距时，直接返回三个通道的图像数组
         return grid_comps
 
 def draw_board_from_board_and_graph_multi_agent(b, g,
@@ -234,7 +266,6 @@ def draw_board_from_board_and_graph_multi_agent(b, g,
     # Setup grid
     x = b.get_width() / r
     y = b.get_height() / r
-
     if padding is not None:
         grid_comps = np.zeros(
             (len(nv)+1,int(x)+2*int(padding/r),int(y)+2*int(padding/r),1),
@@ -589,8 +620,8 @@ def draw_ratsnest_with_board(current_node,
                              padding=None,
                              ignore_power=False):
     # Setup grid
-    bx = b.get_width()
-    by = b.get_height()
+    bx = b.get_height()
+    by = b.get_width()
 
     return draw_ratsnest(current_node,
                          neighbor_nodes,
@@ -769,52 +800,73 @@ def draw_node_name(n,
                    loc="top_right",
                    designator_only=False):
     """
+    在图像上绘制组件名称标签
+    
+    该函数在指定位置绘制组件的名称或ID，用于在PCB可视化中标识组件。
+    
     Parameters
     ----------
-    n : node object
-        DESCRIPTION.
-    bx : TYPE
-        DESCRIPTION.
-    by : TYPE
-        DESCRIPTION.
+    n : 节点对象
+        包含组件信息的节点对象
+    bx : float
+        PCB板的宽度（毫米）
+    by : float
+        PCB板的高度（毫米）
+    padding : float, optional
+        图像边距（毫米），默认为None
+    loc : str, optional
+        文本位置，可选"top_left"或"top_right"，默认为"top_right"
+    designator_only : bool, optional
+        是否只显示组件名称，True时只显示name，False时显示"id (name)"，默认为False
 
     Returns
     -------
-    None.
-
+    numpy.ndarray
+        包含文本标签的灰度图像，尺寸为 (H, W, 1)
     """
 
+    # 将物理尺寸转换为像素网格尺寸
     x = bx / r
     y = by / r
+    
+    # 根据是否有边距创建图像网格
     if padding is not None:
+        # 有边距时，图像尺寸增加2*padding/r
         grid = np.zeros(
             (int(x)+2*int(padding/r),int(y)+2*int(padding/r),1),
             np.uint8)
     else:
+        # 无边距时，使用原始尺寸
         grid = np.zeros((int(x),int(y),1), np.uint8)
 
+    # 根据位置参数计算文本起始坐标
     if loc == "top_left":
+        # 左上角位置
         if padding is None:
-            # - 1 since text moves from left to right
+            # 无边距时，文本位置在组件左上角
             text_origin = (
                 int( (n.get_pos()[0] - n.get_size()[0]/2- 1)/r ),
                 int( (n.get_pos()[1] - n.get_size()[1]/2 - 0.25 )/r ))
         else:
-            # - 1 since text moves from left to right
+            # 有边距时，需要加上边距偏移
             text_origin = (
                 int((n.get_pos()[0] - n.get_size()[0]/2 - 1)/r) + int(padding/r),
                 int((n.get_pos()[1] - n.get_size()[1]/2 - 0.25)/r) + int(padding/r))
     else:# loc == "top_right":
-        # place orientation on the top right
+        # 右上角位置（默认）
         if padding is None:
+            # 无边距时，文本位置在组件右上角
             text_origin = (int((n.get_pos()[0] + n.get_size()[0]/2)/r),
                         int((n.get_pos()[1] - n.get_size()[1]/2)/r))
         else:
+            # 有边距时，需要加上边距偏移
             text_origin = (
                 int((n.get_pos()[0] + n.get_size()[0]/2)/r) + int(padding/r),
                 int((n.get_pos()[1] - n.get_size()[1]/2)/r) + int(padding/r))
 
+    # 根据designator_only参数决定显示的文本内容
     if designator_only is True:
+        # 只显示组件名称
         cv2.putText(img=grid,
             text=f"{n.get_name()}",
             org=text_origin,
@@ -822,6 +874,7 @@ def draw_node_name(n,
             fontScale=0.4,
             color=(127))
     else:
+        # 显示组件ID和名称
         cv2.putText(img=grid,
                     text=f"{n.get_id()} ({n.get_name()})",
                     org=text_origin,
@@ -829,8 +882,8 @@ def draw_node_name(n,
                     fontScale=0.4,
                     color=127)
 
-    # this is dumb, but needed so arrays are matching.
-    # copyMakeBorder reshapes the output image.
+    # 处理边距，确保返回的图像尺寸正确
+    # copyMakeBorder会重新调整输出图像的尺寸
     if padding is not None:
         return cv2.copyMakeBorder(grid,
                                   0, 0, 0, 0,
@@ -840,21 +893,61 @@ def draw_node_name(n,
         return grid
 
 def pcbDraw_resolution():
+    """
+    获取PCB绘制的分辨率
+    
+    Returns
+    -------
+    float
+        当前的分辨率值（毫米/像素）
+    """
     return r
 
 def set_pcbDraw_resolution(resolution):
+    """
+    设置PCB绘制的分辨率
+    
+    Parameters
+    ----------
+    resolution : float
+        新的分辨率值（毫米/像素）
+    """
     global r
     r = resolution
 
 def setup_empty_grid(bx, by, resolution, padding=None):
-    # Setup grid
+    """
+    创建空的图像网格
+    
+    根据给定的尺寸和分辨率创建一个空的灰度图像网格，用于后续的PCB绘制。
+    
+    Parameters
+    ----------
+    bx : float
+        PCB板的宽度（毫米）
+    by : float
+        PCB板的高度（毫米）
+    resolution : float
+        分辨率（毫米/像素）
+    padding : float, optional
+        图像边距（毫米），默认为None（无边距）
+    
+    Returns
+    -------
+    numpy.ndarray
+        空的灰度图像网格，尺寸为 (H, W, 1)
+    """
+    # 将物理尺寸转换为像素网格尺寸
     x = bx / resolution
     y = by / resolution
 
+    # 根据是否有边距创建不同尺寸的图像网格
     if padding is not None:
-        grid = np.zeros((int(x)+2*int(padding/r),int(y)+2*int(padding/r),1),
+        # 有边距时，图像尺寸增加2*padding/resolution
+        grid = np.zeros((int(x)+2*int(padding/resolution),int(y)+2*int(padding/resolution),1),
                         np.uint8)
     else:
+        # 无边距时，使用原始尺寸
         grid = np.zeros((int(x),int(y),1), np.uint8)
 
     return grid

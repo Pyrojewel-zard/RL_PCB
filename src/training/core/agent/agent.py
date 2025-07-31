@@ -186,7 +186,7 @@ class agent(gym.Env):
                 stack_sum += stack[i]
 
             # print("max_stack_sum:", np.max(stack_sum))  # 添加调试信息
-            if np.max(stack_sum) <= 64:
+            if np.max(stack_sum) <= 128:
                 # print("HPWL更新：重叠检查通过")  # 添加调试信息
                 if self.parameters.log_file is not None:
                     f = open(self.parameters.log_file, "a", encoding="utf-8")

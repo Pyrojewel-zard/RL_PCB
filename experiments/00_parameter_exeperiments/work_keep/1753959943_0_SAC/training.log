@@ -1,0 +1,5 @@
+timestamp=2025-07-31 19:09:15:742515
+data begin
+episode_number,timesteps,episode_length,accumulated_reward
+0,6,6,-179.342316
+1,11,5,-92.122384

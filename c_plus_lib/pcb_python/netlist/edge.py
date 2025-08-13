@@ -202,14 +202,14 @@ class Edge:
         self.print_to_console(not print_csv)
         return 0
     
-    def format_string_long(self, line: str) -> int:
+    def format_string_long(self) -> str:
         """格式化长字符串"""
         line = f"{self._a_id},{self._a_name},{self._a_pad_id},{self._a_size_x:.6f},{self._a_size_y:.6f},"
         line += f"{self._a_pos_x:.6f},{self._a_pos_y:.6f},{1 if self._a_is_placed else 0},"
         line += f"{self._b_id},{self._b_name},{self._b_pad_id},{self._b_size_x:.6f},{self._b_size_y:.6f},"
         line += f"{self._b_pos_x:.6f},{self._b_pos_y:.6f},{1 if self._b_is_placed else 0},"
         line += f"{self._net_id},\"{self._net_name}\",{self._power_rail}"
-        return 0
+        return line
     
     # 设置器方法
     def set_id(self, node: int, node_id: int) -> None:

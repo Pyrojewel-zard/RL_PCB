@@ -50,12 +50,10 @@ class Optimal:
         """获取HPWL值"""
         return self._hpwl
     
-    def format_string(self, s: str) -> int:
-        """格式化字符串输出"""
-        s = f"Optimal(id={self._id}, name='{self._name}', " \
-             f"euclidean_distance={self._euclidean_distance:.6f}, " \
-             f"hpwl={self._hpwl:.6f})"
-        return 0
+    def format_string(self, s: str = None) -> str:
+        """格式化字符串输出，返回PCB文件格式的optimal字符串"""
+        formatted = f"{self._id},{self._name},{self._euclidean_distance:.6f},{self._hpwl:.6f}"
+        return formatted
     
     def __str__(self) -> str:
         """字符串表示"""

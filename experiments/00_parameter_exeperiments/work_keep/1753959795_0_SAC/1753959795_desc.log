@@ -1,0 +1,111 @@
+
+================== settings ==================
+default_seed -> None
+policy -> SAC
+rl_model_type -> SAC
+seed -> [2173385197, 2427050077, 2198662304, 4175508672]
+start_timesteps -> 5000
+max_timesteps -> 600000
+max_steps -> 600000
+target_exploration_steps -> 10
+save_model -> False
+load_model -> 
+expert_model -> None
+w -> 2.0
+hpwl -> 6.0
+o -> 2.0
+training_pcb -> /home/pyrojewel/RL_PCB/dataset/base/region_8_fixed.pcb
+evaluation_pcb -> /home/pyrojewel/RL_PCB/dataset/base/evaluation.pcb
+tensorboard_dir -> /home/pyrojewel/RL_PCB/experiments/00_parameter_exeperiments/work
+incremental_replay_buffer -> double
+pcb_save_freq -> 2000
+device -> cuda
+experiment -> parameter_experiment_262
+hyperparameters -> /home/pyrojewel/RL_PCB/experiments/00_parameter_exeperiments/hyperparameters/hp_sac.json
+runs -> 4
+auto_seed -> False
+workers -> 2
+run_name -> 1753959795
+verbose -> 0
+evaluate_every -> 10000000
+early_stopping -> 600000
+shuffle_training_idxs -> False
+shuffle_evaluation_idxs -> False
+pcb_idx -> -1
+redirect_stdout -> False
+redirect_stderr -> False
+run -> 0
+log_dir -> /home/pyrojewel/RL_PCB/experiments/00_parameter_exeperiments/work/1753959795_0_SAC
+
+================== hyperparameters ==================
+learning_rate -> 0.0003
+buffer_size -> 4800000
+n_steps -> 2048
+batch_size -> 1024
+gamma -> 0.99
+net_arch -> {'pi': [800, 600, 400], 'qf': [800, 600, 400]}
+activation_fn -> relu
+expl_noise -> 0.1
+tau -> 0.005
+policy_noise -> 0.2
+noise_clip -> 0.5
+policy_freq -> 1
+
+================== SAC Model Architecture ==================
+Actor
+GaussianPolicy(
+  (pi): Sequential(
+    (0): Linear(in_features=31, out_features=800, bias=True)
+    (1): Linear(in_features=800, out_features=600, bias=True)
+    (2): Linear(in_features=600, out_features=400, bias=True)
+  )
+  (mean_linear): Linear(in_features=400, out_features=3, bias=True)
+  (log_std_linear): Linear(in_features=400, out_features=3, bias=True)
+)
+
+Critic
+QNetwork(
+  (qf1): Sequential(
+    (0): Linear(in_features=34, out_features=800, bias=True)
+    (1): Linear(in_features=800, out_features=600, bias=True)
+    (2): Linear(in_features=600, out_features=400, bias=True)
+    (3): Linear(in_features=400, out_features=1, bias=True)
+  )
+  (qf2): Sequential(
+    (0): Linear(in_features=34, out_features=800, bias=True)
+    (1): Linear(in_features=800, out_features=600, bias=True)
+    (2): Linear(in_features=600, out_features=400, bias=True)
+    (3): Linear(in_features=400, out_features=1, bias=True)
+  )
+)
+
+Critic target
+QNetwork(
+  (qf1): Sequential(
+    (0): Linear(in_features=34, out_features=800, bias=True)
+    (1): Linear(in_features=800, out_features=600, bias=True)
+    (2): Linear(in_features=600, out_features=400, bias=True)
+    (3): Linear(in_features=400, out_features=1, bias=True)
+  )
+  (qf2): Sequential(
+    (0): Linear(in_features=34, out_features=800, bias=True)
+    (1): Linear(in_features=800, out_features=600, bias=True)
+    (2): Linear(in_features=600, out_features=400, bias=True)
+    (3): Linear(in_features=400, out_features=1, bias=True)
+  )
+)
+
+Activation function : <function relu at 0x7f575cd643a0>
+
+
+================== Dependency Information ==================
+pcb library: generation of .pcb files.
+Library version    : 0.0.12
+Library built with : C++14
+Library built on   : Mar  3 2023 23:10:31
+
+netlist_graph: Graph pre-processing library for PCB component placement.
+Library version    : 0.1.16
+Library built with : C++14
+Library built on   : Mar  3 2023 23:10:32
+

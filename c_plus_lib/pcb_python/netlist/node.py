@@ -174,13 +174,13 @@ class Node:
         """打印节点信息"""
         self.print_to_console(not print_csv)
     
-    def format_string_long(self, line: str) -> int:
+    def format_string_long(self) -> str:
         """格式化长字符串"""
         line = f"{self._id},{self._name},{self._size_x:.6f},{self._size_y:.6f},"
         line += f"{self._pos_x:.6f},{self._pos_y:.6f},{self._orientation:.2f},"
         line += f"{self._layer},{1 if self._is_placed else 0},{self._pins},"
         line += f"{self._pins_smd},{self._pins_th},{self._type}"
-        return 0
+        return line
     
     def get_area(self) -> float:
         """获取节点面积"""
@@ -219,9 +219,9 @@ class Node:
         """获取optimal的HPWL"""
         return self._optimal.get_hpwl()
     
-    def get_opt_formatted_string(self, s: str) -> int:
+    def get_opt_formatted_string(self) -> str:
         """获取optimal的格式化字符串"""
-        return self._optimal.format_string(s)
+        return self._optimal.format_string()
     
     # 设置器方法
     def set_id(self, node_id: int) -> None:

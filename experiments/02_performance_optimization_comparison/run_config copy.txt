@@ -1,0 +1,26 @@
+# 性能优化对比实验配置
+# 该实验对比原始SAC/TD3与性能优化版本的训练效果和速度
+
+# === 基线实验 (原始版本) ===
+
+# SAC基线 - 标准设置，单线程探索
+CUDA_VISIBLE_DEVICES=0 python train.py --policy SAC --target_exploration_steps 25_000 --start_timesteps 25_000 --max_timesteps 500_000 --evaluate_every 50_000 --training_pcb ${RL_PCB}/dataset/base/region_8_fixed.pcb --evaluation_pcb ${RL_PCB}/dataset/base/evaluation.pcb --tensorboard_dir ${EXP_DIR}/work -w 4.0 --hpwl 4.0 -o 2.0 --hyperparameters ${EXP_DIR}/hyperparameters/hp_sac_baseline.json --incremental_replay_buffer double --verbose 1 --runs 3 --experiment baseline_sac_original --device cuda --pcb_save_freq 5000
+
+# TD3基线 - 标准设置，单线程探索  
+CUDA_VISIBLE_DEVICES=1 python train.py --policy TD3 --target_exploration_steps 25_000 --start_timesteps 25_000 --max_timesteps 500_000 --evaluate_every 50_000 --training_pcb ${RL_PCB}/dataset/base/region_8_fixed.pcb --evaluation_pcb ${RL_PCB}/dataset/base/evaluation.pcb --tensorboard_dir ${EXP_DIR}/work -w 4.0 --hpwl 4.0 -o 2.0 --hyperparameters ${EXP_DIR}/hyperparameters/hp_td3_baseline.json --incremental_replay_buffer double --verbose 1 --runs 3 --experiment baseline_td3_original --device cuda --pcb_save_freq 5000
+
+# === 优化实验 (性能优化版本) ===
+
+# SAC优化版 - 多线程探索 + GPU优化
+CUDA_VISIBLE_DEVICES=0 python train_optimized.py --policy SAC --target_exploration_steps 25_000 --start_timesteps 25_000 --max_timesteps 500_000 --evaluate_every 50_000 --training_pcb ${RL_PCB}/dataset/base/region_8_fixed.pcb --evaluation_pcb ${RL_PCB}/dataset/base/evaluation.pcb --tensorboard_dir ${EXP_DIR}/work -w 4.0 --hpwl 4.0 -o 2.0 --hyperparameters ${EXP_DIR}/hyperparameters/hp_sac_optimized.json --incremental_replay_buffer double --verbose 1 --runs 3 --experiment optimized_sac_multithread_gpu --device cuda --pcb_save_freq 5000 --enable_multithread true --enable_gpu_optimization true --num_workers 6
+
+# TD3优化版 - 多线程探索 + GPU优化
+CUDA_VISIBLE_DEVICES=1 python train_optimized.py --policy TD3 --target_exploration_steps 25_000 --start_timesteps 25_000 --max_timesteps 500_000 --evaluate_every 50_000 --training_pcb ${RL_PCB}/dataset/base/region_8_fixed.pcb --evaluation_pcb ${RL_PCB}/dataset/base/evaluation.pcb --tensorboard_dir ${EXP_DIR}/work -w 4.0 --hpwl 4.0 -o 2.0 --hyperparameters ${EXP_DIR}/hyperparameters/hp_td3_optimized.json --incremental_replay_buffer double --verbose 1 --runs 3 --experiment optimized_td3_multithread_gpu --device cuda --pcb_save_freq 5000 --enable_multithread true --enable_gpu_optimization true --num_workers 6
+
+# === 消融实验 (分别测试各优化组件) ===
+
+# 仅多线程优化
+CUDA_VISIBLE_DEVICES=0 python train_optimized.py --policy SAC --target_exploration_steps 25_000 --start_timesteps 25_000 --max_timesteps 300_000 --evaluate_every 50_000 --training_pcb ${RL_PCB}/dataset/base/region_8_fixed.pcb --evaluation_pcb ${RL_PCB}/dataset/base/evaluation.pcb --tensorboard_dir ${EXP_DIR}/work -w 4.0 --hpwl 4.0 -o 2.0 --hyperparameters ${EXP_DIR}/hyperparameters/hp_sac_baseline.json --incremental_replay_buffer double --verbose 1 --runs 2 --experiment ablation_sac_multithread_only --device cuda --pcb_save_freq 5000 --enable_multithread true --enable_gpu_optimization false --num_workers 6
+
+# 仅GPU优化
+CUDA_VISIBLE_DEVICES=1 python train_optimized.py --policy SAC --target_exploration_steps 25_000 --start_timesteps 25_000 --max_timesteps 300_000 --evaluate_every 50_000 --training_pcb ${RL_PCB}/dataset/base/region_8_fixed.pcb --evaluation_pcb ${RL_PCB}/dataset/base/evaluation.pcb --tensorboard_dir ${EXP_DIR}/work -w 4.0 --hpwl 4.0 -o 2.0 --hyperparameters ${EXP_DIR}/hyperparameters/hp_sac_optimized.json --incremental_replay_buffer double --verbose 1 --runs 2 --experiment ablation_sac_gpu_only --device cuda --pcb_save_freq 5000 --enable_multithread false --enable_gpu_optimization true --num_workers 1

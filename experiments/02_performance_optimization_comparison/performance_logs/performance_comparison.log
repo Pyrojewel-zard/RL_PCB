@@ -1,0 +1,25 @@
+Wed Aug 13 13:54:47 CST 2025: 性能优化对比实验开始
+Wed Aug 13 13:55:39 CST 2025: 性能优化对比实验开始
+Wed Aug 13 13:55:49 CST 2025: optimized_sac - 耗时: 5秒, GPU利用率: N/A%
+Wed Aug 13 13:55:51 CST 2025: multithread_only - 耗时: 2秒, GPU利用率: N/A%
+Wed Aug 13 13:55:52 CST 2025: gpu_only - 耗时: 1秒, GPU利用率: N/A%
+Wed Aug 13 13:55:55 CST 2025: 性能优化对比实验完成
+Wed Aug 13 13:56:14 CST 2025: 性能优化对比实验开始
+Wed Aug 13 13:56:21 CST 2025: optimized_sac - 耗时: 2秒, GPU利用率: N/A%
+Wed Aug 13 13:56:23 CST 2025: multithread_only - 耗时: 2秒, GPU利用率: N/A%
+Wed Aug 13 13:56:25 CST 2025: gpu_only - 耗时: 2秒, GPU利用率: N/A%
+Wed Aug 13 13:56:26 CST 2025: 性能优化对比实验完成
+Wed Aug 13 14:02:34 CST 2025: 性能优化对比实验开始
+Wed Aug 13 14:03:28 CST 2025: 性能优化对比实验开始
+Wed Aug 13 14:03:34 CST 2025: optimized_sac - 耗时: 1秒, GPU利用率: N/A%
+Wed Aug 13 14:03:36 CST 2025: multithread_only - 耗时: 2秒, GPU利用率: N/A%
+Wed Aug 13 14:03:38 CST 2025: gpu_only - 耗时: 2秒, GPU利用率: N/A%
+Wed Aug 13 14:03:39 CST 2025: 性能优化对比实验完成
+Wed Aug 13 14:09:52 CST 2025: 性能优化对比实验开始
+Wed Aug 13 14:09:59 CST 2025: optimized_sac - 耗时: 2秒, GPU利用率: N/A%
+Wed Aug 13 14:10:00 CST 2025: multithread_only - 耗时: 1秒, GPU利用率: N/A%
+Wed Aug 13 14:10:02 CST 2025: gpu_only - 耗时: 2秒, GPU利用率: N/A%
+Wed Aug 13 14:10:04 CST 2025: 性能优化对比实验完成
+Wed Aug 13 14:43:57 CST 2025: 性能优化对比实验开始
+Wed Aug 13 14:44:04 CST 2025: optimized_sac - 耗时: 2秒, GPU利用率: N/A%
+Wed Aug 13 14:44:06 CST 2025: multithread_only - 耗时: 2秒, GPU利用率: N/A%

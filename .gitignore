@@ -11,4 +11,4 @@ lib
 csv_files
 pcb_netlist/netlist_graph
 pcb_netlist/pcb
-.recycle
+.recycle/

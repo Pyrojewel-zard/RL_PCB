@@ -87,7 +87,7 @@ def training_run(settings):
                            "augment_orientation": True,
                            "agent_max_action": 1,
                            "agent_expl_noise": hp["expl_noise"],
-                           "debug": False,
+                           "debug": True,
                            "max_steps": 200,
                            "w": settings["w"],
                            "o": settings["o"],
@@ -127,8 +127,7 @@ def training_run(settings):
 
     model.explore_for_expert_targets(
         reward_target_exploration_steps=settings["target_exploration_steps"],
-        output_dir=settings["log_dir"],
-        save_pcb_every_n_steps=settings.get("explore_pcb_save_freq", 2)
+        output_dir=settings["log_dir"]
     )
     model.learn(timesteps=settings["max_timesteps"],
                 callback=callback,
@@ -157,6 +156,8 @@ def main():
     mean_best_steps = []
     mean_best_mean_rewards = []
     mean_best_mean_steps = []
+    
+    ## todo 这部分可以修改为多线程，相当于每个线程里独立训练一个智能体，最后进行比较
 
     for run in range(settings["runs"]):
         settings["run"] = run

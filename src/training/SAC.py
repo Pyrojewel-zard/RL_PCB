@@ -297,78 +297,98 @@ class SAC(object):
 
     def explore_for_expert_targets(self,
                                    reward_target_exploration_steps=25_000,
-                                   output_dir=None,
-                                   save_pcb_every_n_steps=1000):
+                                   output_dir=None):
         """
-        在专家目标探索过程中，每隔一定步数保存当前PCB布局到work目录。
+        专家目标探索函数 - 在训练前进行随机探索以收集专家目标数据
+        
+        该函数的主要目的是：
+        1. 通过随机动作探索PCB布局空间
+        2. 收集不同布局状态下的性能指标
+        3. 为强化学习训练提供专家目标参考
+        4. 定期保存探索过程中的PCB布局文件
         
         Args:
-            reward_target_exploration_steps: 探索步数
-            output_dir: PCB文件输出目录，如果为None则不保存
-            save_pcb_every_n_steps: 每隔多少步保存一次PCB文件
+            reward_target_exploration_steps (int): 总探索步数，默认25000步
+            output_dir (str, optional): PCB文件输出目录路径，None表示不保存文件
+            save_pcb_every_n_steps (int): 每隔多少步保存一次PCB文件，默认1000步
+            
+        Returns:
+            None
+            
+        Raises:
+            Exception: 当保存PCB文件时可能出现的文件I/O错误
+            
+        Note:
+            - 该函数使用随机动作进行探索，不依赖训练好的策略网络
+            - 探索过程中会监控环境状态，当达到终止条件时自动重置环境
+            - 保存的PCB文件可用于后续分析和调试
         """
+        # 检查训练环境是否存在
         if self.train_env is None:
             print("Model cannot explore because training envrionment is missing. Please reload model and supply a training envrionment.")
             return
 
-        # 创建PCB输出目录
+        # 创建PCB输出目录（如果指定了输出目录）
         pcb_output_dir = None
         if output_dir is not None:
             import os
             from pathlib import Path
+            # 在指定目录下创建explore_pcb子目录
             pcb_output_dir = os.path.join(output_dir, "explore_pcb")
+            # 创建目录，如果父目录不存在则一并创建
             Path(pcb_output_dir).mkdir(parents=True, exist_ok=True)
             if self.verbose > 0:
                 print(f"PCB文件将保存到: {pcb_output_dir}")
 
-        self.done = False
-        step_count = 0
+        # 初始化探索状态
+        self.done = False          # 环境终止标志
         
+        # 主探索循环
         for _ in range(reward_target_exploration_steps):
+            # 调用环境步进函数，使用随机动作进行探索
+            # 调用文件: src/training/core/environment/environment.py
+            # 调用函数: self.train_env.step()
+            # 参数说明:
+            #   - self.policy: 策略网络（此处用于获取动作空间信息）
+            #   - random=True: 强制使用随机动作
+            #   - rl_model_type="SAC": 指定强化学习算法类型
             obs_vec = self.train_env.step(self.policy,
                                           random=True,
                                           rl_model_type="SAC")
 
-            step_count += 1
-
-            # 每隔指定步数保存PCB文件
-            if (pcb_output_dir is not None and 
-                step_count % save_pcb_every_n_steps == 0):
-                try:
-                    filename = f"explore_step_{step_count}.pcb"
-                    self.train_env.write_current_pcb_file(
-                        path=pcb_output_dir,
-                        filename=filename
-                    )
-                    if self.verbose > 0:
-                        print(f"💾 已保存探索PCB文件: {filename} (步数: {step_count})")
-                except Exception as e:
-                    if self.verbose > 0:
-                        print(f"保存PCB文件时出错: {e}")
-
+            # 检查所有智能体的观察结果，判断是否有智能体达到终止条件
+            # obs_vec结构: [state, next_state, reward, action, done, info]
+            # 其中done位于索引4位置
             for indiv_obs in obs_vec:
-                if indiv_obs[4] is True:
+                if indiv_obs[4] is True:  # 检查done标志
                     self.done = True
+                    break
 
+            # 环境终止处理
             if self.done:
+                # 重置训练环境状态
+                # 调用文件: src/training/core/environment/environment.py
+                # 调用函数: self.train_env.reset()
+                # 功能: 重置所有智能体状态，开始新的探索回合
                 self.train_env.reset()
+                # 重置环境终止标志
                 self.done = False
+                # 重置环境跟踪器
+                # 调用文件: src/training/core/environment/tracker.py
+                # 输出带
+                # 调用函数: self.train_env.tracker.reset()
+                # 功能: 清空跟踪器中的历史数据
+                
                 self.train_env.tracker.reset()
-                # 环境重置时也保存一次PCB文件
-                if pcb_output_dir is not None:
-                    try:
-                        filename = f"explore_reset_{step_count}.pcb"
-                        self.train_env.write_current_pcb_file(
-                            path=pcb_output_dir,
-                            filename=filename
-                        )
-                        if self.verbose > 0:
-                            print(f"💾 环境重置时保存PCB文件: {filename}")
-                    except Exception as e:
-                        if self.verbose > 0:
-                            print(f"重置时保存PCB文件出错: {e}")
 
+        # 探索结束后的清理工作
+        # 最终重置环境状态
+        # 调用文件: src/training/core/environment/environment.py
+        # 调用函数: self.train_env.reset()
+        self.train_env.tracker.create_video(fileName=os.path.join(self.train_env.parameters.log_dir,"explore_video.mp4"))
         self.train_env.reset()
+        
+        # 重置终止标志
         self.done = False
 
     def learn(self,

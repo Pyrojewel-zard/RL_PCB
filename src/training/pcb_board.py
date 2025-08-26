@@ -18,7 +18,7 @@ def board_mask(physical_height_mm,physical_width_mm, grid_step_mm):
     # 正确的像素尺寸计算
     grid_width = int(physical_width_mm / grid_step_mm)
     grid_height = int(physical_height_mm / grid_step_mm)
-    row_index = 9
+    row_index = 8
 
     # 读取并解析 CSV 中区域点集
     df = pd.read_csv(csv_path, header=None)
@@ -61,6 +61,9 @@ def board_mask(physical_height_mm,physical_width_mm, grid_step_mm):
     # 对每一张图进行填充
     for i in range(8):
         cv2.fillPoly(overlap_board_mask[i], [pixel_points], 64)
+
+    # 沿x轴镜像对称（水平翻转）
+    overlap_board_mask = np.flip(overlap_board_mask, axis=1)
 
     return overlap_board_mask
 

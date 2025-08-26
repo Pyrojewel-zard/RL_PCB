@@ -89,6 +89,14 @@ def cmdline_args():
     # 新增：PCB实时保存频率参数
     parser.add_argument("--pcb_save_freq", required=False, type=int, default=None,
                         help="保存实时PCB文件的频率（训练步数间隔），如10000表示每1万步保存一次。默认None表示不保存")
+    
+    # 新增：性能优化相关参数
+    parser.add_argument("--enable_multithread", required=False, type=str, default="true",
+                        help="启用多线程优化，取值为 'true' 或 'false'")
+    parser.add_argument("--enable_gpu_optimization", required=False, type=str, default="true", 
+                        help="启用GPU优化，取值为 'true' 或 'false'")
+    parser.add_argument("--num_workers", required=False, type=int, default=6,
+                        help="工作线程数量")
 
     args = parser.parse_args()
 
@@ -118,6 +126,10 @@ def cmdline_args():
     settings["incremental_replay_buffer"] = args.incremental_replay_buffer
     # 新增：PCB保存频率设置
     settings["pcb_save_freq"] = args.pcb_save_freq
+    # 新增：性能优化参数设置
+    settings["enable_multithread"] = args.enable_multithread.lower() == "true" if isinstance(args.enable_multithread, str) else args.enable_multithread
+    settings["enable_gpu_optimization"] = args.enable_gpu_optimization.lower() == "true" if isinstance(args.enable_gpu_optimization, str) else args.enable_gpu_optimization  
+    settings["num_workers"] = args.num_workers
 
     if args.device == "cuda":
         settings["device"] = "cuda" if torch.cuda.is_available() else "cpu"
@@ -135,6 +147,9 @@ def cmdline_args():
     settings["verbose"] = args.verbose
 
     settings["evaluate_every"] = args.evaluate_every
+    # 添加缺失的频率参数，基于现有参数设置默认值
+    settings["save_freq"] = args.evaluate_every  # 使用评估频率作为保存频率
+    settings["eval_freq"] = args.evaluate_every  # 评估频率
     if args.early_stopping is None:
         settings["early_stopping"] = args.max_timesteps
     else:

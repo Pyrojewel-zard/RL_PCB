@@ -1,0 +1,8 @@
+# SAC优化版 - 多线程探索 + GPU优化
+CUDA_VISIBLE_DEVICES=0 python train_optimized.py --policy SAC --seed 42 --target_exploration_steps 25_000 --start_timesteps 25_000 --max_timesteps 500_000 --evaluate_every 50_000 --training_pcb ${RL_PCB}/dataset/base/region_8_fixed.pcb --evaluation_pcb ${RL_PCB}/dataset/base/evaluation.pcb --tensorboard_dir ${EXP_DIR}/work -w 4.0 --hpwl 4.0 -o 2.0 --hyperparameters ${EXP_DIR}/hyperparameters/hp_sac_optimized.json --incremental_replay_buffer double --verbose 1 --runs 3 --experiment optimized_sac_multithread_gpu --device cuda --pcb_save_freq 5000 --enable_multithread true --enable_gpu_optimization true --num_workers 6
+
+# TD3优化版 - 多线程探索 + GPU优化
+CUDA_VISIBLE_DEVICES=1 python train_optimized.py --policy TD3 --seed 42 --target_exploration_steps 25_000 --start_timesteps 25_000 --max_timesteps 500_000 --evaluate_every 50_000 --training_pcb ${RL_PCB}/dataset/base/region_8_fixed.pcb --evaluation_pcb ${RL_PCB}/dataset/base/evaluation.pcb --tensorboard_dir ${EXP_DIR}/work -w 4.0 --hpwl 4.0 -o 2.0 --hyperparameters ${EXP_DIR}/hyperparameters/hp_td3_optimized.json --incremental_replay_buffer double --verbose 1 --runs 3 --experiment optimized_td3_multithread_gpu --device cuda --pcb_save_freq 5000 --enable_multithread true --enable_gpu_optimization true --num_workers 6
+
+
+2173385197

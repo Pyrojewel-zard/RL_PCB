@@ -5,3 +5,9 @@ alwaysApply: true
 1. 禁止检索venv,bin,ansible,lib这几个文件夹1. 禁止检索venv,bin,ansible,lib这几个文件夹
 2. 使用的python环境为venv下的环境，需要source setup.sh进行激活
 3. 所有输出的解释性内容需要使用中文
+4. 使用python需要在/home/pyrojewel/RL_PCB/路径下，source setup.sh进行激活
+5. 禁止检索/home/pyrojewel/RL_PCB/c_plus_lib文件夹
+6. 禁止import 任何c_plus_lib相关函数和文件夹
+6. 输出mermaid或者技术文档时，需要使用中文
+7. 输出的mermaid或者技术文档需要保证学术风格，不要使用过于口语化的表达
+8. 输出的mermaid要尽可能凝练，用于ppt展示使用

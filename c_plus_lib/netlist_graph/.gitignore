@@ -1,7 +1,0 @@
-build
-lib
-workspace
-pyfiles
-*.so
-docs
-package

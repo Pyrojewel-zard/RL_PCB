@@ -1,4 +1,0 @@
-[build-system]
-requires = ["setuptools>42"]	# list of packages that are needed to build your package. Listing it here will only make it available during the build, not after it is installed. 
-build-backend = "setuptools.build_meta" # name of python object that will be used to perform the build. If another build system is used (e.g. flit or poetry) this would be different.
-

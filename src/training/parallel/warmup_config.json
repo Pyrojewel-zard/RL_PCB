@@ -1,0 +1,10 @@
+{
+  "enable": true,
+  "verbose": true,
+  "base_seed": 1234,
+  "light_mode": true,
+  "env_ctor": "core.environment.environment:environment",
+  "num_workers": 8,
+  "chunk_per_worker": 1000,
+  "random_warmup_steps": 60000
+  }
